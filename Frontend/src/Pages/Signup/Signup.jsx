@@ -2,7 +2,7 @@ import React from 'react';
 import { Form, Link } from 'react-router-dom'; // Import Form and Link
 import { FormInput, Submit } from '../../Components';
 
-const Signin = () => {
+const Signup = () => {
   return (
     <section className='h-full flex justify-center items-center flex-col gap-6 place-items-center bg-transparent'>
         <h1 class="text-4xl md:text-6xl tracking-tight  font-bold text-transparent bg-clip-text bg-gradient-to-bl from-zinc-800 via-slate-200 to-zinc-900 h-20 ">Sign Up</h1>
@@ -57,4 +57,5 @@ const Signin = () => {
   );
 }
 
-export default Signin;
+export default Signup;
+
