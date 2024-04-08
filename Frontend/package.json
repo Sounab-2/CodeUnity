@@ -10,7 +10,10 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@monaco-editor/react": "^4.6.0",
     "@reduxjs/toolkit": "^2.2.3",
+    "@uiw/react-codemirror": "^4.21.25",
+    "axios": "^1.6.8",
     "dotenv": "^16.4.5",
     "firebase": "^10.10.0",
     "react": "^18.2.0",
