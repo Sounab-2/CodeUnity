@@ -1,7 +1,7 @@
 import React from 'react';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import { Home, About, ContactUs, SignIn, SignUp, Error,Editor } from './Pages';
-import './App.css'; 
+
 
 const App = () => {
   return (

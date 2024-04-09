@@ -1,12 +1,17 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { useFirebase } from '../../Context/FirebaseContext';
+import { Navbar , Footer ,Hero , Feauters,Team} from '../../Components';
+
 
 const Home = () => {
   const { user, signoutUser } = useFirebase();
 
   return (
-    <div className='min-h-screen w-full h-full'>
+    <section>
+    <Navbar/>
+    <Hero/>
+    {/* <div className='min-h-screen w-full h-full'>
       {user ? (
         <div className=' flex flex-col gap-4'>
           <p>User Email: {user.email}</p>
@@ -15,7 +20,12 @@ const Home = () => {
       ) : (
         <Link className='btn' to='/signin'>Signin</Link>
       )}
-    </div>
+    </div> */}
+    <Feauters/>
+    <hr />
+    <Team/>
+    <Footer/>
+    </section>
   );
 }
 
