@@ -1,8 +1,9 @@
 import React, { useState } from 'react';
 import { Form, Link ,useNavigate } from 'react-router-dom';
 import { FormInput, Submit } from '../../Components';
-import { getAuth, signInWithEmailAndPassword, GoogleAuthProvider, signInWithPopup } from 'firebase/auth';
+import { getAuth, signInWithEmailAndPassword, GoogleAuthProvider, signInWithPopup} from 'firebase/auth';
 import { useFirebase } from '../../Context/FirebaseContext';
+import {auth } from "../../firebase";
 
 
 const Signin = () => {
@@ -26,27 +27,33 @@ const Signin = () => {
 
     const handleSubmit=(e)=>{
       e.preventDefault();
-      console.log('Email:', email);
-      console.log('Password:', password);
-      console.log('Form submitted'); 
       setEmail('');
       setPassword('');
 
       firebase.signInUserWithEmailAndPassword(email,password)
       .then(()=>{
-        alert('success');
+        // i have to call for backend api endpoint
         navigate('/');
       })
       .catch(()=>{
-        alert("something went wrong");
+        console.log('Something went wrong');
       })
+
+      const user =  auth.currentUser;
+
+      if(user){
+        const {email,uid} = user;
+        console.log(email,uid);
+      } 
+
 
     }
 
     const signinwithgoogle = () => {
       firebase.signInUserWithGoogle()
-        .then(() => {
-          alert('Success');
+        .then((user) => {
+          console.log(user);
+          // here i have to call for backend api endpoint to login
           navigate('/'); // Redirect to sign-in page
         })
         .catch((error) => {

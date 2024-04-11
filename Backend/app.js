@@ -6,10 +6,11 @@ require('dotenv').config();
 const app = express();
 const port = process.env.PORT || 3000;
 
-//Connect Database
+//Database
+const connectDB = require('./db/connect');
 
 //routers
-
+const authRouter = require('./routes/authRoute');
 
 //middlewares
 const notFoundMiddleware = require('./middleware/not-found');
@@ -30,18 +31,16 @@ const errorHandlerMiddleware = require('./middleware/error-handler')
 
 // Add your routes and other middleware here...
 
+app.use(express.json());
+
+
 app.get('/', (req, res) => {
   res.send('Server is running');
 });
 
 
-// app.get('/', (req,res,next)=>{
-//     res.send("Collaborative Code Editor api")
-// })
+app.use('/api/v1/auth', authRouter);
 
-app.get('/api/v1', (req,res,next)=>{
-    res.send('testing')
-})
 
 
 app.use(notFoundMiddleware);
@@ -49,11 +48,12 @@ app.use(errorHandlerMiddleware);
 
 
 const start = async function() {
-    try {
-        app.listen(port,console.log(`Server is listening on ${port}`));
-    } catch (error) {
-        console.log(error);
-    }
+  await connectDB(process.env.MONGO_URL);
+  try {
+      app.listen(port,console.log(`Server is listening on ${port}`));
+  } catch (error) {
+      console.log(error);
+  }
 }
 
 

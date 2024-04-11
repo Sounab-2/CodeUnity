@@ -2,6 +2,8 @@ import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { FormInput, Submit } from '../../Components';
 import { useFirebase } from '../../Context/FirebaseContext';
+import { updateProfile } from "firebase/auth";
+import {auth } from "../../firebase";
 
 
 const Signup = () => {
@@ -29,8 +31,9 @@ const Signup = () => {
 
   const signinwithgoogle = () => {
     firebase.signInUserWithGoogle()
-      .then(() => {
+      .then((user) => {
         alert('Success');
+        console.log(user);
         navigate('/'); // Redirect to sign-in page
       })
       .catch((error) => {
@@ -40,10 +43,6 @@ const Signup = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    console.log('Username:', username);
-    console.log('Email:', email);
-    console.log('Password:', password);
-    console.log('Form submitted');
     setUsername('');
     setEmail('');
     setPassword('');
@@ -65,6 +64,23 @@ const Signup = () => {
       alert('Something went wrong');
       setIsButtonDisabled(false); // Re-enable the button if signup fails
     });
+
+    const user =  auth.currentUser;
+    if(user){
+      const {email,uid} = user;
+      console.log(email,uid);
+      updateProfile(user,{
+        displayName: username
+      }).then(() =>{
+        console.log(user.displayName); 
+      })
+    .catch((error) => {
+      console.log(error);
+    });
+
+    // Here i will api call for register in server side 
+  }
+
   };
 
   return (
