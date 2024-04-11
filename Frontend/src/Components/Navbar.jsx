@@ -1,16 +1,17 @@
 import React, { useState } from 'react';
 import { Link, NavLink } from 'react-router-dom';
-// import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-// import { faUserPlus, faBars, faSignOut } from '@fortawesome/free-solid-svg-icons';
-// import Avataricon from '../Avataricon/Avataricon';
-import { useSelector } from 'react-redux';
 import { useEffect } from 'react';
-
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faUserPlus, faBars, faSignOut } from '@fortawesome/free-solid-svg-icons';
+import AvatarCom from './AvatarCom';
+// import { useSelector, useDispatch } from 'react-redux';
+import { useFirebase } from '../Context/FirebaseContext';
 
 export default function Header() {
 
   const [isMobileNavOpen, setIsMobileNavOpen] = useState(false);
-  const user = useSelector(state => state.user);
+  // const user = useSelector(state => state.user);
+  const { user, signoutUser } = useFirebase();
 
   const toggleMobileNav = () => {
     setIsMobileNavOpen(!isMobileNavOpen);
@@ -33,6 +34,8 @@ export default function Header() {
 
 
 
+
+
   return (
     <header className="sticky z-50 top-0 flex flex-col ">
       <nav className={`px-4 lg:px-6 py-2.5 text-xl ${isScrolled ? 'glass' : 'bg-transparent'}`}>
@@ -46,8 +49,10 @@ export default function Header() {
             {/* <FontAwesomeIcon icon={faBars} className="md:hidden" /> */}
           </span>
           {user ? (
-            <div className="flex items-center lg:order-2">
-              {/* <Avataricon/> */}
+
+            <div className="flex items-center lg:order-2 gap-5">
+
+             <AvatarCom/>
             </div>
 
 
@@ -58,13 +63,13 @@ export default function Header() {
                 className="text-gray-800 bg-gray-50 hover:bg-gray-200 focus:ring-4 focus:ring-gray-300 font-medium rounded-lg text-sm px-4 lg:px-5 py-2 lg:py-2.5 mr-2 focus:outline-none"
               >
                 <div className='w-16 justify-between flex'>
-                  {/* <span><FontAwesomeIcon icon={faUserPlus} /></span> */}
+                  <span><FontAwesomeIcon icon={faUserPlus} /></span>
                   <h3>Log in</h3>
                 </div>
               </Link>
               <Link
                 to="/signup"
-                className="text-gray-900 bg-gradient-to-r from-lime-200 via-lime-400 to-lime-500 font-medium rounded-lg text-sm px-4 lg:px-5 py-2 lg:py-2.5 mr-2 focus:outline-none"
+                className=' btn bg-primary-content'
               >
                 <h3>Sign Up</h3>
               </Link>
@@ -96,7 +101,7 @@ export default function Header() {
               </li>
               <li>
                 <NavLink
-                  to="/product"
+                  to="/dashboard"
                   className={({ isActive }) =>
                     `block py-2 pr-4 pl-3 duration-200 ${isActive ? "text-primary-1250" : "text-white"} border-b border-gray-100 hover:bg-gray-50 lg:hover:bg-transparent lg:border-0 hover:text-white lg:p-0`
                   }

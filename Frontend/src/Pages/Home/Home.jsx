@@ -5,7 +5,7 @@ import { Navbar , Footer ,Hero , Feauters,Team} from '../../Components';
 import { useSelector } from 'react-redux';
 
 const Home = () => {
-  const { user, signoutUser } = useFirebase();
+  
   const username = useSelector(state => state.username);
   console.log(username);
   return (

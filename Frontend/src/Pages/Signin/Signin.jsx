@@ -164,7 +164,7 @@ const Signin = () => {
         if (user) {
           console.log(user);
           dispatch(setUsername(user.displayName || user.email)); // Dispatch the username or email if displayName is not available
-          navigate('/'); // Redirect to home page
+          navigate('/dashboard'); // Redirect to home page
         }
       })
       .catch((error) => {
@@ -178,7 +178,7 @@ const Signin = () => {
         const user = result.user;
         console.log(user);
         dispatch(setUsername(user.displayName)); // Again, dispatching the username
-        navigate('/'); // Redirect to home page
+        navigate('/dashboard'); // Redirect to home page
       })
       .catch((error) => {
         console.error('Error signing in with Google:', error.message);
@@ -188,7 +188,7 @@ const Signin = () => {
   return (
     <section className='h-full flex justify-center items-center flex-col gap-12 place-items-center bg-transparent'>
       <h1 className="text-4xl md:text-6xl tracking-tight font-bold text-transparent bg-clip-text bg-gradient-to-bl from-zinc-800 via-slate-200 to-zinc-900 h-20">Sign In</h1>
-      <div className='card w-1/3 bg-base-100 shadow-2xl flex flex-col gap-y-4'>
+      <div className='card w-1/3 bg-base-100 shadow-2xl flex flex-col gap-y-4 p-10'>
         <div className='flex gap-2 flex-col'>
           <form onSubmit={handleSubmit}>
             <FormInput

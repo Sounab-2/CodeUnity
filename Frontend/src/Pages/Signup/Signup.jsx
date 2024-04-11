@@ -228,7 +228,7 @@ const Signup = () => {
       .then((user) => {
         alert('Success');
         console.log(user);
-        navigate('/'); // Redirect to sign-in page
+        navigate('/dashboard'); // Redirect to sign-in page
       })
       .catch((error) => {
         console.error('Error signing up with Google:', error.message);
@@ -238,7 +238,7 @@ const Signup = () => {
   return (
     <section className='h-full flex justify-center items-center flex-col gap-6 place-items-center bg-transparent'>
       <h1 className="text-4xl md:text-6xl tracking-tight font-bold text-transparent bg-clip-text bg-gradient-to-bl from-zinc-800 via-slate-200 to-zinc-900 h-20">Sign Up</h1>
-      <div className='card w-2/5 bg-base-100 shadow-2xl flex flex-col gap-y-4'>
+      <div className='card w-2/5 bg-base-100 shadow-2xl flex flex-col gap-y-4 p-10'>
         <div className='flex gap-3 flex-col'>
           <form onSubmit={handleSubmit}>
             <FormInput
