@@ -2,6 +2,7 @@ import { createSlice } from '@reduxjs/toolkit';
 
 const initialState = {
   user: null,
+  username: null,
   isLoading: false,
 };
 
@@ -14,6 +15,9 @@ const userSlice = createSlice({
       state.isLoading = false;
       state.error = null;
     },
+    setUsername: (state, action) => {
+      state.username = action.payload;
+    },
     setLoading: (state, action) => {
       state.isLoading = action.payload;
     },
@@ -23,5 +27,5 @@ const userSlice = createSlice({
   } 
 }); 
 
-export const { setUser, setLoading, logout} = userSlice.actions;
+export const { setUser, setLoading, logout,setUsername} = userSlice.actions;
 export default userSlice.reducer;

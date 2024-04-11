@@ -4,12 +4,14 @@ import { FormInput, Submit } from '../../Components';
 import { getAuth, signInWithEmailAndPassword, GoogleAuthProvider, signInWithPopup} from 'firebase/auth';
 import { useFirebase } from '../../Context/FirebaseContext';
 import {auth } from "../../firebase";
+import { useDispatch } from 'react-redux';
+import { setUsername } from '../../../features/userSlice';
 
 
 const Signin = () => {
     const firebase=useFirebase()
     const navigate = useNavigate();
-
+    const dispatch = useDispatch();
 
     const[email,setEmail]=useState('');
     const[password,setPassword]=useState('');
@@ -42,8 +44,9 @@ const Signin = () => {
       const user =  auth.currentUser;
 
       if(user){
-        const {email,uid} = user;
-        console.log(email,uid);
+        const {email,uid,displayName} = user;
+        console.log(email,uid,displayName);
+        dispatch(setUsername(displayName));
       } 
 
 

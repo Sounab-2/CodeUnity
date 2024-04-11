@@ -2,11 +2,12 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import { useFirebase } from '../../Context/FirebaseContext';
 import { Navbar , Footer ,Hero , Feauters,Team} from '../../Components';
-
+import { useSelector } from 'react-redux';
 
 const Home = () => {
   const { user, signoutUser } = useFirebase();
-
+  const username = useSelector(state => state.username);
+  console.log(username);
   return (
     <section>
     <Navbar/>
