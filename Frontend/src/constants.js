@@ -2,7 +2,7 @@ export const LANGUAGE_VERSIONS={
     python: "3.10.0",
     java: "15.0.2",
     javascript: "18.15.0",
-    cpp: "9.3.0",
+    cpp: "",
 }
 
 export const CODE_SNIPPETS={

@@ -8,16 +8,17 @@ app.use(bodyParser.json());
 let rooms = [];
 
 app.post('/create/solo', (req, res) => {
-  const { meetingId, roomType, projectName, language, fileName } = req.body;
+  const { meetingId, roomType, workspaceName,code, language, fileName } = req.body;
 
-  if (!meetingId || !roomType || !projectName || !language || !fileName) {
+  if (!meetingId || !roomType || !workspaceName || !code || !language || !fileName) {
     return res.status(400).json({ error: 'All parameters are required.' });
   }
 
   const newRoom = {
     meetingId,
     roomType:'solo',
-    projectName,
+    workspaceName,
+    code,
     language,
     fileName
   };
