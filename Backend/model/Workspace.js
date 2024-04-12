@@ -50,7 +50,12 @@ const WorkspaceSchema = new mongoose.Schema({
         type: mongoose.Schema.Types.ObjectId,
         ref: 'User',
         required: true,
-    }]
+    }],
+    host:{
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'User',
+        required: true,
+    }
 });
 
 const WorkspaceModel = mongoose.model('Workspace', WorkspaceSchema);
