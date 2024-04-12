@@ -20,26 +20,26 @@ const WorkspaceSchema = new mongoose.Schema({
         type: {
             cPlusPlus: { 
                 type: String, 
-                required: true, 
+                // required: true, 
                 default: '#include <iostream>\nint main() {\n  std::cout << "Hello World!";\n  return 0;\n}' 
             },
             java: { 
                 type: String, 
-                required: true, 
+                // required: true, 
                 default: 'public class Main {\n  public static void main(String[] args) {\n    System.out.println("Hello World!");\n  }\n}' 
             },
             python: { 
                 type: String, 
-                required: true, 
+                // required: true, 
                 default: 'print("Hello World!")' 
             },
             javascript: { 
                 type: String, 
-                required: true, 
+                // required: true, 
                 default: 'console.log("Hello World!");' 
             }
         },
-        required: true
+        // required: true
     },
     type: {
         type: String,
