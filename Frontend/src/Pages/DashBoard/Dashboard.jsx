@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { SideBox, DashNav } from '../../Components';
 import { Link ,useNavigate } from 'react-router-dom';
 import { Route, Routes } from "react-router-dom";
@@ -7,24 +7,28 @@ import NewProject from './Newproject'
 import Savedfile from './Savedfile'
 import Stats from './Stats'
 import { useFirebase } from '../../Context/FirebaseContext';
-import { useEffect } from 'react';
-
 
 const Dashboard = () => {
-
-    const { user } = useFirebase();
+    const { user, loading } = useFirebase();
     const navigate = useNavigate(); 
+    const [authReady, setAuthReady] = useState(false);
 
     useEffect(() => {
-        if (!user) {
+        const timer = setTimeout(() => {
+            setAuthReady(true);
+        }, 2000); 
+
+        return () => clearTimeout(timer);
+    }, []);
+
+    useEffect(() => {
+        if (authReady && !loading && !user) {
             navigate('/signin');
         }
-    }, [user, navigate]);
+    }, [authReady, loading, user, navigate]);
 
 
     return (
-        
-
         <>
             <DashNav />
             <SideBox />
@@ -34,7 +38,6 @@ const Dashboard = () => {
                 <Route path='newproject' element={<NewProject />} />
                 <Route path='saved' element={<Savedfile />} />
                 <Route path='stats' element={<Stats />} />
-              
             </Routes>
 
         </>
