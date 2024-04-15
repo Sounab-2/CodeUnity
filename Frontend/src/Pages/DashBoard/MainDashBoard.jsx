@@ -15,7 +15,7 @@ const MainDashBoard = () => {
       <DeveloperQuotes/>
       <div className=' w-full justify-between flex flex-wrap '>
         <span className='  flex flex-col gap-7 justify-center items-center border-2 rounded-lg p-16 '>
-          <h1 className=' text-white font-bold text-5xl'>You don't have a floder yet </h1>
+          <h1 className=' text-white font-bold text-5xl'>You don't have a folder yet </h1>
           <button className=' btn bg-primary text-white'>Create a floder</button>
 
         </span>
