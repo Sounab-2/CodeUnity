@@ -93,7 +93,7 @@ const Newproject = () => {
                 <button className="btn" onClick={() => handleWorkSpaceSelection('Join')}>Join a work space</button>
               </div>
             )}
-            {step === 2 && selectedTeam === 'Solo' && (
+            {/* {step === 2 && selectedTeam === 'Solo' && (
               <div className=' flex flex-col gap-8'>
                 
                 <h3 className="font-bold text-lg">Create a folder</h3>
@@ -103,8 +103,8 @@ const Newproject = () => {
                 <button className="btn" onClick={handleNextStep}>Next</button>
                 </div>
               </div>
-            )}
-             {step === 3 && selectedTeam === 'Solo' &&  (
+            )} */}
+             {step === 2 && selectedTeam === 'Solo' &&  (
               <div className=' flex flex-col gap-5 p-10'>
            
                 <Link className=' btn' to='/editor'>Open Editor</Link>
@@ -115,7 +115,7 @@ const Newproject = () => {
                 <div className="flex flex-col gap-6">
                   <h3 className="font-bold text-lg">Workspace Details</h3>
                   <input type="text" value={workspaceName} onChange={handleWorkspaceNameChange} placeholder="Workspace Name" className="input input-bordered input-primary w-full max-w-xs" />
-                  <div className="relative">
+                  {/* <div className="relative">
                     <input type="text" value={code} readOnly className="input input-bordered input-primary w-full max-w-xs" />
                     <button
                       className="absolute top-0 right-40 w-16 h-full text-center text-gray-500 focus:outline-none"
@@ -149,7 +149,7 @@ const Newproject = () => {
                         </div>
                       )}
                     </button>
-                  </div>
+                  </div> */}
 
 
                   <button className="btn" onClick={handleNextStep}>Next</button>
@@ -166,7 +166,7 @@ const Newproject = () => {
               </div>
             )}
 
-            {step === 4 && selectedTeam === 'Team' && selectedWorkSpace === 'Create' && (
+            {/* {step === 4 && selectedTeam === 'Team' && selectedWorkSpace === 'Create' && (
               <div className=' flex flex-col gap-4'>
                 <h3 className="font-bold text-lg">Create a folder</h3>
                 <div className=' flex gap-5'>
@@ -174,7 +174,7 @@ const Newproject = () => {
                 <button className="btn" onClick={handleNextStep}>Next</button>
                 </div>
               </div>
-            )}
+            )} */}
 
             {step === 4 && selectedTeam === 'Team' && selectedWorkSpace === 'Join' && (
               <div className=' flex flex-col gap-10'>
@@ -182,7 +182,7 @@ const Newproject = () => {
                 <Link className=' btn' to='/editor'>Join</Link>
               </div>
             )}
-            {step === 5 && selectedTeam === 'Team' && selectedWorkSpace === 'Create' && (
+            {step === 4 && selectedTeam === 'Team' && selectedWorkSpace === 'Create' && (
               <div className=' flex flex-col gap-5'>
                 Your Profile
                 <Link className=' btn' to='/editor'>Create the workSpace</Link>
