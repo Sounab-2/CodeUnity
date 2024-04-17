@@ -1,15 +1,15 @@
 import React, { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
+import { Link , useNavigate } from 'react-router-dom';
 
 const Newproject = () => {
   const [step, setStep] = useState(1);
   const [selectedTeam, setSelectedTeam] = useState('');
   const [selectedWorkSpace, setSelectedWorkSpace] = useState('');
   const [code, setCode] = useState('');
-  const [folderName, setFolderName] = useState('');
   const [workspaceName, setWorkspaceName] = useState('');
   const [copied, setCopied] = useState(false);
   const [codeGenerated, setCodeGenerated] = useState(false);
+  const [isDisabled, setIsButtonDisabled] = useState(true);
 
   useEffect(() => {
     if (!codeGenerated) {
@@ -25,6 +25,7 @@ const Newproject = () => {
 
   const handleWorkSpaceSelection = (option) => {
     setSelectedWorkSpace(option);
+   
     setStep(3);
   };
 
@@ -37,8 +38,22 @@ const Newproject = () => {
   };
 
   const handleWorkspaceNameChange = (event) => {
-    setWorkspaceName(event.target.value);
+    const name = event.target.value;
+    setWorkspaceName(name);
+    if (name.length >= 6) {
+      setIsButtonDisabled(false); // Enable the button when the length is greater than or equal to 6
+    } else {
+      setIsButtonDisabled(true); // Disable the button when the length is less than 6
+    }
   };
+  
+  const navigate = useNavigate();
+
+  const handleSolo=()=>{
+
+    navigate('/editor')
+
+  }
 
   const handleNextStep = () => {
     setStep(step + 1);
@@ -52,7 +67,6 @@ const Newproject = () => {
     setCode('');
     setFolderName('');
     setWorkspaceName('');
-    setCodeGenerated(false); // Reset code generation flag
   };
 
   const generateCode = () => {
@@ -93,21 +107,27 @@ const Newproject = () => {
                 <button className="btn" onClick={() => handleWorkSpaceSelection('Join')}>Join a work space</button>
               </div>
             )}
-            {/* {step === 2 && selectedTeam === 'Solo' && (
-              <div className=' flex flex-col gap-8'>
+
+             {step === 2 && selectedTeam === 'Solo' &&  (
+              <div className=' flex flex-col gap-6 p-10'>
+           
+           <div className=' flex flex-col gap-4'>
                 
-                <h3 className="font-bold text-lg">Create a folder</h3>
+                <h3 className="font-bold text-lg">Create a Workspace</h3>
 
                 <div className=' flex gap-3'>
-                <input type="text" value={folderName} onChange={handleFolderNameChange}  className="input input-bordered input-primary w-full max-w-xs" />
-                <button className="btn" onClick={handleNextStep}>Next</button>
+                <input type="text" value={workspaceName} onChange={handleWorkspaceNameChange}  className="input input-bordered input-primary w-full max-w-xs" placeholder="workspace name" />
+       
                 </div>
               </div>
-            )} */}
-             {step === 2 && selectedTeam === 'Solo' &&  (
-              <div className=' flex flex-col gap-5 p-10'>
-           
-                <Link className=' btn' to='/editor'>Open Editor</Link>
+              
+                <button disabled={isDisabled} className=' btn' onClick={handleSolo} >
+                  
+                  Open Editor
+                
+                  
+                </button>
+
               </div>
             )}
             {step === 3 && selectedTeam === 'Team' && selectedWorkSpace === 'Create' && (
@@ -115,44 +135,7 @@ const Newproject = () => {
                 <div className="flex flex-col gap-6">
                   <h3 className="font-bold text-lg">Workspace Details</h3>
                   <input type="text" value={workspaceName} onChange={handleWorkspaceNameChange} placeholder="Workspace Name" className="input input-bordered input-primary w-full max-w-xs" />
-                  {/* <div className="relative">
-                    <input type="text" value={code} readOnly className="input input-bordered input-primary w-full max-w-xs" />
-                    <button
-                      className="absolute top-0 right-40 w-16 h-full text-center text-gray-500 focus:outline-none"
-                      onClick={copyToClipboard}
-                    >
-                      {copied ? (
-                        <div className="flex items-center justify-center h-full">
-                          <svg
-                            className="w-3.5 h-3.5 text-blue-700 dark:text-blue-500 mr-1"
-                            aria-hidden="true"
-                            xmlns="http://www.w3.org/2000/svg"
-                            fill="none"
-                            viewBox="0 0 16 12"
-                          >
-                            <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M1 5.917 5.724 10.5 15 1.5" />
-                          </svg>
-                          <span className="text-sm font-medium">Copied!</span>
-                        </div>
-                      ) : (
-                        <div className="flex items-center justify-center h-full">
-                          <svg
-                            className="w-3.5 h-3.5"
-                            aria-hidden="true"
-                            xmlns="http://www.w3.org/2000/svg"
-                            fill="currentColor"
-                            viewBox="0 0 18 20"
-                          >
-                            <path d="M16 1h-3.278A1.992 1.992 0 0 0 11 0H7a1.993 1.993 0 0 0-1.722 1H2a2 2 0 0 0-2 2v15a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V3a2 2 0 0 0-2-2Zm-3 14H5a1 1 0 0 1 0-2h8a1 1 0 0 1 0 2Zm0-4H5a1 1 0 0 1 0-2h8a1 1 0 1 1 0 2Zm0-5H5a1 1 0 0 1 0-2h2V2h4v2h2a1 1 0 1 1 0 2Z" />
-                          </svg>
-                     
-                        </div>
-                      )}
-                    </button>
-                  </div> */}
-
-
-                  <button className="btn" onClick={handleNextStep}>Next</button>
+                  <button className="btn" onClick={handleNextStep} disabled={isDisabled}>Next</button>
                 </div>
               </>
             )}
@@ -165,16 +148,6 @@ const Newproject = () => {
                 </div>
               </div>
             )}
-
-            {/* {step === 4 && selectedTeam === 'Team' && selectedWorkSpace === 'Create' && (
-              <div className=' flex flex-col gap-4'>
-                <h3 className="font-bold text-lg">Create a folder</h3>
-                <div className=' flex gap-5'>
-                <input type="text" value={folderName} onChange={handleFolderNameChange} className="input input-bordered input-primary w-full max-w-xs" />
-                <button className="btn" onClick={handleNextStep}>Next</button>
-                </div>
-              </div>
-            )} */}
 
             {step === 4 && selectedTeam === 'Team' && selectedWorkSpace === 'Join' && (
               <div className=' flex flex-col gap-10'>
