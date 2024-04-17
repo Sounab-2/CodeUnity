@@ -2,5 +2,5 @@ import axios from 'axios';
 
 export const axiosInstance = axios.create({
     withCredentials: true,
-    baseURL: 'http://localhost:3000'
+    baseURL: 'http://localhost:5050'
 });

@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Link , useNavigate } from 'react-router-dom';
+import { auth } from '../../firebase';
+import { axiosInstance } from '../../../utils/index';
 
 const Newproject = () => {
   const [step, setStep] = useState(1);
@@ -10,7 +12,9 @@ const Newproject = () => {
   const [copied, setCopied] = useState(false);
   const [codeGenerated, setCodeGenerated] = useState(false);
   const [isDisabled, setIsButtonDisabled] = useState(true);
+  const user= auth.currentUser;
 
+  const userId=user.uid;
   useEffect(() => {
     if (!codeGenerated) {
       generateCode();
@@ -49,11 +53,35 @@ const Newproject = () => {
   
   const navigate = useNavigate();
 
-  const handleSolo=()=>{
+  const handleSolo = async () => {
+    const name = workspaceName;
+    const fileName = 'topic'; 
+    const language = 'c++';
 
-    navigate('/editor')
+    const data = {
+      name,
+      fileName,
+      language
+    };
 
-  }
+    try {
+      console.log(userId);
+      // const response = await axiosInstance.post(`/api/v1/project/create/solo/${userId}`, {data});
+      // console.log(data);
+
+      // if (response.ok) {
+      //   const { workspace } = await response.json();
+      //   console.log('Workspace created successfully:', workspace);
+      //   navigate('/editor'); 
+      // } else {
+      //   const { message } = await response.json();
+      //   console.error('Failed to create workspace:', message);
+      // }
+    } catch (error) {
+      console.error('Error creating workspace:', error.message);
+      
+    }
+  };
 
   const handleNextStep = () => {
     setStep(step + 1);
@@ -81,6 +109,8 @@ const Newproject = () => {
       setCopied(false);
     }, 2000);
   };
+
+  
 
   return (
     <div className="p-4 pt-20 min-h-screen lg:ml-64 overflow-hidden flex flex-row justify-between">
