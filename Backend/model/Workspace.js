@@ -18,28 +18,11 @@ const WorkspaceSchema = new mongoose.Schema({
     },
     code: {
         type: {
-            cPlusPlus: { 
-                type: String, 
-                // required: true, 
-                default: '#include <iostream>\nint main() {\n  std::cout << "Hello World!";\n  return 0;\n}' 
-            },
-            java: { 
-                type: String, 
-                // required: true, 
-                default: 'public class Main {\n  public static void main(String[] args) {\n    System.out.println("Hello World!");\n  }\n}' 
-            },
-            python: { 
-                type: String, 
-                // required: true, 
-                default: 'print("Hello World!")' 
-            },
-            javascript: { 
-                type: String, 
-                // required: true, 
-                default: 'console.log("Hello World!");' 
-            }
-        },
-        // required: true
+            cPlusPlus: { type: String, default: '#include <iostream>\nint main() {\n  std::cout << "Hello World!";\n  return 0;\n}' },
+            java: { type: String, default: 'public class Main {\n  public static void main(String[] args) {\n    System.out.println("Hello World!");\n  }\n}' },
+            python: { type: String, default: 'print("Hello World!")' },
+            javascript: { type: String, default: 'console.log("Hello World!");' }
+        }
     },
     type: {
         type: String,
@@ -47,12 +30,12 @@ const WorkspaceSchema = new mongoose.Schema({
         enum: ['solo', 'team']
     },
     team: [{
-        type: mongoose.Schema.Types.ObjectId,
+        type: String,
         ref: 'User',
         required: true,
     }],
-    host:{
-        type: mongoose.Schema.Types.ObjectId,
+    host: {
+        type: String,
         ref: 'User',
         required: true,
     }

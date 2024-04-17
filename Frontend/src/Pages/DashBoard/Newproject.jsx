@@ -13,8 +13,10 @@ const Newproject = () => {
   const [codeGenerated, setCodeGenerated] = useState(false);
   const [isDisabled, setIsButtonDisabled] = useState(true);
   const user= auth.currentUser;
-
+  const navigate = useNavigate();
   const userId=user.uid;
+
+
   useEffect(() => {
     if (!codeGenerated) {
       generateCode();
@@ -51,12 +53,12 @@ const Newproject = () => {
     }
   };
   
-  const navigate = useNavigate();
+
 
   const handleSolo = async () => {
     const name = workspaceName;
     const fileName = 'topic'; 
-    const language = 'c++';
+    const language = 'python';
 
     const data = {
       name,
@@ -66,17 +68,9 @@ const Newproject = () => {
 
     try {
       console.log(userId);
-      // const response = await axiosInstance.post(`/api/v1/project/create/solo/${userId}`, {data});
-      // console.log(data);
-
-      // if (response.ok) {
-      //   const { workspace } = await response.json();
-      //   console.log('Workspace created successfully:', workspace);
-      //   navigate('/editor'); 
-      // } else {
-      //   const { message } = await response.json();
-      //   console.error('Failed to create workspace:', message);
-      // }
+      const response = await axiosInstance.post(`/api/v1/project/create/solo/${userId}`, {name,fileName,language});
+      // console.log(response);
+      navigate('/editor'); 
     } catch (error) {
       console.error('Error creating workspace:', error.message);
       
