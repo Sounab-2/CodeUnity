@@ -135,7 +135,7 @@ io.on('connection', (socket) => {
     socket.on('joinRoom', (roomId) => {
         socket.join(roomId);
         console.log(`User ${socket.id} joined room: ${roomId}`);
-        socket.to(roomId).emit('userJoined', roomId);
+        socket.to(roomId).emit('userJoined', {roomId,userId: socket.id});
     });
 });
 

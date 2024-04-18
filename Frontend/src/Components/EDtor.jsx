@@ -1,9 +1,9 @@
-import React, { useRef } from 'react';
+import React, { useEffect, useRef } from 'react';
 import{Editor} from "@monaco-editor/react";
 import { useState } from 'react';
 import { CODE_SNIPPETS } from '../constants';
 import { executeCode } from '../api';
-
+import { initializeSocket } from '../socket';
 
 const EDtor = () => {
     const [theme, setTheme] = useState('vs-white'); 
@@ -14,6 +14,26 @@ const EDtor = () => {
     const [isLoading, setIsLoading] = useState(false);
     const {isError, setIsError} = useState(false);
     const [inputValue, setInputValue] = useState('');
+    const socketRef = useRef(null);
+    
+    useEffect(()=>{
+      const init = async ()=>{
+        if(!socketRef.current){
+          socketRef.current = await initializeSocket();
+          const roomId = 1234
+          socketRef.current.emit('joinRoom', roomId);
+          socketRef.current.on('userJoined',({userId})=>{
+            console.log('A new user joined: ', userId);
+          })
+        }
+      }
+
+      init();
+
+      console.log('rendering');
+    },[])
+   
+
 
     const onMount = (editor) => {
         editorRef.current=editor;

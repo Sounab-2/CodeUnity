@@ -47,9 +47,9 @@ const Newproject = () => {
     const name = event.target.value;
     setWorkspaceName(name);
     if (name.length >= 6) {
-      setIsButtonDisabled(false); // Enable the button when the length is greater than or equal to 6
+      setIsButtonDisabled(false); 
     } else {
-      setIsButtonDisabled(true); // Disable the button when the length is less than 6
+      setIsButtonDisabled(true); 
     }
   };
   

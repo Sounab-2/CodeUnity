@@ -21,7 +21,7 @@ const createSoloWorkspace = async (req, res) => {
 };
 
 const createTeamWorkspace = async (req, res) => {
-    const { name, fileName, language } = req.body; // Correctly extract and rename filename to fileName
+    const { name, fileName, language } = req.body;
     const { userId } = req.params;
 
     if (!name || !fileName || !language || !userId) {

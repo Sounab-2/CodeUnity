@@ -1,7 +1,15 @@
 import io from 'socket.io-client';
 
-const SOCKET_URL = 'http://localhost:3000'; 
+const SOCKET_URL = 'http://localhost:5050'; 
 
-const socket = io(SOCKET_URL, { withCredentials: true });
+const options = {
+    reconnection: true,               
+    reconnectionAttempts: Infinity, 
+    transports: ['websocket'], 
+    autoConnect: true
+};
 
-export default socket;
+export const initializeSocket = async () => {
+    const socket = io(SOCKET_URL, options);
+    return socket;
+};
