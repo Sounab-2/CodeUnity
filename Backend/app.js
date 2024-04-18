@@ -131,12 +131,18 @@ io.on('connection', (socket) => {
         console.log('User disconnected:', socket.id);
     });
 
-    // Example event
     socket.on('joinRoom', (roomId) => {
         socket.join(roomId);
         console.log(`User ${socket.id} joined room: ${roomId}`);
         socket.to(roomId).emit('userJoined', {roomId,userId: socket.id});
     });
+
+    socket.on('code-change',({value,meetingId})=>{
+        // console.log(value);
+        socket.to(meetingId).emit('code-sync',value);
+    })
+    
+
 });
 
 const start = async () => {
