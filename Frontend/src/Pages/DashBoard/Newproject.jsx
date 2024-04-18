@@ -103,6 +103,24 @@ const Newproject = () => {
 
   };
 
+  const joinTeam = async  () => {
+    try{
+      if(code){
+        const response = await axiosInstance.post(`/api/v1/project/join/team/${userId}`, {meetingId:code});
+        console.log(response);
+        navigate(`/editor/${code}`);
+      }
+      else{
+        console.log("Please enter a valid meeting id");
+      }
+      
+    }
+    catch{
+      console.error('Error joining workspace:', error.message);
+    }
+    
+  };
+
   const handleModalClose = () => {
     // Reset state
     setStep(1);
@@ -190,7 +208,7 @@ const Newproject = () => {
                 <h3 className="font-bold text-lg">Paste the code or Ask friend a code</h3>
                 <div className=' flex gap-4'>
                 <input type="text"  onChange={handleCodeChange} className="input input-bordered input-primary w-full max-w-xs" />
-                <button className="btn" onClick={handleNextStep}>Next</button>
+                <button className="btn" onClick= {()=>joinTeam()}>Next</button>
                 </div>
               </div>
             )}

@@ -47,6 +47,20 @@ const createTeamWorkspace = async (req, res) => {
     }
 };
 
+const joinTeam = async (req,res) => {
+    const { userId } = req.params;
+    const meetingId = req.body.meetingId;
+    try{
+        const workspace = await WorkspaceModel.findOne({_id:meetingId});
+        workspace.team.push(userId);
+        await workspace.save();
+        res.status(StatusCodes.OK).json({ workspace });
+    }
+    catch{
+        res.status(StatusCodes.BAD_REQUEST).json({ message: error.message });
+    }
+};
 
 
-module.exports = { createSoloWorkspace,createTeamWorkspace };
+
+module.exports = { createSoloWorkspace,createTeamWorkspace,joinTeam };
