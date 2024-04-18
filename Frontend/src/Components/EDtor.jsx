@@ -4,6 +4,7 @@ import { useState } from 'react';
 import { CODE_SNIPPETS } from '../constants';
 import { executeCode } from '../api';
 import { initializeSocket } from '../socket';
+import { useParams } from 'react-router-dom';
 
 const EDtor = () => {
     const [theme, setTheme] = useState('vs-white'); 
@@ -14,14 +15,16 @@ const EDtor = () => {
     const [isLoading, setIsLoading] = useState(false);
     const {isError, setIsError} = useState(false);
     const [inputValue, setInputValue] = useState('');
+    const meetingId = useParams().meetingId;
+    // console.log(meetingId);
     const socketRef = useRef(null);
+
     
     useEffect(()=>{
       const init = async ()=>{
         if(!socketRef.current){
           socketRef.current = await initializeSocket();
-          const roomId = 1234
-          socketRef.current.emit('joinRoom', roomId);
+          socketRef.current.emit('joinRoom', meetingId);
           socketRef.current.on('userJoined',({userId})=>{
             console.log('A new user joined: ', userId);
           })

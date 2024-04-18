@@ -14,7 +14,7 @@ const Newproject = () => {
   const [isDisabled, setIsButtonDisabled] = useState(true);
   const user= auth.currentUser;
   const navigate = useNavigate();
-  const userId=user.uid;
+  const userId=user?.uid;
 
 
   useEffect(() => {
@@ -77,8 +77,30 @@ const Newproject = () => {
     }
   };
 
-  const handleNextStep = () => {
+  const handleNextStep = async () => {
     setStep(step + 1);
+    const name = workspaceName;
+    const fileName = 'topic'; 
+    const language = 'python';
+
+    const data = {
+      name,
+      fileName,
+      language
+    };
+
+    try {
+      console.log(userId);
+      const response = await axiosInstance.post(`/api/v1/project/create/team/${userId}`, {name,fileName,language});
+      // console.log(response);
+      const meetingId = response.data.workspace._id;
+      console.log(meetingId);
+      navigate(`/editor/${meetingId}`);
+    } catch (error) {
+      console.error('Error creating workspace:', error.message);
+      
+    }
+
   };
 
   const handleModalClose = () => {
