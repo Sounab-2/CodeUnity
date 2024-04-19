@@ -3,7 +3,7 @@ import React from 'react';
 const About = () => {
     return (
         <>
-            <section class="bg-gray-950">
+            <section class="bg-primary-content">
                 <div class="py-8 px-4 mx-auto max-w-screen-xl sm:py-16 lg:px-6">
                     <div class="max-w-screen-md mb-8 lg:mb-16">
                         <h2 class="mb-4 text-4xl tracking-tight font-extrabold text-white">Discover the Ultimate Learning Experience</h2>
@@ -56,7 +56,7 @@ const About = () => {
                     </div>
                 </div>
             </section>
-            <section className=' bg-gray-950 p-20'>
+            <section className=' bg-primary-content p-20'>
                 <div className="join join-vertical w-full">
                     <div className="collapse collapse-arrow join-item border border-base-300">
                         <input type="radio" name="my-accordion-4" defaultChecked />
@@ -88,7 +88,7 @@ const About = () => {
                 </div>
             </section>
 
-            <section className=' min-h-96 bg-slate-950 p-12 flex gap-8'>
+            <section className=' min-h-96 bg-primary-content p-12 flex gap-8'>
                 <img src="/about-image-dark.svg" alt="" />
                 <div className=' border-3'>
                     <ul className="timeline timeline-snap-icon max-md:timeline-compact timeline-vertical">

@@ -3,13 +3,13 @@ import { Link } from 'react-router-dom';
 
 const SideBox = () => {
    return (
-      <aside id="logo-sidebar" class="fixed top-0 left-0 z-40 w-64 h-screen pt-20 transition-transform -translate-x-full bg-white border-r border-gray-200 sm:translate-x-0 dark:bg-gray-800 dark:border-gray-700" aria-label="Sidebar">
-         <div class="h-full px-3 pb-4 overflow-y-auto bg-white dark:bg-gray-800">
+      <aside id="logo-sidebar" class="fixed top-0 left-0 z-40 w-64 h-screen pt-20 transition-transform -translate-x-full  border-r border-gray-200 sm:translate-x-0 bg-base-300" aria-label="Sidebar">
+         <div class="h-full px-3 pb-4 overflow-y-auto bg-base-300 mt-5">
             <ul class="space-y-2 font-medium">
                <li>
                   <Link
                      to="/dashboard"
-                     class={`flex items-center p-2 rounded-lg dark:text-white group ${location.pathname === '/dashboard' ? 'bg-gray-100 dark:bg-gray-700' : 'text-gray-900 hover:bg-gray-100 dark:hover:bg-gray-700'
+                     class={`flex items-center p-2 rounded text-base-content group ${location.pathname === '/dashboard' ? 'bg-base-100' : ' hover:bg-base-200'
                         }`}
 
                   >
@@ -17,13 +17,13 @@ const SideBox = () => {
                         <path d="M16.975 11H10V4.025a1 1 0 0 0-1.066-.998 8.5 8.5 0 1 0 9.039 9.039.999.999 0 0 0-1-1.066h.002Z" />
                         <path d="M12.5 0c-.157 0-.311.01-.565.027A1 1 0 0 0 11 1.02V10h8.975a1 1 0 0 0 1-.935c.013-.188.028-.374.028-.565A8.51 8.51 0 0 0 12.5 0Z" />
                      </svg>
-                     <span class="ms-3">Dashboard</span>
+                     <span class="ms-3  ">Dashboard</span>
                   </Link>
                </li>
                <li>
                   <Link
                      to="/dashboard/saved"
-                     class={`flex items-center p-2 rounded-lg dark:text-white group ${location.pathname === '/dashboard/saved' ? 'bg-gray-100 dark:bg-gray-700' : 'text-gray-900 hover:bg-gray-100 dark:hover:bg-gray-700'
+                     class={`flex items-center p-2 rounded-lg text-base-content group ${location.pathname === '/dashboard/saved' ? 'bg-base-100' : ' hover:bg-base-100'
                         }`}
 
                   >
@@ -41,7 +41,7 @@ const SideBox = () => {
                <li>
                   <Link
                      to="/dashboard/newproject"
-                     class={`flex items-center p-2 rounded-lg dark:text-white group ${location.pathname === '/dashboard/newproject' ? 'bg-gray-100 dark:bg-gray-700' : 'text-gray-900 hover:bg-gray-100 dark:hover:bg-gray-700'
+                     class={`flex items-center p-2 rounded-lg text-base-content group ${location.pathname === '/dashboard/newproject' ? 'bg-base-100' : ' hover:bg-base-100'
                         }`}
 
                   >
@@ -56,7 +56,7 @@ const SideBox = () => {
                <li>
                   <Link
                      to="/dashboard/stats"
-                     class={`flex items-center p-2 rounded-lg dark:text-white group ${location.pathname === '/dashboard/stats' ? 'bg-gray-100 dark:bg-gray-700' : 'text-gray-900 hover:bg-gray-100 dark:hover:bg-gray-700'
+                     class={`flex items-center p-2 rounded-lg text-base-content group ${location.pathname === '/dashboard/stats' ? 'bg-base-100' : 'text-base-content hover:bg-base-100'
                         }`}
 
                   >

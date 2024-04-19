@@ -4,13 +4,13 @@ import { useEffect } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faUserPlus, faBars, faSignOut } from '@fortawesome/free-solid-svg-icons';
 import AvatarCom from './AvatarCom';
-// import { useSelector, useDispatch } from 'react-redux';
 import { useFirebase } from '../Context/FirebaseContext';
+import Themetoggler from './Themetoggler'
 
 export default function Header() {
-
+ 
   const [isMobileNavOpen, setIsMobileNavOpen] = useState(false);
-  // const user = useSelector(state => state.user);
+
   const { user, signoutUser } = useFirebase();
 
   const toggleMobileNav = () => {
@@ -38,7 +38,7 @@ export default function Header() {
 
   return (
     <header className="sticky z-50 top-0 flex flex-col ">
-      <nav className={`px-4 lg:px-6 py-2.5 text-xl ${isScrolled ? 'glass' : 'bg-transparent'}`}>
+      <nav className={`px-4 lg:px-6 py-2.5 text-xl ${isScrolled ? 'glass' : 'bg-base-300 '}`}>
 
         <div className="flex flex-wrap justify-between items-center mx-auto max-w-screen-xl">
           <Link to="/" className="flex items-center">
@@ -52,7 +52,8 @@ export default function Header() {
 
             <div className="flex items-center lg:order-2 gap-5">
 
-             <AvatarCom/>
+              <AvatarCom />
+              <Themetoggler/>
             </div>
 
 

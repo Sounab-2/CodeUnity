@@ -5,7 +5,7 @@ import { faUserPlus, faBars, faSignOut } from '@fortawesome/free-solid-svg-icons
 const Team = () => {
   return (
    <>
-    <section class="history" id="history" className=' bg-slate-950 flex justify-center items-center min-h-screen flex-col gap-5'>
+    <section class="history" id="history" className=' bg-primary-content flex justify-center items-center min-h-screen flex-col gap-5'>
         {/* <div class="absolute bottom-0 left-0 right-0 z-[-1] h-full w-full bg-[url(/shape.svg)] bg-cover bg-center bg-no-repeat"></div> */}
         
         <h1 className=' flex items-center text-4xl text-white font-extrabold'>Meet Our Team Members</h1>
