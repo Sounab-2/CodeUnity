@@ -20,7 +20,7 @@ const Themetoggler = () => {
         }
     }
     return (
-        <label className="swap swap-rotate text-white">
+        <label className="swap swap-rotate text-white z-10 relative">
 
             {/* this hidden checkbox controls the state */}
             <input 
