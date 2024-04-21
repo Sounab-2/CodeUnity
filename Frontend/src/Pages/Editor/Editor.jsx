@@ -6,10 +6,10 @@ import { EditorNav } from '../../Components';
 
 const Editor = () => {
   return (
-    <>
+    <section className=' max-h-screen overflow-hidden w-full'>
       <EditorNav />
       <EDtor />
-    </>
+    </section>
   );
 }
 

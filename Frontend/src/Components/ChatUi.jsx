@@ -11,7 +11,7 @@ const ChatUi = () => {
             </div>
             <div className="drawer-side">
                 <label htmlFor="my-drawer-4" aria-label="close sidebar" className="drawer-overlay"></label>
-                <div className=' min-h-screen w-1/3 p-14 bg-base-300 relative z-50'>
+                <div className=' min-h-screen w-1/3 p-14 bg-base-300 relative z-50 border-2'>
                     <div className="chat chat-start">
                         <div className="chat-image avatar">
                             <div className="w-10 rounded-full">
