@@ -2,7 +2,7 @@ import React from 'react';
 import 'tailwindcss/tailwind.css';
 import EDtor from '../../Components/EDtor';
 import { EditorNav } from '../../Components';
-import { useRef,useEffect } from 'react';
+import { useRef,useEffect,useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { initializeSocket } from '../../socket';
 
@@ -10,6 +10,7 @@ import { initializeSocket } from '../../socket';
 const Editor = () => {
   const socketRef = useRef(null);
   const { meetingId } = useParams();
+  const [value, setValue] = useState('');
 
   useEffect(() => {
     const initSocket = async () => {
@@ -45,7 +46,7 @@ const Editor = () => {
   return (
     <section className=' max-h-screen overflow-hidden w-full'>
       <EditorNav socketRef={socketRef}/>
-      <EDtor socketRef={socketRef}/>
+      <EDtor socketRef={socketRef} value={value} setValue={setValue}/>
     </section>
   );
 }

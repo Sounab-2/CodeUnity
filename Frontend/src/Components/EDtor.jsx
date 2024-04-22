@@ -8,16 +8,18 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPlay,faFolderPlus , faComments} from '@fortawesome/free-solid-svg-icons';
 
 
-const EditorComponent = ({socketRef}) => {
+const EditorComponent = ({socketRef,value,setValue}) => {
     const [theme, setTheme] = useState('vs-dark');
     const editorRef = useRef(null);
-    const [value, setValue] = useState('');
+   
     const [language, setLanguage] = useState('python');
     const [output, setOutput] = useState('');
     const [isLoading, setIsLoading] = useState(false);
     const [isError, setIsError] = useState(false);
     const [inputValue, setInputValue] = useState('');
     const [isDrawerOpen, setIsDrawerOpen] = useState(true);
+    const { meetingId } = useParams();
+    
 
     const handleCodeChange = (newValue) => {
         setValue(newValue);
