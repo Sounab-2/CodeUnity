@@ -4,6 +4,8 @@ import { useParams } from 'react-router-dom';
 import { CODE_SNIPPETS } from '../constants';
 import { executeCode } from '../api';
 import { initializeSocket } from '../socket';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faPlay,faFolderPlus , faComments} from '@fortawesome/free-solid-svg-icons';
 
 
 const EditorComponent = () => {
@@ -125,8 +127,9 @@ const EditorComponent = () => {
 
                     <div className="navbar bg-base-300 rounded-box flex justify-between ">
                         <div>
-                            <button className=' btn bg-primary text-secondary-content hover:bg-base-100 hover:text-base-content'>
+                            <button className=' btn bg-primary text-secondary-content hover:bg-base-100 hover:text-base-content text-sm flex'>
                                 create a file
+                                {/* <span><FontAwesomeIcon icon={faFolderPlus} /></span> */}
                             </button>
                         </div>
                         <div className="flex px-2 lg:flex-none">
@@ -184,6 +187,7 @@ const EditorComponent = () => {
 
                             <button className="btn btn-outline  btn-success" onClick={runCode} disabled={isLoading}>
                                 {isLoading ? 'Running...' : 'Run'}
+                                <span><FontAwesomeIcon icon={faPlay} /></span>
 
                             </button>
 

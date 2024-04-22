@@ -2,6 +2,7 @@ import React from 'react';
 import Themetoggler from './Themetoggler';
 import ChatUi from './ChatUi';
 import Call from './Call';
+
 const EditorNav = () => {
   return (
     <div className=' bg-base-300 w-full h-20 pl-28 flex items-center justify-evenly'>
