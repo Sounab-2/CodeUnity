@@ -141,9 +141,19 @@ io.on('connection', (socket) => {
         // console.log(value);
         socket.to(meetingId).emit('code-sync',value);
     })
+
+    socket.on('message',({text,meetingId})=>{
+        console.log(text);
+        socket.to(meetingId).emit('received-message',text);
+    })
     
 
 });
+
+
+
+
+
 
 const start = async () => {
     try {

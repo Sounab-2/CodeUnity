@@ -8,7 +8,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPlay,faFolderPlus , faComments} from '@fortawesome/free-solid-svg-icons';
 
 
-const EditorComponent = () => {
+const EditorComponent = ({socketRef}) => {
     const [theme, setTheme] = useState('vs-dark');
     const editorRef = useRef(null);
     const [value, setValue] = useState('');
@@ -17,37 +17,7 @@ const EditorComponent = () => {
     const [isLoading, setIsLoading] = useState(false);
     const [isError, setIsError] = useState(false);
     const [inputValue, setInputValue] = useState('');
-    const { meetingId } = useParams();
-    const socketRef = useRef(null);
     const [isDrawerOpen, setIsDrawerOpen] = useState(true);
-
-
-
-    useEffect(() => {
-        const initSocket = async () => {
-            if (!socketRef.current) {
-                socketRef.current = await initializeSocket();
-                socketRef.current.emit('joinRoom', meetingId);
-                socketRef.current.on('userJoined', ({ userId }) => {
-                    console.log('A new user joined: ', userId);
-                });
-
-                socketRef.current.on('code-sync', (code) => {
-                    setValue(code);
-                });
-            }
-        };
-
-        initSocket();
-
-        // Proper cleanup to remove listeners
-        return () => {
-            if (socketRef.current) {
-                socketRef.current.off('userJoined');
-                socketRef.current.off('code-sync');
-            }
-        };
-    }, [meetingId]);
 
     const handleCodeChange = (newValue) => {
         setValue(newValue);
