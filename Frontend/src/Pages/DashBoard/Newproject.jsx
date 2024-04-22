@@ -69,8 +69,10 @@ const Newproject = () => {
     try {
       console.log(userId);
       const response = await axiosInstance.post(`/api/v1/project/create/solo/${userId}`, {name,fileName,language});
-      // console.log(response);
-      navigate('/editor'); 
+      console.log(response);
+      const meetingId = response.data.workspace._id;
+      console.log(meetingId);
+      navigate(`/editor/${meetingId}`); 
     } catch (error) {
       console.error('Error creating workspace:', error.message);
       
