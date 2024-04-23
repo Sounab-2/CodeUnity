@@ -14,7 +14,7 @@ const WorkspaceSchema = new mongoose.Schema({
     language: {
         type: String,
         required: true,
-        enum: ['java', 'python', 'c++', 'javascript']
+        enum: ['java', 'python', 'cPlusPlus', 'javascript']
     },
     code: {
             cPlusPlus: { type: String, default: '#include <iostream>\nint main() {\n  std::cout << "Hello World!";\n  return 0;\n}' },

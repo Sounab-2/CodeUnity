@@ -143,8 +143,8 @@ const ChatUi = ({ socketRef }) => {
     if (socketRef.current) {
         socketRef.current.on('received-message', (text) => {
             // Update the messages state with the received message
-            // setMessages(prevMessages => [...prevMessages, { text }]);
-            console.log(text)
+            //setMessages(prevMessages => [...prevMessages, { text }]);
+            console.log(text);
         });
     }
 }, []);

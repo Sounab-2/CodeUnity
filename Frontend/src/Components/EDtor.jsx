@@ -6,7 +6,7 @@ import { executeCode } from '../api';
 import { initializeSocket } from '../socket';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPlay,faFolderPlus , faComments} from '@fortawesome/free-solid-svg-icons';
-
+import {axiosInstance} from '../../utils/index';
 
 const EditorComponent = ({socketRef,value,setValue}) => {
     const [theme, setTheme] = useState('vs-dark');
@@ -37,9 +37,21 @@ const EditorComponent = ({socketRef,value,setValue}) => {
         setTheme((prevTheme) => prevTheme === 'vs-dark' ? 'vs-white' : 'vs-dark');
     };
 
-    const onSelectLanguage = (newLanguage) => {
+    const onSelectLanguage = async (newLanguage) => {
         setLanguage(newLanguage);
         setValue(CODE_SNIPPETS[newLanguage]);
+        const response = await axiosInstance.post('/api/v1/project/language',{
+            meetingId,
+            language: newLanguage
+        });
+    };
+
+    const codeSave = async () =>{
+        const response = await axiosInstance.post('/api/v1/project/save',{
+            meetingId,
+            code: value
+        })
+        console.log(response);
     };
 
     const runCode = async () => {
@@ -48,9 +60,14 @@ const EditorComponent = ({socketRef,value,setValue}) => {
 
         try {
             setIsLoading(true);
-            const { run: result } = await executeCode(language, sourcecode, inputValue);
-            setOutput(result.output);
-            result.stderr ? setIsError(true) : setIsError(false);
+            const response = await axiosInstance.post('/api/v1/project/run',{
+                code: sourcecode,
+                input: '2',
+                language: language
+            });
+            const { output } = response.data;
+            setOutput(output);
+            console.log(response);
         } catch (error) {
             console.log(error);
         }
@@ -58,7 +75,7 @@ const EditorComponent = ({socketRef,value,setValue}) => {
             setIsLoading(false);
         }
     };
-
+    
     const handleInputChange = (e) => {
         setInputValue(e.target.value);
     };
@@ -123,14 +140,14 @@ const EditorComponent = ({socketRef,value,setValue}) => {
                                 </button></li>
                                 <li><button
                                     className={language === 'cpp' ? 'font-bold text-blue-500' : ''}
-                                    onClick={() => onSelectLanguage('cpp')}>
+                                    onClick={() => onSelectLanguage('cPlusPlus')}>
                                     C++
                                 </button></li>
                             </ul>
                         </div>
                         <div className="flex justify-end flex-1 px-2">
                             <div className="flex items-stretch gap-3">
-                                <button className=' btn bg-primary text-secondary-content hover:bg-base-100 hover:text-base-content'>
+                                <button onClick={codeSave} className=' btn bg-primary text-secondary-content hover:bg-base-100 hover:text-base-content'>
                                     save
                                 </button>
                                 <label className="flex cursor-pointer gap-2 my-3">
