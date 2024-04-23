@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import AvatarCom from './AvatarCom';
 
 const EditorDrawer = () => {
     const [isDrawerOpen, setIsDrawerOpen] = useState(false);

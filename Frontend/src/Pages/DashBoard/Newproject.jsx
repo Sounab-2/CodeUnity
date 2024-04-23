@@ -2,8 +2,11 @@ import React, { useState, useEffect } from 'react';
 import { Link , useNavigate } from 'react-router-dom';
 import { auth } from '../../firebase';
 import { axiosInstance } from '../../../utils/index';
+import { useDispatch } from 'react-redux';
+import { setMeetingId } from '../../../features/meetingSlice';
 
 const Newproject = () => {
+  const dispatch = useDispatch();
   const [step, setStep] = useState(1);
   const [selectedTeam, setSelectedTeam] = useState('');
   const [selectedWorkSpace, setSelectedWorkSpace] = useState('');
@@ -71,6 +74,7 @@ const Newproject = () => {
       const response = await axiosInstance.post(`/api/v1/project/create/solo/${userId}`, {name,fileName,language});
       console.log(response);
       const meetingId = response.data.workspace._id;
+      dispatch(setMeetingId(meetingId));
       console.log(meetingId);
       navigate(`/editor/${meetingId}`); 
     } catch (error) {

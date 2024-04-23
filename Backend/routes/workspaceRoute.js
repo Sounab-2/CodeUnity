@@ -6,7 +6,7 @@ const {
       joinTeam,
       languageSelector,
       saveCode,
-      ru
+      runCode
 } = require('../controllers/workspaceController');
 
 router.post('/create/solo/:userId',createSoloWorkspace);
