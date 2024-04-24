@@ -5,13 +5,14 @@ import { CODE_SNIPPETS } from '../constants';
 import { executeCode } from '../api';
 import { initializeSocket } from '../socket';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faPlay,faFolderPlus , faComments} from '@fortawesome/free-solid-svg-icons';
-import {axiosInstance} from '../../utils/index';
+import { faPlay, faFolderPlus, faComments } from '@fortawesome/free-solid-svg-icons';
+import { axiosInstance } from '../../utils/index';
+import { useSelector } from 'react-redux';
+import { selectMeetingId, selectMeetingName } from '../../features/meetingSlice';
 
-const EditorComponent = ({socketRef,value,setValue}) => {
+const EditorComponent = ({ socketRef, value, setValue }) => {
     const [theme, setTheme] = useState('vs-dark');
     const editorRef = useRef(null);
-   
     const [language, setLanguage] = useState('python');
     const [output, setOutput] = useState('');
     const [isLoading, setIsLoading] = useState(false);
@@ -19,7 +20,10 @@ const EditorComponent = ({socketRef,value,setValue}) => {
     const [inputValue, setInputValue] = useState('');
     const [isDrawerOpen, setIsDrawerOpen] = useState(true);
     const { meetingId } = useParams();
-    
+    const meetId = useSelector(selectMeetingId);
+    const meetName = useSelector(selectMeetingName);
+    const [copied, setCopied] = useState(false);
+
 
     const handleCodeChange = (newValue) => {
         setValue(newValue);
@@ -40,14 +44,14 @@ const EditorComponent = ({socketRef,value,setValue}) => {
     const onSelectLanguage = async (newLanguage) => {
         setLanguage(newLanguage);
         setValue(CODE_SNIPPETS[newLanguage]);
-        const response = await axiosInstance.post('/api/v1/project/language',{
+        const response = await axiosInstance.post('/api/v1/project/language', {
             meetingId,
             language: newLanguage
         });
     };
 
-    const codeSave = async () =>{
-        const response = await axiosInstance.post('/api/v1/project/save',{
+    const codeSave = async () => {
+        const response = await axiosInstance.post('/api/v1/project/save', {
             meetingId,
             code: value
         })
@@ -60,7 +64,7 @@ const EditorComponent = ({socketRef,value,setValue}) => {
 
         try {
             setIsLoading(true);
-            const response = await axiosInstance.post('/api/v1/project/run',{
+            const response = await axiosInstance.post('/api/v1/project/run', {
                 code: sourcecode,
                 input: '2',
                 language: language
@@ -75,13 +79,21 @@ const EditorComponent = ({socketRef,value,setValue}) => {
             setIsLoading(false);
         }
     };
-    
+
     const handleInputChange = (e) => {
         setInputValue(e.target.value);
     };
     const toggleDrawer = () => {
         setIsDrawerOpen(!isDrawerOpen);
     };
+    const copyToClipboard = () => {
+        navigator.clipboard.writeText(meetId ? meetId : 'No meeting ID set');
+        setCopied(true);
+        setTimeout(() => {
+            setCopied(false);
+        }, 2000);
+    };
+
 
     return (
         <>
@@ -100,10 +112,65 @@ const EditorComponent = ({socketRef,value,setValue}) => {
                 </div>
                 <div className={`drawer-side mt-20 ${isDrawerOpen ? 'open' : 'closed'}`}>
                     <label htmlFor="my-drawer" aria-label="close sidebar" className="drawer-overlay" onClick={toggleDrawer}></label>
-                    <ul className="menu p-4 w-72 min-h-full bg-base-200 text-base-content">
+                    <ul className="menu  w-72 min-h-full bg-base-200 text-base-content">
                         {/* Sidebar content here */}
-                        <li><a>Sidebar Item 1</a></li>
-                        <li><a>Sidebar Item 2</a></li>
+                        <li>
+
+                            <h1 className=' text-base-content font-bold text-base flex flex-col text-left w-64'>
+                                
+                                Meeting Id : 
+                                <pre className=' text-base-content font-light text-xs'>(Share with your friends to invite them) </pre>
+                            </h1>
+                    
+
+                            <input type="text" value={meetId ? ` ${meetId}` : 'No meeting ID set'} readOnly className="input input-bordered input-primary w-64 text-sm" />
+                            <button
+                                className="absolute left-52  top-16 mt-2 text-center bg-transparent "
+                                onClick={copyToClipboard}
+                            >
+                                {copied ? (
+                                    <div className="flex items-center justify-center h-full bg-transparent">
+                                        <svg
+                                            className="w-3.5 h-3.5 text-blue-700 dark:text-blue-500 mr-1 bg-transparent"
+                                            aria-hidden="true"
+                                            xmlns="http://www.w3.org/2000/svg"
+                                            fill="none"
+                                            viewBox="0 0 16 12"
+                                        >
+                                            <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M1 5.917 5.724 10.5 15 1.5" />
+                                        </svg>
+                                        <span className="text-sm font-medium">Copied!</span>
+                                    </div>
+                                ) : (
+                                    <div className="flex items-center justify-center h-full">
+                                        <svg
+                                            className="w-3.5 h-3.5"
+                                            aria-hidden="true"
+                                            xmlns="http://www.w3.org/2000/svg"
+                                            fill="currentColor"
+                                            viewBox="0 0 18 20"
+                                        >
+                                            <path d="M16 1h-3.278A1.992 1.992 0 0 0 11 0H7a1.993 1.993 0 0 0-1.722 1H2a2 2 0 0 0-2 2v15a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V3a2 2 0 0 0-2-2Zm-3 14H5a1 1 0 0 1 0-2h8a1 1 0 0 1 0 2Zm0-4H5a1 1 0 0 1 0-2h8a1 1 0 1 1 0 2Zm0-5H5a1 1 0 0 1 0-2h2V2h4v2h2a1 1 0 1 1 0 2Z" />
+                                        </svg>
+
+                                    </div>
+                                )}
+                            </button>
+
+
+
+
+
+
+
+
+
+
+
+
+                        </li>
+                        <h1 className=' text-base-content font-bold text-base flex flex-col items-center justify-center text-center mt-5 w-64'> Meeting Name :</h1>
+                        <li><input type="text" value={meetName ? `${meetName}` : 'No meeting ID set'} readOnly className="input input-bordered input-primary w-64 text-xl mt-4"></input></li>
                     </ul>
                 </div>
             </div>

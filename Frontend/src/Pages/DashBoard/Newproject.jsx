@@ -3,7 +3,7 @@ import { Link , useNavigate } from 'react-router-dom';
 import { auth } from '../../firebase';
 import { axiosInstance } from '../../../utils/index';
 import { useDispatch } from 'react-redux';
-import { setMeetingId } from '../../../features/meetingSlice';
+import { setMeetingId, setMeetingName } from '../../../features/meetingSlice';
 
 const Newproject = () => {
   const dispatch = useDispatch();
@@ -49,6 +49,7 @@ const Newproject = () => {
   const handleWorkspaceNameChange = (event) => {
     const name = event.target.value;
     setWorkspaceName(name);
+    dispatch(setMeetingName(name));
     if (name.length >= 6) {
       setIsButtonDisabled(false); 
     } else {
@@ -101,6 +102,7 @@ const Newproject = () => {
       // console.log(response);
       const meetingId = response.data.workspace._id;
       console.log(meetingId);
+      dispatch(setMeetingId(meetingId));
       navigate(`/editor/${meetingId}`);
     } catch (error) {
       console.error('Error creating workspace:', error.message);
@@ -115,6 +117,7 @@ const Newproject = () => {
         const response = await axiosInstance.post(`/api/v1/project/join/team/${userId}`, {meetingId:code});
         console.log(response);
         navigate(`/editor/${code}`);
+        dispatch(setMeetingId(code));
       }
       else{
         console.log("Please enter a valid meeting id");
