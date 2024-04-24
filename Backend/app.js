@@ -141,9 +141,11 @@ io.on('connection', (socket) => {
         socket.to(meetingId).emit('code-sync',value);
     })
 
-    socket.on('message',({text,meetingId})=>{
+    socket.on('message',({text,meetingId,sender,senderPhoto})=>{
         console.log(text);
-        socket.to(meetingId).emit('received-message',text);
+        console.log(sender);
+        console.log(senderPhoto);
+        socket.to(meetingId).emit('received-message',{text,sender,senderPhoto});
     })
     
 
