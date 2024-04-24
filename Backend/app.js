@@ -143,8 +143,8 @@ io.on('connection', (socket) => {
 
     socket.on('message',({text,meetingId,sender,senderPhoto})=>{
         console.log(text);
-        console.log(sender);
-        console.log(senderPhoto);
+        // console.log(sender);
+        // console.log(senderPhoto);
         socket.to(meetingId).emit('received-message',{text,sender,senderPhoto});
     })
     

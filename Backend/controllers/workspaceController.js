@@ -200,6 +200,91 @@ const runCode = async (req, res) => {
                     });
                 });
             });
+        } else if (lang === 'cPlusPlus') {
+            tempFilePath = path.join(folderPath, 'temp.cpp');
+            // executableFile = path.join(folderPath, 'a');
+            // Write the code in the temporary file
+            fs.writeFile(tempFilePath, code, (err) => {
+                if (err) {
+                    console.error('Error writing code to file:', err);
+                    res.status(500).send('Error writing code to file');
+                    return;
+                }
+                // Compile and run the C++ code using g++
+                exec(`g++ -o ${path.join(folderPath, 'a')} ${tempFilePath} && ${path.join(folderPath, 'a')}`, (error, stdout, stderr) => {
+                    if (error) {
+                        res.status(500).send(`Execution error1: ${error.message}`);
+                        return;
+                    }
+                    if (stderr) {
+                        res.status(500).send(`Execution stderror2: ${stderr}`);
+                        return;
+                    }
+                    res.send(stdout.trim()); // Send output to the client
+
+                    fs.unlink(tempFilePath, (err) => {
+                        if (err) {
+                            console.error('Error removing temporary file:', err);
+                        } else {
+                            console.log('Temporary file removed successfully');
+                        }
+                    });
+                    
+                    fs.unlink(path.join(folderPath, 'a'), (err) => {
+                        if (err) {
+                            console.error('Error removing temporary file:', err);
+                        } else {
+                            console.log('Temporary file removed successfully');
+                        }
+                    });
+                    
+                });
+            });
+        } else if (lang === 'java') {
+            tempFilePath = path.join(folderPath, 'Main.java');
+            // Write the code in the temporary file
+            fs.writeFile(tempFilePath, code, (err) => {
+                if (err) {
+                    console.error('Error writing code to file:', err);
+                    res.status(500).send('Error writing code to file');
+                    return;
+                }
+                // Compile and run the Java code using javac and java
+                exec(`javac ${tempFilePath} && java -classpath ${folderPath} Main`, (error, stdout, stderr) => {
+                    if (error) {
+                        res.status(500).send(`Execution error: ${error.message}`);
+                        return;
+                    }
+                    if (stderr) {
+                        res.status(500).send(`Execution error: ${stderr}`);
+                        return;
+                    }
+                    res.send(stdout.trim()); // Send output to the client
+                    
+                    fs.unlink(tempFilePath, (err) => {
+                        if (err) {
+                            console.error('Error removing temporary file:', err);
+                        } else {
+                            console.log('Temporary file removed successfully');
+                        }
+                    });
+                });
+            });
+        } else if (lang === 'javascript') {
+            // For JavaScript, simply execute the code using Node.js
+            exec(`node -e "${code}"`, (error, stdout, stderr) => {
+                if (error) {
+                    res.status(500).send(`Execution error: ${error.message}`);
+                    return;
+                }
+                if (stderr) {
+                    res.status(500).send(`Execution error: ${stderr}`);
+                    return;
+                }
+                res.send(stdout.trim()); // Send output to the client
+            });
+        } else {
+            res.status(400).send('Unsupported language');
         }
 
     } catch (error) {

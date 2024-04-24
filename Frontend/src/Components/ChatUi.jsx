@@ -31,9 +31,9 @@ const ChatUi = ({ socketRef }) => {
 
             socketRef.current.on('received-message', ({ text, sender, senderPhoto }) => {
                 setMessages(prevMessages => [...prevMessages, { text, sender, senderPhoto }]);
-                console.log(text);
-                console.log(sender);
-                console.log(senderPhoto);
+                // console.log(text);
+                // console.log(sender);
+                // console.log(senderPhoto);
             });
         }
     }, []);
