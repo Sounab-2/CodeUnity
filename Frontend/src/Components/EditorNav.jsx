@@ -24,7 +24,7 @@ const EditorNav = ({socketRef}) => {
         <div className=' flex justify-between gap-6 '>
     
         <ChatUi socketRef={socketRef}/>
-        <Call/>
+        <Call socketRef={socketRef}/>
         <Themetoggler/>
         </div>
     </div>

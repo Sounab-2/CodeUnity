@@ -147,6 +147,10 @@ io.on('connection', (socket) => {
         // console.log(senderPhoto);
         socket.to(meetingId).emit('received-message',{text,sender,senderPhoto});
     })
+
+    socket.on('call', (meetingId)=>{
+        socket.to(meetingId).emit('incoming-call');
+    })
     
 
 });
