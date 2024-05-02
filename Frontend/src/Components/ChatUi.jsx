@@ -36,7 +36,7 @@ const ChatUi = ({ socketRef }) => {
                 // console.log(senderPhoto);
             });
         }
-    }, []);
+    }, [socketRef.current]);
 
     const getCurrentTime = () => {
         const now = new Date();

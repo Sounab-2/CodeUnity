@@ -26,6 +26,7 @@ const Newproject = () => {
       setCodeGenerated(true);
     }
   }, [codeGenerated]);
+  
 
   const handleTeamSelection = (option) => {
     setSelectedTeam(option);
@@ -43,7 +44,9 @@ const Newproject = () => {
   };
 
   const handleFolderNameChange = (event) => {
+
     setFolderName(event.target.value);
+    
   };
 
   const handleWorkspaceNameChange = (event) => {
@@ -57,7 +60,7 @@ const Newproject = () => {
     }
   };
   
-
+  
 
   const handleSolo = async () => {
     const name = workspaceName;
@@ -99,7 +102,7 @@ const Newproject = () => {
     try {
       console.log(userId);
       const response = await axiosInstance.post(`/api/v1/project/create/team/${userId}`, {name,fileName,language});
-      // console.log(response);
+      console.log(response);
       const meetingId = response.data.workspace._id;
       console.log(meetingId);
       dispatch(setMeetingId(meetingId));
@@ -118,6 +121,7 @@ const Newproject = () => {
         console.log(response);
         navigate(`/editor/${code}`);
         dispatch(setMeetingId(code));
+        dispatch(setMeetingName(response.data.workspace.name));
       }
       else{
         console.log("Please enter a valid meeting id");

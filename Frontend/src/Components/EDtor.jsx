@@ -69,7 +69,7 @@ const EditorComponent = ({ socketRef, value, setValue }) => {
                 input: '2',
                 language: language
             });
-            const { output } = response.data;
+            const output  = response.data;
             setOutput(output);
             console.log(response);
         } catch (error) {
@@ -156,18 +156,6 @@ const EditorComponent = ({ socketRef, value, setValue }) => {
                                     </div>
                                 )}
                             </button>
-
-
-
-
-
-
-
-
-
-
-
-
                         </li>
                         <h1 className=' text-base-content font-bold text-base flex flex-col items-center justify-center text-center mt-5 w-64'> Meeting Name :</h1>
                         <li><input type="text" value={meetName ? `${meetName}` : 'No meeting ID set'} readOnly className="input input-bordered input-primary w-64 text-xl mt-4"></input></li>
@@ -182,12 +170,14 @@ const EditorComponent = ({ socketRef, value, setValue }) => {
                 <div className=" pr-3 relative z-30 w-1/2 ">
 
                     <div className="navbar bg-base-300 rounded-box flex justify-between ">
-                        <div>
+                        
+                        {/* <div>
                             <button className=' btn bg-primary text-secondary-content hover:bg-base-100 hover:text-base-content text-sm flex'>
                                 create a file
                                 {/* <span><FontAwesomeIcon icon={faFolderPlus} /></span> */}
-                            </button>
-                        </div>
+                            {/* </button> */}
+                        {/* </div>  */}
+
                         <div className="flex px-2 lg:flex-none">
                             <ul className="menu menu-vertical lg:menu-horizontal bg-base-200 rounded-box">
                                 <li><button
