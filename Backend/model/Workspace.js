@@ -28,13 +28,19 @@ const WorkspaceSchema = new mongoose.Schema({
         enum: ['solo', 'team']
     },
     team: [{
-        type: String,
-        ref: 'User',
-        required: true,
+        _id: false,
+        id: {
+            type: String,
+            required: true
+        },
+        username: {
+            type: String,
+            required: true
+        }
     }],
     host: {
         type: String,
-        ref: 'User',
+        // ref: 'User',
         required: true,
     }
 });

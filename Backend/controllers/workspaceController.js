@@ -30,10 +30,11 @@ const createSoloWorkspace = async (req, res) => {
 };
 
 const createTeamWorkspace = async (req, res) => {
-    const { name, fileName, language } = req.body;
+    const { name, fileName, language, username} = req.body;
     const { userId } = req.params;
+    console.log(username);
 
-    if (!name || !fileName || !language || !userId) {
+    if (!name || !fileName || !language || !userId || !username) {
         throw new customError.BadRequestError('Please provide all project details');
     }
 
@@ -45,7 +46,7 @@ const createTeamWorkspace = async (req, res) => {
             language,
             type: 'team',
             host: userId,
-            team: [userId] 
+            team: [{ id: userId, username }]
         });
 
         await workspace.save(); // Save the workspace with the user added to the team
@@ -58,10 +59,11 @@ const createTeamWorkspace = async (req, res) => {
 
 const joinTeam = async (req,res) => {
     const { userId } = req.params;
-    const meetingId = req.body.meetingId;
+    const {meetingId, username} = req.body;
+    console.log(username);
     try{
         const workspace = await WorkspaceModel.findOne({_id:meetingId});
-        workspace.team.push(userId);
+        workspace.team.push({id:userId, username:username});
         await workspace.save();
         res.status(StatusCodes.OK).json({ workspace });
     }
@@ -69,6 +71,19 @@ const joinTeam = async (req,res) => {
         res.status(StatusCodes.BAD_REQUEST).json({ message: error.message });
     }
 };
+
+const showTeam = async (req,res) => {
+    const {roomId} = req.body;
+    // console.log(roomId);
+    try{
+        const workspace = await WorkspaceModel.findOne({_id:roomId});
+        // console.log(workspace);
+        res.status(StatusCodes.OK).json({ workspace });
+    }
+    catch(error){
+        res.status(StatusCodes.BAD_REQUEST).json({ message: error.message });
+    }
+}
 
 const saveCode = async (req,res) => {
     const meetingId = req.body.meetingId;
@@ -296,4 +311,4 @@ const runCode = async (req, res) => {
 module.exports = runCode;
 
 
-module.exports = { createSoloWorkspace,createTeamWorkspace,joinTeam,languageSelector,saveCode,runCode };
+module.exports = { createSoloWorkspace,createTeamWorkspace,joinTeam,showTeam,languageSelector,saveCode,runCode };

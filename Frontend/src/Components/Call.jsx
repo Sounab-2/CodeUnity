@@ -2,7 +2,7 @@ import React, { useEffect } from 'react';
 import AgoraRTC from 'agora-rtc-sdk-ng';
 import { useParams } from 'react-router-dom';
 import { useFirebase } from '../Context/FirebaseContext';
-
+import { useSelector } from 'react-redux';
 const Call = ({socketRef}) => {
   const {meetingId}=useParams();
   const appId = process.env.AGORA_APP_ID;
@@ -10,7 +10,10 @@ const Call = ({socketRef}) => {
   const { user, signoutUser } = useFirebase();
   const RTCId = user?.uid;
   let roomId = meetingId;
- 
+  // const teamMembers = useSelector(state=> state.meeting.team);
+  // console.log(teamMembers);
+
+
   let audioTracks = {
     localAudioTracks:null,
     remoteAudioTracks:[]

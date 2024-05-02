@@ -2,8 +2,8 @@ import React, { useState, useEffect } from 'react';
 import { Link , useNavigate } from 'react-router-dom';
 import { auth } from '../../firebase';
 import { axiosInstance } from '../../../utils/index';
-import { useDispatch } from 'react-redux';
-import { setMeetingId, setMeetingName } from '../../../features/meetingSlice';
+import { useDispatch} from 'react-redux';
+import { setMeetingId, setMeetingName,setTeam } from '../../../features/meetingSlice';
 
 const Newproject = () => {
   const dispatch = useDispatch();
@@ -67,12 +67,6 @@ const Newproject = () => {
     const fileName = 'topic'; 
     const language = 'python';
 
-    const data = {
-      name,
-      fileName,
-      language
-    };
-
     try {
       console.log(userId);
       const response = await axiosInstance.post(`/api/v1/project/create/solo/${userId}`, {name,fileName,language});
@@ -92,19 +86,16 @@ const Newproject = () => {
     const name = workspaceName;
     const fileName = 'topic'; 
     const language = 'python';
-
-    const data = {
-      name,
-      fileName,
-      language
-    };
-
+    const username = user?.displayName;
+  
     try {
       console.log(userId);
-      const response = await axiosInstance.post(`/api/v1/project/create/team/${userId}`, {name,fileName,language});
-      console.log(response);
+      const response = await axiosInstance.post(`/api/v1/project/create/team/${userId}`, {name,fileName,language,username});
       const meetingId = response.data.workspace._id;
+      const {team} = response.data.workspace;
+      dispatch(setTeam(team));
       console.log(meetingId);
+      // console.log(team);
       dispatch(setMeetingId(meetingId));
       navigate(`/editor/${meetingId}`);
     } catch (error) {
@@ -117,8 +108,10 @@ const Newproject = () => {
   const joinTeam = async  () => {
     try{
       if(code){
-        const response = await axiosInstance.post(`/api/v1/project/join/team/${userId}`, {meetingId:code});
-        console.log(response);
+        const response = await axiosInstance.post(`/api/v1/project/join/team/${userId}`, {meetingId:code, username: user?.displayName});
+        const {team} = response.data.workspace;
+        // console.log(team);
+        dispatch(setTeam(team));
         navigate(`/editor/${code}`);
         dispatch(setMeetingId(code));
         dispatch(setMeetingName(response.data.workspace.name));
@@ -128,7 +121,7 @@ const Newproject = () => {
       }
       
     }
-    catch{
+    catch(error){
       console.error('Error joining workspace:', error.message);
     }
     

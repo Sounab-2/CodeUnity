@@ -5,20 +5,32 @@ import { EditorNav } from '../../Components';
 import { useRef,useEffect,useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { initializeSocket } from '../../socket';
+import { axiosInstance } from '../../../utils';
+import { useDispatch } from 'react-redux';
+import { setTeam } from '../../../features/meetingSlice';
+
 
 
 const Editor = () => {
   const socketRef = useRef(null);
   const { meetingId } = useParams();
   const [value, setValue] = useState('');
-
+  const dispatch = useDispatch();
   useEffect(() => {
     const initSocket = async () => {
         if (!socketRef.current) {
             socketRef.current = await initializeSocket();
             socketRef.current.emit('joinRoom', meetingId);
-            socketRef.current.on('userJoined', ({ userId }) => {
+            socketRef.current.on('userJoined', async ({ userId ,roomId}) => {
                 console.log('A new user joined: ', userId);
+                console.log('Room joined: ', roomId);
+                try {
+                  const response = await axiosInstance.post('/api/v1/project/showTeam',{roomId});
+                  const {team} = response.data.workspace;
+                  dispatch(setTeam(team));
+                } catch (error) {
+                  console.log(error);
+                }
             });
 
             socketRef.current.on('code-sync', (code) => {
