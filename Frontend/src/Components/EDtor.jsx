@@ -56,6 +56,8 @@ const EditorComponent = ({ socketRef, value, setValue }) => {
             code: value
         })
         console.log(response);
+        CODE_SNIPPETS[language] = value;
+        
     };
 
     const runCode = async () => {
@@ -72,6 +74,12 @@ const EditorComponent = ({ socketRef, value, setValue }) => {
             const output  = response.data;
             setOutput(output);
             console.log(response);
+            const r2 = await axiosInstance.post('/api/v1/project/save', {
+            meetingId,
+            code: sourcecode
+        })
+        console.log(r2);
+        CODE_SNIPPETS[language] = value;
         } catch (error) {
             console.log(error);
         }
@@ -219,7 +227,7 @@ const EditorComponent = ({ socketRef, value, setValue }) => {
                         theme={theme}
                         onMount={onMount}
                         defaultLanguage={language}
-                        defaultValue='print("Hello World")'
+                        defaultValue='print("Hello World in Python")'
                         value={value}
                         onChange={handleCodeChange}
                     />
