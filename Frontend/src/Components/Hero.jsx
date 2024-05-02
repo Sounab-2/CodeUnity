@@ -1,4 +1,6 @@
 import { Link, NavLink } from 'react-router-dom'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faUpRightFromSquare } from '@fortawesome/free-solid-svg-icons';
 
 const Hero = () => {
   return (
@@ -11,7 +13,7 @@ const Hero = () => {
           <div className="-mx-4 flex flex-col ">
             <div className="w-full px-4">
               <div
-                className="wow fadeInUp mx-auto max-w-[800px] text-center  flex flex-col gap-5"
+                className="wow fadeInUp mx-auto max-w-[800px] text-center  flex flex-col gap-5  -mt-10"
                 data-wow-delay=".2s"
               >
                 <div className="mb-5 text-3xl font-bold leading-tight  sm:text-4xl sm:leading-tight md:text-5xl md:leading-tight flex  justify-center items-center gap-5">
@@ -21,20 +23,22 @@ const Hero = () => {
                 </div>
                 <span className=' text-white text-xl font-bold'>Empowering Collaboration, Unifying Code.</span>
                 <p className="mb-12 text-base font-medium !leading-relaxed text-body-color dark:opacity-90 sm:text-lg md:text-xl">
-                  Effortlessly collaborate on code in real-time with your team. Seamlessly join WorkSpace, edit code together, and communicate effectively for enhanced productivity
+                Experience coding like never before with our platform's real-time collaboration features. Easily join sessions, synchronize edits, chat, make calls, and boost productivity with seamless teamwork. Effortlessly communicate, share ideas, and code together in a dynamic environment designed to elevate your projects to new heights of success.
                 </p>
-                <div className="flex flex-col items-center justify-center space-y-4 sm:flex-row sm:space-x-4 sm:space-y-0">
+                <div className="flex flex-col items-center justify-center gap-4  sm:flex-row sm:space-x-4 sm:space-y-0 -mt-7">
                   <Link
                     to='/about'
-                    className="rounded-md bg-primary py-4 px-8 text-base font-semibold text-white duration-300 ease-in-out hover:bg-primary/80"
+                    className="rounded-md bg-primary py-4 px-8  text-base font-semibold text-white duration-300 ease-in-out hover:bg-primary/80 flex gap-4"
                   >
                     How to use
+                    <span><FontAwesomeIcon icon={faUpRightFromSquare} /></span>
                   </Link>
                   <Link
                     to=''
-                    className="rounded-md bg-secondary hover:bg-base-100 hover:text-white py-4 px-8 text-base font-semibold text-black duration-300 ease-in-out"
+                    className="rounded-md bg-secondary hover:bg-base-100 hover:text-white py-4 px-8 text-base font-semibold text-black duration-300 ease-in-out flex gap-5"
                   >
                     Explore
+                    <span><FontAwesomeIcon icon={faUpRightFromSquare} /></span>
                   </Link>
                 </div>
               </div>

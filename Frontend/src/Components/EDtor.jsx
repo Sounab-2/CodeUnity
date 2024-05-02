@@ -9,6 +9,7 @@ import { faPlay, faFolderPlus, faComments } from '@fortawesome/free-solid-svg-ic
 import { axiosInstance } from '../../utils/index';
 import { useSelector } from 'react-redux';
 import { selectMeetingId, selectMeetingName } from '../../features/meetingSlice';
+import Avatar from 'react-avatar';
 
 const EditorComponent = ({ socketRef, value, setValue }) => {
     const [theme, setTheme] = useState('vs-dark');
@@ -23,6 +24,8 @@ const EditorComponent = ({ socketRef, value, setValue }) => {
     const meetId = useSelector(selectMeetingId);
     const meetName = useSelector(selectMeetingName);
     const [copied, setCopied] = useState(false);
+
+    const teamMembers = useSelector(state=> state.meeting.team);
 
 
     const handleCodeChange = (newValue) => {
@@ -102,6 +105,11 @@ const EditorComponent = ({ socketRef, value, setValue }) => {
         }, 2000);
     };
 
+    
+    // console.log(teamMembers);
+
+
+
 
     return (
         <>
@@ -119,9 +127,11 @@ const EditorComponent = ({ socketRef, value, setValue }) => {
                     </label>
                 </div>
                 <div className={`drawer-side mt-20 ${isDrawerOpen ? 'open' : 'closed'}`}>
+                    
                     <label htmlFor="my-drawer" aria-label="close sidebar" className="drawer-overlay" onClick={toggleDrawer}></label>
                     <ul className="menu  w-72 min-h-full bg-base-200 text-base-content">
                         {/* Sidebar content here */}
+                        <div className='  '>
                         <li>
 
                             <h1 className=' text-base-content font-bold text-base flex flex-col text-left w-64'>
@@ -167,6 +177,22 @@ const EditorComponent = ({ socketRef, value, setValue }) => {
                         </li>
                         <h1 className=' text-base-content font-bold text-base flex flex-col items-center justify-center text-center mt-5 w-64'> Meeting Name :</h1>
                         <li><input type="text" value={meetName ? `${meetName}` : 'No meeting ID set'} readOnly className="input input-bordered input-primary w-64 text-xl mt-4"></input></li>
+                        </div>
+
+                        <hr className=' mt-6'/>
+
+                        <div className='  flex flex-col h-auto p-3 gap-3 mt-6 bg-base-300 rounded-lg'>
+                            {
+                                 teamMembers.map(member =>(
+                                    
+                                    <li className=' rounded-lg bg-base-100 border-2 flex flex-row items-center justify-center gap-1 '>
+                                         <span><Avatar name={member.username} className="dropdown" size="40" round={true} color={Avatar.getRandomColor(['red', 'green', 'blue'])} textSizeRatio={0.8}  /></span>
+                                        <h1>{member.username}</h1>
+                                       
+                                    </li>
+                                ))
+                            }
+                        </div>
                     </ul>
                 </div>
             </div>

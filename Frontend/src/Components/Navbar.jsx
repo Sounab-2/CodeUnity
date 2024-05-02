@@ -98,7 +98,7 @@ export default function Header() {
                     `block py-2 pr-4 pl-3 duration-200 ${isActive ? "text-primary-1250" : "text-white"} border-b border-gray-100 hover:bg-gray-50 lg:hover:bg-transparent lg:border-0 hover:text-white lg:p-0`
                   }
                 >
-                  Features
+                  How to use
                 </NavLink>
               </li>
               <li>
@@ -110,17 +110,6 @@ export default function Header() {
                   activeClassName="text-primary-1250"
                 >
                   Get Started
-                </NavLink>
-              </li>
-              <li>
-                <NavLink
-                  to="/contactUs"
-                  className={({ isActive }) =>
-                    `block py-2 pr-4 pl-3 duration-200 ${isActive ? "text-primary-1250" : "text-white"} border-b border-gray-100 hover:bg-gray-50 lg:hover:bg-transparent lg:border-0 hover:text-white lg:p-0`
-                  }
-                  activeClassName="text-primary-1250"
-                >
-                  Contact Us
                 </NavLink>
               </li>
             </ul>

@@ -26,26 +26,27 @@ const Team = () => {
                   </div>
                 </figcaption>
              </figure>
+
              <figure class="sub-history">
                 <div class="image" data-aos="zoom-in"><img src="/images/snik.jpg" loading="lazy" alt="Hinduism" className=' h-56 w-full'/>
                 </div>
                 <figcaption data-aos="zoom-in" className=' bg-slate-900'>
-                   <h3>Snikd
-                     endu Pramanik</h3>
-                   <h4></h4>
-                   <div className=' w-full p-12 flex  justify-between'>
+                   <h3>Snikdhendu Pramanik</h3>
+                   <h4 className=' font-extrabold'>Full Stack Developer || MERN Developer</h4>
+                  <div className=' w-full p-20 flex  justify-between'>
                      <button className=' btn'>   <FontAwesomeIcon icon={faBars}  /></button>
                      <button className=' btn'>   <FontAwesomeIcon icon={faBars}  /></button>
                   </div>
                 </figcaption>
              </figure>
+
              <figure class="sub-history">
-                <div class="image" data-aos="zoom-in"><img src="/images/snik.jpg" loading="lazy" alt="Hinduism" className=' h-56 w-full'/>
+                <div class="image" data-aos="zoom-in"><img src="/images/shrey.jpg" loading="lazy" alt="Hinduism" className=' h-56 w-full'/>
                 </div>
                 <figcaption data-aos="zoom-in" className=' bg-slate-900'>
                    <h3>Sounab Bhattacharjee</h3>
-                   <h4></h4>
-                   <div className=' w-full p-12 flex  justify-between'>
+                   <h4 className=' font-extrabold'>Full Stack Developer || MERN Developer</h4>
+                  <div className=' w-full p-20 flex  justify-between'>
                      <button className=' btn'>   <FontAwesomeIcon icon={faBars}  /></button>
                      <button className=' btn'>   <FontAwesomeIcon icon={faBars}  /></button>
                   </div>
