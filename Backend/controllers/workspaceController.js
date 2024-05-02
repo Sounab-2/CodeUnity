@@ -74,16 +74,31 @@ const joinTeam = async (req,res) => {
 
 const showTeam = async (req,res) => {
     const {roomId} = req.body;
-    // console.log(roomId);
+    if(!roomId){
+        throw new customError.BadRequestError('Please provide Meeting ID');
+    }
     try{
         const workspace = await WorkspaceModel.findOne({_id:roomId});
-        // console.log(workspace);
         res.status(StatusCodes.OK).json({ workspace });
     }
     catch(error){
         res.status(StatusCodes.BAD_REQUEST).json({ message: error.message });
     }
 }
+
+const savedWorkspace = async (req, res) => {
+    const { userId } = req.body;
+    if(!userId){
+        throw new customError.BadRequestError('Please provide User ID');
+    }
+    try {
+        const workspaces = await WorkspaceModel.find({ team: { $elemMatch: { id: userId } } });
+        res.status(StatusCodes.OK).json({ workspaces });
+    } catch (error) {
+        res.status(StatusCodes.BAD_REQUEST).json({ message: error.message });
+    }
+};
+
 
 const saveCode = async (req,res) => {
     const meetingId = req.body.meetingId;
@@ -311,4 +326,4 @@ const runCode = async (req, res) => {
 module.exports = runCode;
 
 
-module.exports = { createSoloWorkspace,createTeamWorkspace,joinTeam,showTeam,languageSelector,saveCode,runCode };
+module.exports = { createSoloWorkspace,createTeamWorkspace,joinTeam,showTeam,savedWorkspace,languageSelector,saveCode,runCode };

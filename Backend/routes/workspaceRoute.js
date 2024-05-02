@@ -5,6 +5,7 @@ const {
       createSoloWorkspace ,createTeamWorkspace,
       joinTeam,
       showTeam,
+      savedWorkspace,
       languageSelector,
       saveCode,
       runCode
@@ -17,6 +18,7 @@ router.post('/language',languageSelector);
 router.post('/save',saveCode);
 router.post('/run',runCode);
 router.post('/showTeam',showTeam);
+router.post('/savedWorkspace',savedWorkspace);
 // router.post('/login',login);
 // router.get('/logout',logout);
 
