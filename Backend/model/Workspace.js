@@ -36,6 +36,10 @@ const WorkspaceSchema = new mongoose.Schema({
         username: {
             type: String,
             required: true
+        },
+        photoUrl: {
+            type: String,
+            required: true
         }
     }],
     host: {

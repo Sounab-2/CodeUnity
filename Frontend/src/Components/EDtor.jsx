@@ -26,6 +26,7 @@ const EditorComponent = ({ socketRef, value, setValue }) => {
     const [copied, setCopied] = useState(false);
 
     const teamMembers = useSelector(state=> state.meeting.team);
+    console.log(teamMembers);
 
 
     const handleCodeChange = (newValue) => {
@@ -183,10 +184,14 @@ const EditorComponent = ({ socketRef, value, setValue }) => {
 
                         <div className='  flex flex-col h-auto p-3 gap-3 mt-6 bg-base-300 rounded-lg'>
                             {
-                                 teamMembers.map(member =>(
+                                 teamMembers?.map(member =>(
                                     
                                     <li className=' rounded-lg bg-base-100 border-2 flex flex-row items-center justify-center gap-1 '>
-                                         <span><Avatar name={member.username} className="dropdown" size="40" round={true} color={Avatar.getRandomColor(['red', 'green', 'blue'])} textSizeRatio={0.8}  /></span>
+                                         <span>
+                                            {/* <Avatar name={member.username} className="dropdown" size="40" round={true} color={Avatar.getRandomColor(['red', 'green', 'blue'])} textSizeRatio={0.8}  /> */}
+                                            <Avatar name={member.username} className="dropdown" size="40" round={true} color={Avatar.getRandomColor( ['red', 'green', 'blue'])} textSizeRatio={0.8} src={member.photoUrl || ''} />
+                                         
+                                         </span>
                                         <h1>{member.username}</h1>
                                        
                                     </li>

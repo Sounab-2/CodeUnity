@@ -30,11 +30,11 @@ const createSoloWorkspace = async (req, res) => {
 };
 
 const createTeamWorkspace = async (req, res) => {
-    const { name, fileName, language, username} = req.body;
+    const { name, fileName, language, username, photoUrl} = req.body;
     const { userId } = req.params;
     console.log(username);
 
-    if (!name || !fileName || !language || !userId || !username) {
+    if (!name || !fileName || !language || !userId || !username || !photoUrl) {
         throw new customError.BadRequestError('Please provide all project details');
     }
 
@@ -46,7 +46,7 @@ const createTeamWorkspace = async (req, res) => {
             language,
             type: 'team',
             host: userId,
-            team: [{ id: userId, username }]
+            team: [{ id: userId, username, photoUrl}]
         });
 
         await workspace.save(); // Save the workspace with the user added to the team
@@ -59,11 +59,11 @@ const createTeamWorkspace = async (req, res) => {
 
 const joinTeam = async (req,res) => {
     const { userId } = req.params;
-    const {meetingId, username} = req.body;
-    console.log(username);
+    const {meetingId, username,photoUrl} = req.body;
+    // console.log(username);
     try{
         const workspace = await WorkspaceModel.findOne({_id:meetingId});
-        workspace.team.push({id:userId, username:username});
+        workspace.team.push({id:userId, username:username, photoUrl});
         await workspace.save();
         res.status(StatusCodes.OK).json({ workspace });
     }

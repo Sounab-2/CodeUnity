@@ -87,12 +87,13 @@ const Newproject = () => {
     const fileName = 'topic'; 
     const language = 'python';
     const username = user?.displayName;
-  
+    const photoUrl= user?.photoURL;
+
     try {
-      console.log(userId);
-      const response = await axiosInstance.post(`/api/v1/project/create/team/${userId}`, {name,fileName,language,username});
+      const response = await axiosInstance.post(`/api/v1/project/create/team/${userId}`, {name,fileName,language,username,photoUrl});
       const meetingId = response.data.workspace._id;
       const {team} = response.data.workspace;
+      console.log(team);
       dispatch(setTeam(team));
       console.log(meetingId);
       // console.log(team);
@@ -108,9 +109,9 @@ const Newproject = () => {
   const joinTeam = async  () => {
     try{
       if(code){
-        const response = await axiosInstance.post(`/api/v1/project/join/team/${userId}`, {meetingId:code, username: user?.displayName});
+        const response = await axiosInstance.post(`/api/v1/project/join/team/${userId}`, {meetingId:code, username: user?.displayName, photoUrl:user?.photoURL});
         const {team} = response.data.workspace;
-        // console.log(team);
+        console.log(team);
         dispatch(setTeam(team));
         navigate(`/editor/${code}`);
         dispatch(setMeetingId(code));
