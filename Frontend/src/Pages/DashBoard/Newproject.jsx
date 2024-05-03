@@ -2,13 +2,13 @@ import React, { useState, useEffect } from 'react';
 import { Link , useNavigate } from 'react-router-dom';
 import { auth } from '../../firebase';
 import { axiosInstance } from '../../../utils/index';
-import { useDispatch} from 'react-redux';
-import { setMeetingId, setMeetingName,setTeam } from '../../../features/meetingSlice';
+import { useDispatch,useSelector} from 'react-redux';
+import { setMeetingId, setMeetingName,setTeam,setSelectedTeam } from '../../../features/meetingSlice';
 
 const Newproject = () => {
   const dispatch = useDispatch();
   const [step, setStep] = useState(1);
-  const [selectedTeam, setSelectedTeam] = useState('');
+  // const [selectedTeam, setSelectedTeam] = useState('');
   const [selectedWorkSpace, setSelectedWorkSpace] = useState('');
   const [code, setCode] = useState('');
   const [workspaceName, setWorkspaceName] = useState('');
@@ -18,7 +18,7 @@ const Newproject = () => {
   const user= auth.currentUser;
   const navigate = useNavigate();
   const userId=user?.uid;
-
+  const selectedTeam = useSelector(state => state.meeting.selectedTeam);
 
   useEffect(() => {
     if (!codeGenerated) {
@@ -29,7 +29,7 @@ const Newproject = () => {
   
 
   const handleTeamSelection = (option) => {
-    setSelectedTeam(option);
+    dispatch(setSelectedTeam(option));
     setStep(2);
   };
 

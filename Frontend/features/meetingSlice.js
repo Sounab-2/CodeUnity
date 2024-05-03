@@ -4,7 +4,8 @@ import { createSlice } from '@reduxjs/toolkit';
 const initialState = {
   meetId: null,
   meetName : null,
-  team: null
+  team: null,
+  selectedTeam:''
 };
 
 const meetingSlice = createSlice({
@@ -19,11 +20,14 @@ const meetingSlice = createSlice({
       },
     setTeam: (state, action) => {
       state.team = action.payload;
+    },
+    setSelectedTeam: (state,action)=>{
+      state.selectedTeam = action.payload;
     }
   },
 });
 
-export const { setMeetingId , setMeetingName,setTeam} = meetingSlice.actions;
+export const { setMeetingId , setMeetingName,setTeam,setSelectedTeam} = meetingSlice.actions;
 export const selectMeetingId = (state) => state.meeting.meetId;
 export const selectMeetingName = (state) => state.meeting.meetName;
 
