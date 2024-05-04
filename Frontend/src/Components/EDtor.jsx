@@ -10,6 +10,8 @@ import { axiosInstance } from '../../utils/index';
 import { useSelector } from 'react-redux';
 import { selectMeetingId, selectMeetingName } from '../../features/meetingSlice';
 import Avatar from 'react-avatar';
+import { useDispatch } from 'react-redux';
+import { setTeam,setMeetingId,setMeetingName } from '../../features/meetingSlice';
 
 const EditorComponent = ({ socketRef, value, setValue }) => {
     const [theme, setTheme] = useState('vs-dark');
@@ -24,10 +26,18 @@ const EditorComponent = ({ socketRef, value, setValue }) => {
     const meetId = useSelector(selectMeetingId);
     const meetName = useSelector(selectMeetingName);
     const [copied, setCopied] = useState(false);
+    const dispatch = useDispatch();
 
     const teamMembers = useSelector(state=> state.meeting.team);
     console.log(teamMembers);
 
+    useEffect( async () => {
+        const response = await axiosInstance.post('/api/v1/project/showTeam',{roomId: meetingId});
+        const {team,_id,name}= response.data.workspace;
+        dispatch(setTeam(team));
+        dispatch(setMeetingId(_id));
+        dispatch(setMeetingName(name));
+    },[]);
 
     const handleCodeChange = (newValue) => {
         setValue(newValue);

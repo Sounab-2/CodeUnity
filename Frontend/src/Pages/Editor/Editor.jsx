@@ -8,7 +8,7 @@ import { initializeSocket } from '../../socket';
 import { axiosInstance } from '../../../utils';
 import { useDispatch } from 'react-redux';
 import { setTeam } from '../../../features/meetingSlice';
-
+import { useNavigate } from 'react-router-dom';
 
 
 const Editor = () => {
@@ -16,6 +16,8 @@ const Editor = () => {
   const { meetingId } = useParams();
   const [value, setValue] = useState('');
   const dispatch = useDispatch();
+  const navigate = useNavigate();
+
   useEffect(() => {
     const initSocket = async () => {
         if (!socketRef.current) {
@@ -39,6 +41,7 @@ const Editor = () => {
 
             socketRef.current.on('disconnect',()=>{
               console.log('socket disconnected');
+              navigate('/dashboard/newproject');
             })
         }
     };
@@ -53,7 +56,7 @@ const Editor = () => {
             socketRef.current.disconnect();
         }
     };
-}, [meetingId]);
+}, [meetingId,socketRef.current]);
 
   return (
     <section className=' max-h-screen overflow-hidden w-full'>
