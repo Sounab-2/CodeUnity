@@ -56,7 +56,7 @@ const Editor = () => {
             socketRef.current.disconnect();
         }
     };
-}, [meetingId,socketRef.current]);
+}, [meetingId]);
 
   return (
     <section className=' max-h-screen overflow-hidden w-full'>

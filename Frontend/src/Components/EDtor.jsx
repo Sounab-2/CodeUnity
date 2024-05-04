@@ -34,15 +34,22 @@ const EditorComponent = ({ socketRef, value, setValue }) => {
     const userId = user?.uid;
 
     const teamMembers = useSelector(state => state.meeting.team);
-    console.log(teamMembers);
+    // console.log(teamMembers);
 
-    useEffect(async () => {
-        const response = await axiosInstance.post('/api/v1/project/showTeam', { roomId: meetingId });
-        const { team, _id, name } = response.data.workspace;
-        dispatch(setTeam(team));
-        dispatch(setMeetingId(_id));
-        dispatch(setMeetingName(name));
-    }, []);
+   
+    useEffect(() => {
+        
+        const showTeamMembers = async () => {
+            const response = await axiosInstance.post('/api/v1/project/showTeam',{roomId: meetingId});
+            const {team,_id,name}= response.data.workspace;
+            dispatch(setTeam(team));
+            dispatch(setMeetingId(_id));
+            dispatch(setMeetingName(name));
+        }
+       
+        showTeamMembers();
+    },[]);
+
 
     const handleCodeChange = (newValue) => {
         setValue(newValue);
