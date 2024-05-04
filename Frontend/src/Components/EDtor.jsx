@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { Editor } from "@monaco-editor/react";
-import { useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import { CODE_SNIPPETS } from '../constants';
 import { executeCode } from '../api';
 import { initializeSocket } from '../socket';
@@ -32,23 +32,21 @@ const EditorComponent = ({ socketRef, value, setValue }) => {
     const dispatch = useDispatch();
     const { user } = useFirebase();
     const userId = user?.uid;
+    const navigate = useNavigate();
 
     const teamMembers = useSelector(state => state.meeting.team);
-    // console.log(teamMembers);
 
-   
+    const showTeamMembers = async () => {
+        const response = await axiosInstance.post('/api/v1/project/showTeam',{roomId: meetingId});
+        const {team,_id,name}= response.data.workspace;
+        dispatch(setTeam(team));
+        dispatch(setMeetingId(_id));
+        dispatch(setMeetingName(name));
+    }
+
     useEffect(() => {
-        
-        const showTeamMembers = async () => {
-            const response = await axiosInstance.post('/api/v1/project/showTeam',{roomId: meetingId});
-            const {team,_id,name}= response.data.workspace;
-            dispatch(setTeam(team));
-            dispatch(setMeetingId(_id));
-            dispatch(setMeetingName(name));
-        }
-       
         showTeamMembers();
-    },[]);
+    },[teamMembers]);
 
 
     const handleCodeChange = (newValue) => {
@@ -129,8 +127,23 @@ const EditorComponent = ({ socketRef, value, setValue }) => {
     };
 
 
-    // console.log(teamMembers);
-    // console.log(hostId);
+    const handleLeave = async () => {
+    //     socketRef.current?.emit('user-left', { meetingId });
+    //     socketRef.current?.off('userJoined');
+    //     socketRef.current?.off('code-sync');
+        try {
+            const response = await axiosInstance.post('/api/v1/project/leaveWorkspace', {meetingId,userId});
+            const {team} = response.data.workspace;
+            if(response){
+                dispatch(setTeam(team));
+                socketRef.current?.disconnect();
+                navigate('/');
+            }
+        } catch (error) {
+            console.log(error);
+        }
+    };
+    
 
 
 
@@ -244,7 +257,7 @@ const EditorComponent = ({ socketRef, value, setValue }) => {
                         </div>
                         <div>
                             <li>
-                                <button className=' btn bg-red-600 w-full'>Leave Room </button>
+                                <button className=' btn bg-red-600 w-full' onClick={handleLeave}>Leave Room </button>
                             </li>
                         </div>
                     </div>
