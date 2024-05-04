@@ -41,7 +41,7 @@ const Editor = () => {
 
             socketRef.current.on('disconnect',()=>{
               console.log('socket disconnected');
-              navigate('/dashboard/newproject');
+              // navigate('/dashboard/newproject');
             })
         }
     };

@@ -8,10 +8,12 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPlay, faFolderPlus, faComments } from '@fortawesome/free-solid-svg-icons';
 import { axiosInstance } from '../../utils/index';
 import { useSelector } from 'react-redux';
-import { selectMeetingId, selectMeetingName } from '../../features/meetingSlice';
+import { selectHostId, selectMeetingId, selectMeetingName } from '../../features/meetingSlice';
 import Avatar from 'react-avatar';
 import { useDispatch } from 'react-redux';
-import { setTeam,setMeetingId,setMeetingName } from '../../features/meetingSlice';
+import { setTeam, setMeetingId, setMeetingName } from '../../features/meetingSlice';
+import { useFirebase } from '../Context/FirebaseContext';
+
 
 const EditorComponent = ({ socketRef, value, setValue }) => {
     const [theme, setTheme] = useState('vs-dark');
@@ -25,19 +27,22 @@ const EditorComponent = ({ socketRef, value, setValue }) => {
     const { meetingId } = useParams();
     const meetId = useSelector(selectMeetingId);
     const meetName = useSelector(selectMeetingName);
+    const hostId = useSelector(selectHostId);
     const [copied, setCopied] = useState(false);
     const dispatch = useDispatch();
+    const { user } = useFirebase();
+    const userId = user?.uid;
 
-    const teamMembers = useSelector(state=> state.meeting.team);
+    const teamMembers = useSelector(state => state.meeting.team);
     console.log(teamMembers);
 
-    useEffect( async () => {
-        const response = await axiosInstance.post('/api/v1/project/showTeam',{roomId: meetingId});
-        const {team,_id,name}= response.data.workspace;
+    useEffect(async () => {
+        const response = await axiosInstance.post('/api/v1/project/showTeam', { roomId: meetingId });
+        const { team, _id, name } = response.data.workspace;
         dispatch(setTeam(team));
         dispatch(setMeetingId(_id));
         dispatch(setMeetingName(name));
-    },[]);
+    }, []);
 
     const handleCodeChange = (newValue) => {
         setValue(newValue);
@@ -71,7 +76,7 @@ const EditorComponent = ({ socketRef, value, setValue }) => {
         })
         console.log(response);
         CODE_SNIPPETS[language] = value;
-        
+
     };
 
     const runCode = async () => {
@@ -85,15 +90,15 @@ const EditorComponent = ({ socketRef, value, setValue }) => {
                 input: '2',
                 language: language
             });
-            const output  = response.data;
+            const output = response.data;
             setOutput(output);
             console.log(response);
             const r2 = await axiosInstance.post('/api/v1/project/save', {
-            meetingId,
-            code: sourcecode
-        })
-        console.log(r2);
-        CODE_SNIPPETS[language] = value;
+                meetingId,
+                code: sourcecode
+            })
+            console.log(r2);
+            CODE_SNIPPETS[language] = value;
         } catch (error) {
             console.log(error);
         }
@@ -116,15 +121,16 @@ const EditorComponent = ({ socketRef, value, setValue }) => {
         }, 2000);
     };
 
-    
+
     // console.log(teamMembers);
+    // console.log(hostId);
 
 
 
 
     return (
         <>
-            <div className="drawer min-h-screen absolute top-4 left-10 w-1/2 ">
+            <div className="drawer min-h-screen absolute top-4 left-10 w-1/2 overflow-y-auto">
                 <input id="my-drawer" type="checkbox" className="drawer-toggle" checked={isDrawerOpen} onChange={toggleDrawer} />
                 <div className="drawer-content w-1/2">
 
@@ -138,77 +144,103 @@ const EditorComponent = ({ socketRef, value, setValue }) => {
                     </label>
                 </div>
                 <div className={`drawer-side mt-20 ${isDrawerOpen ? 'open' : 'closed'}`}>
-                    
+
                     <label htmlFor="my-drawer" aria-label="close sidebar" className="drawer-overlay" onClick={toggleDrawer}></label>
-                    <ul className="menu  w-72 min-h-full bg-base-200 text-base-content">
+                    <div className="menu  w-72 max-h-screen bg-base-200 text-base-content overflow-y-auto border-2 flex flex-col">
                         {/* Sidebar content here */}
-                        <div className='  '>
-                        <li>
+                        <div className=' '>
+                            <li>
 
-                            <h1 className=' text-base-content font-bold text-base flex flex-col text-left w-64'>
-                                
-                                Meeting Id : 
-                                <pre className=' text-base-content font-light text-xs'>(Share with your friends to invite them) </pre>
-                            </h1>
-                    
+                                <h1 className=' text-base-content font-bold text-base flex flex-col text-left w-64'>
 
-                            <input type="text" value={meetId ? ` ${meetId}` : 'No meeting ID set'} readOnly className="input input-bordered input-primary w-64 text-sm" />
-                            <button
-                                className="absolute left-52  top-16 mt-2 text-center bg-transparent "
-                                onClick={copyToClipboard}
-                            >
-                                {copied ? (
-                                    <div className="flex items-center justify-center h-full bg-transparent">
-                                        <svg
-                                            className="w-3.5 h-3.5 text-blue-700 dark:text-blue-500 mr-1 bg-transparent"
-                                            aria-hidden="true"
-                                            xmlns="http://www.w3.org/2000/svg"
-                                            fill="none"
-                                            viewBox="0 0 16 12"
-                                        >
-                                            <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M1 5.917 5.724 10.5 15 1.5" />
-                                        </svg>
-                                        <span className="text-sm font-medium">Copied!</span>
-                                    </div>
-                                ) : (
-                                    <div className="flex items-center justify-center h-full">
-                                        <svg
-                                            className="w-3.5 h-3.5"
-                                            aria-hidden="true"
-                                            xmlns="http://www.w3.org/2000/svg"
-                                            fill="currentColor"
-                                            viewBox="0 0 18 20"
-                                        >
-                                            <path d="M16 1h-3.278A1.992 1.992 0 0 0 11 0H7a1.993 1.993 0 0 0-1.722 1H2a2 2 0 0 0-2 2v15a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V3a2 2 0 0 0-2-2Zm-3 14H5a1 1 0 0 1 0-2h8a1 1 0 0 1 0 2Zm0-4H5a1 1 0 0 1 0-2h8a1 1 0 1 1 0 2Zm0-5H5a1 1 0 0 1 0-2h2V2h4v2h2a1 1 0 1 1 0 2Z" />
-                                        </svg>
+                                    Meeting Id :
+                                    <pre className=' text-base-content font-light text-xs'>(Share with your friends to invite them) </pre>
+                                </h1>
 
-                                    </div>
-                                )}
-                            </button>
-                        </li>
-                        <h1 className=' text-base-content font-bold text-base flex flex-col items-center justify-center text-center mt-5 w-64'> Meeting Name :</h1>
-                        <li><input type="text" value={meetName ? `${meetName}` : 'No meeting ID set'} readOnly className="input input-bordered input-primary w-64 text-xl mt-4"></input></li>
+
+                                <input type="text" value={meetId ? ` ${meetId}` : 'No meeting ID set'} readOnly className="input input-bordered input-primary w-64 text-sm" />
+                                <button
+                                    className="absolute left-52  top-16 mt-2 text-center bg-transparent "
+                                    onClick={copyToClipboard}
+                                >
+                                    {copied ? (
+                                        <div className="flex items-center justify-center h-full bg-transparent">
+                                            <svg
+                                                className="w-3.5 h-3.5 text-blue-700 dark:text-blue-500 mr-1 bg-transparent"
+                                                aria-hidden="true"
+                                                xmlns="http://www.w3.org/2000/svg"
+                                                fill="none"
+                                                viewBox="0 0 16 12"
+                                            >
+                                                <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M1 5.917 5.724 10.5 15 1.5" />
+                                            </svg>
+                                            <span className="text-sm font-medium">Copied!</span>
+                                        </div>
+                                    ) : (
+                                        <div className="flex items-center justify-center h-full">
+                                            <svg
+                                                className="w-3.5 h-3.5"
+                                                aria-hidden="true"
+                                                xmlns="http://www.w3.org/2000/svg"
+                                                fill="currentColor"
+                                                viewBox="0 0 18 20"
+                                            >
+                                                <path d="M16 1h-3.278A1.992 1.992 0 0 0 11 0H7a1.993 1.993 0 0 0-1.722 1H2a2 2 0 0 0-2 2v15a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V3a2 2 0 0 0-2-2Zm-3 14H5a1 1 0 0 1 0-2h8a1 1 0 0 1 0 2Zm0-4H5a1 1 0 0 1 0-2h8a1 1 0 1 1 0 2Zm0-5H5a1 1 0 0 1 0-2h2V2h4v2h2a1 1 0 1 1 0 2Z" />
+                                            </svg>
+
+                                        </div>
+                                    )}
+                                </button>
+                            </li>
+                            <h1 className=' text-base-content font-bold text-base flex flex-col items-center justify-center text-center mt-5 w-64'> Meeting Name :</h1>
+                            <li><input type="text" value={meetName ? `${meetName}` : 'No meeting ID set'} readOnly className="input input-bordered input-primary w-64 text-xl mt-4"></input></li>
                         </div>
 
-                        <hr className=' mt-6'/>
+                        <hr className=' mt-6' />
 
                         <div className='  flex flex-col h-auto p-3 gap-3 mt-6 bg-base-300 rounded-lg'>
                             {
-                                 teamMembers?.map(member =>(
-                                    
+                                teamMembers?.map(member => (
+
                                     <li className=' rounded-lg bg-base-100 border-2 flex flex-row items-center justify-center gap-1 '>
-                                         <span>
+                                        <span>
                                             {/* <Avatar name={member.username} className="dropdown" size="40" round={true} color={Avatar.getRandomColor(['red', 'green', 'blue'])} textSizeRatio={0.8}  /> */}
-                                            <Avatar name={member.username} className="dropdown" size="40" round={true} color={Avatar.getRandomColor( ['red', 'green', 'blue'])} textSizeRatio={0.8} src={member.photoUrl || ''} />
-                                         
-                                         </span>
-                                        <h1>{member.username}</h1>
-                                       
+                                            <Avatar name={member.username} className="dropdown" size="50" round={true} color={Avatar.getRandomColor(['red', 'green', 'blue'])} textSizeRatio={0.8} src={member.photoUrl || ''} />
+
+
+                                        </span>
+                                        <h1>
+                                            {member.username}
+                                            <span>
+                                                {member.id === userId && (
+                                                    /* Content to render if member.id equals userId */
+                                                    <span>(You)</span>
+                                                )}
+                                            </span>
+
+                                        </h1>
+                                        {
+                                                    member.id === hostId && (
+
+                                                        <span className=' font-bold tetx-lg text-green-600'>(Host)</span>
+
+                                                    )
+                                                }
+                                        {userId === hostId  &&  member.id != userId && (
+                                            <button className=' btn bg-red-600'>Remove</button>
+                                        )}
+
                                     </li>
                                 ))
                             }
+
                         </div>
-                    </ul>
+                        <div>
+                            <li>
+                                <button className=' btn bg-red-600 w-full'>Leave Room </button>
+                            </li>
+                        </div>
+                    </div>
                 </div>
             </div>
 
@@ -219,12 +251,12 @@ const EditorComponent = ({ socketRef, value, setValue }) => {
                 <div className=" pr-3 relative z-30 w-1/2 ">
 
                     <div className="navbar bg-base-300 rounded-box flex justify-between ">
-                        
+
                         {/* <div>
                             <button className=' btn bg-primary text-secondary-content hover:bg-base-100 hover:text-base-content text-sm flex'>
                                 create a file
                                 {/* <span><FontAwesomeIcon icon={faFolderPlus} /></span> */}
-                            {/* </button> */}
+                        {/* </button> */}
                         {/* </div>  */}
 
                         <div className="flex px-2 lg:flex-none">

@@ -3,12 +3,11 @@ import { Link , useNavigate } from 'react-router-dom';
 import { auth } from '../../firebase';
 import { axiosInstance } from '../../../utils/index';
 import { useDispatch,useSelector} from 'react-redux';
-import { setMeetingId, setMeetingName,setTeam,setSelectedTeam } from '../../../features/meetingSlice';
+import { setMeetingId, setMeetingName,setTeam,setSelectedTeam,setHostId } from '../../../features/meetingSlice';
 
 const Newproject = () => {
   const dispatch = useDispatch();
   const [step, setStep] = useState(1);
-  // const [selectedTeam, setSelectedTeam] = useState('');
   const [selectedWorkSpace, setSelectedWorkSpace] = useState('');
   const [code, setCode] = useState('');
   const [workspaceName, setWorkspaceName] = useState('');
@@ -19,6 +18,7 @@ const Newproject = () => {
   const navigate = useNavigate();
   const userId=user?.uid;
   const selectedTeam = useSelector(state => state.meeting.selectedTeam);
+
 
   useEffect(() => {
     if (!codeGenerated) {
@@ -94,10 +94,13 @@ const Newproject = () => {
       const meetingId = response.data.workspace._id;
       const {team} = response.data.workspace;
       console.log(team);
+      console.log(response);
       dispatch(setTeam(team));
       console.log(meetingId);
       // console.log(team);
       dispatch(setMeetingId(meetingId));
+      dispatch(setHostId(response.data.workspace.host));
+      console.log(response.data.workspace.host);
       navigate(`/editor/${meetingId}`);
     } catch (error) {
       console.error('Error creating workspace:', error.message);
@@ -116,6 +119,7 @@ const Newproject = () => {
         navigate(`/editor/${code}`);
         dispatch(setMeetingId(code));
         dispatch(setMeetingName(response.data.workspace.name));
+        dispatch(setHostId(response.data.workspace.host));
       }
       else{
         console.log("Please enter a valid meeting id");
