@@ -46,7 +46,22 @@ const WorkspaceSchema = new mongoose.Schema({
         type: String,
         // ref: 'User',
         required: true,
-    }
+    },
+    chat: [{
+        _id: false,
+        msg: {
+            type: String,
+            required: true
+        },
+        id: {
+            type: String,
+            required: true
+        },
+        username: {
+            type: String,
+            required: true
+        },
+    }]
 });
 
 const WorkspaceModel = mongoose.model('Workspace', WorkspaceSchema);

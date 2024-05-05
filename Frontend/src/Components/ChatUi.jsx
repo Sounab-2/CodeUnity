@@ -5,31 +5,65 @@ import { faPaperPlane, faComments } from '@fortawesome/free-solid-svg-icons';
 import { useParams } from 'react-router-dom';
 import { useFirebase } from '../Context/FirebaseContext';
 import AvatarCom from './AvatarCom';
+import { axiosInstance } from '../../utils';
 
 const ChatUi = ({ socketRef }) => {
     const [message, setMessage] = useState('');
     const [messages, setMessages] = useState([]);
+    const [unreadCount, setUnreadCount] = useState(0); 
+    const [isDrawerOpen, setIsDrawerOpen] = useState(false);
     const { meetingId } = useParams();
     const { user } = useFirebase();
 
     // Function to send a message
-    const sendMessage = (e) => {
+    const sendMessage = async (e) => {
         const senderName = user.displayName;
         const senderAvatar = user.photoURL;
         e.preventDefault();
         if (message.trim() !== '') {
             socketRef.current.emit('message', { text: message, meetingId, sender: senderName, senderPhoto: senderAvatar });
             setMessages(prevMessages => [...prevMessages, { text: message, sentByUser: true, sender: senderName, senderPhoto: senderAvatar }]);
-            setMessage('');
+                
+            try{
+                const response =await axiosInstance.post('/api/v1/project/savechat',{
+                    meetingId,
+                    message,
+                    username:senderName,
+                    userId:user?.uid
+                })
+                // console.log(response.data.workSpace.chat);
+                setMessage('');
+                
+            }
+            catch(e){
+                console.log('Error sending message',e);
+            }
+            
         }
     };
 
     // Function to handle incoming messages
     useEffect(() => {
+        const fetchMessages = async () => {
+            try {
+                const response = await axiosInstance.post(`/api/v1/project/getchat/${meetingId}`);
+                const fetchedMessages = response.data.workSpace.chat;
+                console.log(fetchedMessages);
+              
+            } catch (error) {
+                console.error('Error fetching messages:', error);
+            }
+        };
+
         if (socketRef.current) {
             socketRef.current.off('received-message');
-
+            
             socketRef.current.on('received-message', ({ text, sender, senderPhoto }) => {
+                fetchMessages();
+                
+                if (!isDrawerOpen) {
+                    setUnreadCount(prevCount => prevCount + 1);
+                }
                 setMessages(prevMessages => [...prevMessages, { text, sender, senderPhoto }]);
                 // console.log(text);
                 // console.log(sender);
@@ -46,6 +80,12 @@ const ChatUi = ({ socketRef }) => {
         return currentTime;
     };
 
+    const toggleDrawer = () => {
+        if (isDrawerOpen) {
+            setUnreadCount(0);
+        }
+        setIsDrawerOpen(prevState => !prevState);
+    };
 
     useEffect(() => {
         const chatContainer = document.querySelector('.chat-container');
@@ -62,8 +102,9 @@ const ChatUi = ({ socketRef }) => {
             <input id="my-drawer-4" type="checkbox" className="drawer-toggle" />
             <div className="drawer-content">
                 {/* Chat button */}
-                <label htmlFor="my-drawer-4" className="drawer-button btn btn-primary">
+                <label htmlFor="my-drawer-4" className="drawer-button btn btn-primary" onClick={toggleDrawer}>
                     <span className='text-2xl'><FontAwesomeIcon icon={faComments} /></span>
+                    {unreadCount > 0 && <span className="absolute top-0 right-0 bg-red-500 text-white rounded-full px-2">{unreadCount}</span>}
                 </label>
             </div>
             <div className="drawer-side">

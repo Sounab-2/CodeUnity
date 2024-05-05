@@ -99,6 +99,36 @@ const savedWorkspace = async (req, res) => {
     }
 };
 
+const saveChat = async (req,res) => {
+    const { meetingId, message,username,userId } = req.body;
+    if(!meetingId){
+        throw new customError.BadRequestError('Please provide Room ID');
+    }
+    try{
+        const workSpace = await WorkspaceModel.findOne({_id:meetingId});
+        workSpace.chat.push({msg:message,id:userId,username:username });
+        await workSpace.save();
+        res.status(StatusCodes.OK).json({ workSpace });
+    }
+    catch{
+        res.status(StatusCodes.BAD_REQUEST).json({ message: error.message });
+    }
+
+};
+
+const getChat = async(req,res)=>{
+    const {meetingId} = req.params;
+    try{
+        const workSpace =await WorkspaceModel.findOne({_id:meetingId});
+        if (!workSpace) {
+            return res.status(404).json({ message: 'Workspace not found' });
+        }
+        res.status(StatusCodes.OK).json({ workSpace });
+    }
+    catch(error){
+        console.log('Error fetching messages:', error);
+    }
+}
 
 const saveCode = async (req,res) => {
     const meetingId = req.body.meetingId;
@@ -127,6 +157,23 @@ const languageSelector = async (req,res) => {
     }
     catch(error){
         res.status(StatusCodes.BAD_REQUEST).json({ message: error.message });
+    }
+};
+
+const leaveWorkspace = async (req, res) => {
+    const {meetingId, userId} = req.body;
+    if(!meetingId){
+        throw new customError.BadRequestError('Please provide Meeting ID');
+    }
+
+    try {
+        const workspace = await WorkspaceModel.findOne({_id:meetingId});
+        const newTeam = workspace.team.filter(member => member.id != userId);
+        workspace.team = newTeam;
+        await workspace.save();
+        res.status(StatusCodes.OK).json({ workspace });
+    } catch (error) {
+        console.log(error);
     }
 };
 
@@ -326,4 +373,4 @@ const runCode = async (req, res) => {
 module.exports = runCode;
 
 
-module.exports = { createSoloWorkspace,createTeamWorkspace,joinTeam,showTeam,savedWorkspace,languageSelector,saveCode,runCode };
+module.exports = { createSoloWorkspace,createTeamWorkspace,joinTeam,showTeam,savedWorkspace,languageSelector,saveCode,runCode,leaveWorkspace,saveChat,getChat };

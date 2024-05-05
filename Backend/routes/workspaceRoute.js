@@ -8,7 +8,10 @@ const {
       savedWorkspace,
       languageSelector,
       saveCode,
-      runCode
+      runCode,
+      leaveWorkspace,
+      saveChat,
+      getChat
 } = require('../controllers/workspaceController');
 
 router.post('/create/solo/:userId',createSoloWorkspace);
@@ -19,6 +22,9 @@ router.post('/save',saveCode);
 router.post('/run',runCode);
 router.post('/showTeam',showTeam);
 router.post('/savedWorkspace',savedWorkspace);
+router.post('/leaveWorkspace',leaveWorkspace);
+router.post('/savechat',saveChat);
+router.post('/getchat/:meetingId',getChat);
 // router.post('/login',login);
 // router.get('/logout',logout);
 
