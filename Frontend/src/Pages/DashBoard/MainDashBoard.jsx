@@ -1,6 +1,7 @@
 import React from 'react';
 import { DeveloperQuotes } from '../../Components';
 import { useFirebase } from '../../Context/FirebaseContext';
+import { Link } from 'react-router-dom';
 
 const MainDashBoard = () => {
   const { user, signoutUser } = useFirebase();
@@ -15,8 +16,8 @@ const MainDashBoard = () => {
       <DeveloperQuotes/>
       <div className=' w-full justify-between flex flex-wrap '>
         <span className='  flex flex-col gap-7 justify-center items-center border-2 rounded-lg p-16 '>
-          <h1 className=' text-base-content font-bold text-5xl'>You don't have a folder yet </h1>
-          <button className=' btn bg-primary text-primary-content'>Create a floder</button>
+          <h1 className=' text-base-content font-bold text-4xl'>Don't be late, start your work now. </h1>
+          <Link to='/dashboard/newproject' className=' btn bg-primary text-primary-content'>Create a new WorkSpace</Link>
 
         </span>
       <img src="./Gen Z.gif" className=' rounded-full h-72 w-72 shadow-lg shadow-slate-50' alt="gif" />
