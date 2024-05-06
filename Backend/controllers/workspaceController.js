@@ -100,13 +100,13 @@ const savedWorkspace = async (req, res) => {
 };
 
 const saveChat = async (req,res) => {
-    const { meetingId, message,username,userId } = req.body;
+    const { meetingId, message,username,userId,photoUrl } = req.body;
     if(!meetingId){
         throw new customError.BadRequestError('Please provide Room ID');
     }
     try{
         const workSpace = await WorkspaceModel.findOne({_id:meetingId});
-        workSpace.chat.push({msg:message,id:userId,username:username });
+        workSpace.chat.push({msg:message,id:userId,username:username,photoUrl:photoUrl });
         await workSpace.save();
         res.status(StatusCodes.OK).json({ workSpace });
     }
@@ -258,11 +258,11 @@ const runCode = async (req, res) => {
                 // Run the code using the temporary file
                 exec(`python ${tempFilePath}`, (error, stdout, stderr) => {
                     if (error) {
-                        res.status(500).send(`Execution error: ${error.message}`);
+                        res.status(500).json({data:error.message});
                         return;
                     }
                     if (stderr) {
-                        res.status(500).send(`Execution error: ${stderr}`);
+                        res.status(500).json({data:stderr});
                         return;
                     }
                     res.send(stdout.trim()); // Send output to the client
@@ -290,11 +290,11 @@ const runCode = async (req, res) => {
                 // Compile and run the C++ code using g++
                 exec(`g++ -o ${path.join(folderPath, 'a')} ${tempFilePath} && ${path.join(folderPath, 'a')}`, (error, stdout, stderr) => {
                     if (error) {
-                        res.status(500).send(`Execution error1: ${error.message}`);
+                        res.status(500).send({data:error});
                         return;
                     }
                     if (stderr) {
-                        res.status(500).send(`Execution stderror2: ${stderr}`);
+                        res.status(500).send({data:stderr});
                         return;
                     }
                     res.send(stdout.trim()); // Send output to the client
@@ -318,7 +318,19 @@ const runCode = async (req, res) => {
                 });
             });
         } else if (lang === 'java') {
-            tempFilePath = path.join(folderPath, 'Main.java');
+           
+            const classRegex = /public\s+class\s+(\w+)\s*\{/;
+            const match = code.match(classRegex);
+
+            if (!match || match.length < 2) {
+                res.status(400).send('Unable to determine class name');
+                return;
+            }
+
+            const className = match[1]; // Extract the class name from the match
+
+            tempFilePath = path.join(folderPath, `${className}.java`);
+            
             // Write the code in the temporary file
             fs.writeFile(tempFilePath, code, (err) => {
                 if (err) {
@@ -326,14 +338,15 @@ const runCode = async (req, res) => {
                     res.status(500).send('Error writing code to file');
                     return;
                 }
+                
                 // Compile and run the Java code using javac and java
-                exec(`javac ${tempFilePath} && java -classpath ${folderPath} Main`, (error, stdout, stderr) => {
+                exec(`javac ${tempFilePath} && java -classpath ${folderPath} ${className}`, (error, stdout, stderr) => {
                     if (error) {
-                        res.status(500).send(`Execution error: ${error.message}`);
+                        res.status(500).send({data:error});
                         return;
                     }
                     if (stderr) {
-                        res.status(500).send(`Execution error: ${stderr}`);
+                        res.status(500).send({data:stderr});
                         return;
                     }
                     res.send(stdout.trim()); // Send output to the client
@@ -345,17 +358,24 @@ const runCode = async (req, res) => {
                             console.log('Temporary file removed successfully');
                         }
                     });
+                    fs.unlink( path.join(folderPath, `${className}.class`), (err) => {
+                        if (err) {
+                            console.error('Error removing temporary file:', err);
+                        } else {
+                            console.log('Temporary class removed successfully');
+                        }
+                    });
                 });
             });
         } else if (lang === 'javascript') {
             // For JavaScript, simply execute the code using Node.js
             exec(`node -e "${code}"`, (error, stdout, stderr) => {
                 if (error) {
-                    res.status(500).send(`Execution error: ${error.message}`);
+                    res.status(500).json({data: error});
                     return;
                 }
                 if (stderr) {
-                    res.status(500).send(`Execution error: ${stderr}`);
+                    res.status(500).json({data:stderr});
                     return;
                 }
                 res.send(stdout.trim()); // Send output to the client

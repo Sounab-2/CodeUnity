@@ -29,9 +29,10 @@ const ChatUi = ({ socketRef }) => {
                     meetingId,
                     message,
                     username:senderName,
-                    userId:user?.uid
+                    userId:user?.uid,
+                    photoUrl:senderAvatar
                 })
-                // console.log(response.data.workSpace.chat);
+                console.log(response.data.workSpace.chat);
                 setMessage('');
                 
             }

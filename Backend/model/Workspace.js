@@ -61,6 +61,10 @@ const WorkspaceSchema = new mongoose.Schema({
             type: String,
             required: true
         },
+        photoUrl: {
+            type: String,
+            required: true
+        }
     }]
 });
 

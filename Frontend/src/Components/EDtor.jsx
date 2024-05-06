@@ -87,7 +87,7 @@ const EditorComponent = ({ socketRef, value, setValue }) => {
     const runCode = async () => {
         const sourcecode = editorRef.current.getValue();
         if (!sourcecode) return;
-
+        setIsError(false);
         try {
             setIsLoading(true);
             const response = await axiosInstance.post('/api/v1/project/run', {
@@ -97,18 +97,20 @@ const EditorComponent = ({ socketRef, value, setValue }) => {
             });
             const output = response.data;
             setOutput(output);
-            console.log(response);
+            console.log(output);
             const r2 = await axiosInstance.post('/api/v1/project/save', {
                 meetingId,
                 code: sourcecode
             })
-            console.log(r2);
+            // console.log(r2);
             CODE_SNIPPETS[language] = value;
         } catch (error) {
-            console.log(error);
+            setOutput('An error occurred\n' + error.response.data.data.cmd); // Set error message as output
+            setIsError(true);
         }
         finally {
             setIsLoading(false);
+            
         }
     };
 
