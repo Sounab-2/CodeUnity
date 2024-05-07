@@ -6,15 +6,17 @@ import { useRef,useEffect,useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { initializeSocket } from '../../socket';
 import { axiosInstance } from '../../../utils';
-import { useDispatch } from 'react-redux';
+import { useDispatch,useSelector } from 'react-redux';
 import { setTeam } from '../../../features/meetingSlice';
 import { useNavigate } from 'react-router-dom';
 import { auth } from '../../firebase';
+import { setSelectedTeam,setMeetingId,setMeetingName } from '../../../features/meetingSlice';
 
 const Editor = () => {
   const socketRef = useRef(null);
   const { meetingId } = useParams();
   const [value, setValue] = useState('');
+  const selectedTeam = useSelector(state => state.meeting.selectedTeam);
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const user =  auth.currentUser;
@@ -24,7 +26,7 @@ const Editor = () => {
   const reloadWorkspace = async () =>{
     try {
       const response = await axiosInstance.post('/api/v1/project/showTeam',{roomId:meetingId});
-      const {team} = response.data.workspace;
+      const {team,_id,name} = response.data.workspace;
       isUserPresent = team.some(member => member.id === userId);
       if(!isUserPresent) {
         console.log('user not present');
@@ -34,6 +36,7 @@ const Editor = () => {
       dispatch(setTeam(team));
       dispatch(setMeetingId(_id));
       dispatch(setMeetingName(name));
+      dispatch(setSelectedTeam(response.data.workspace.type));
     } catch (error) {
       console.log(error);
     }

@@ -48,6 +48,16 @@ const EditorComponent = ({ socketRef, value, setValue }) => {
         showTeamMembers();
     },[teamMembers]);
 
+    const setCode = async() => {
+        const r2 = await axiosInstance.post('/api/v1/project/showTeam', {roomId:meetingId});
+        setValue(r2.data.workspace.code[language]);
+    }
+
+    useEffect(()=>{
+            setCode();
+     },[]);
+
+
     const removeTeamMembers = async (memberId) => {
         try {
            const response = await axiosInstance.post('/api/v1/project/remove',{meetingId,userId:memberId});
@@ -77,11 +87,11 @@ const EditorComponent = ({ socketRef, value, setValue }) => {
 
     const onSelectLanguage = async (newLanguage) => {
         setLanguage(newLanguage);
-        setValue(CODE_SNIPPETS[newLanguage]);
         const response = await axiosInstance.post('/api/v1/project/language', {
             meetingId,
             language: newLanguage
         });
+        setValue(response.data.workspace.code[newLanguage]);
     };
 
     const codeSave = async () => {
@@ -89,9 +99,7 @@ const EditorComponent = ({ socketRef, value, setValue }) => {
             meetingId,
             code: value
         })
-        console.log(response);
-        CODE_SNIPPETS[language] = value;
-
+       
     };
 
     const runCode = async () => {
@@ -112,11 +120,14 @@ const EditorComponent = ({ socketRef, value, setValue }) => {
                 meetingId,
                 code: sourcecode
             })
-            // console.log(r2);
-            CODE_SNIPPETS[language] = value;
+            
         } catch (error) {
-            setOutput('An error occurred\n' + error.response.data.data.cmd); // Set error message as output
-            setIsError(true);
+            if(language == 'python'){
+                setOutput('An error occurred\n' + error.response.data.data); 
+            }
+            else{
+                setOutput('An error occurred\n' + error.response.data.data.cmd);
+            }
         }
         finally {
             setIsLoading(false);

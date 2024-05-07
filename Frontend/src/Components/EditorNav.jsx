@@ -23,7 +23,7 @@ const EditorNav = ({socketRef}) => {
           </button>
         
         </div>
-        {selectedTeam === 'Team' && (
+        {selectedTeam === 'team' && (
         <div className='flex justify-between gap-6'>
           <ChatUi socketRef={socketRef}/>
           <Call socketRef={socketRef}/>
