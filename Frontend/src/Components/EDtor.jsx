@@ -5,7 +5,7 @@ import { CODE_SNIPPETS } from '../constants';
 import { executeCode } from '../api';
 import { initializeSocket } from '../socket';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faPlay, faFolderPlus, faComments } from '@fortawesome/free-solid-svg-icons';
+import { faPlay, faFolderPlus, faComments,faCircleXmark } from '@fortawesome/free-solid-svg-icons';
 import { axiosInstance } from '../../utils/index';
 import { useSelector } from 'react-redux';
 import { selectHostId, selectMeetingId, selectMeetingName } from '../../features/meetingSlice';
@@ -175,7 +175,7 @@ const EditorComponent = ({ socketRef, value, setValue }) => {
         <>
             <div className="drawer min-h-screen absolute top-4 left-10 w-1/2 overflow-y-auto">
                 <input id="my-drawer" type="checkbox" className="drawer-toggle" checked={isDrawerOpen} onChange={toggleDrawer} />
-                <div className="drawer-content w-1/2">
+                <div className="drawer-content w-1/2 ">
 
                     <label className="btn btn-circle swap swap-rotate" htmlFor='my-drawer'>
 
@@ -186,10 +186,11 @@ const EditorComponent = ({ socketRef, value, setValue }) => {
                         <svg className={isDrawerOpen ? "swap-off fill-current" : "swap-on fill-current"} xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 512 512"><polygon points="400 145.49 366.51 112 256 222.51 145.49 112 112 145.49 222.51 256 112 366.51 145.49 400 256 289.49 366.51 400 400 366.51 289.49 256 400 145.49" /></svg>
                     </label>
                 </div>
-                <div className={`drawer-side mt-20 ${isDrawerOpen ? 'open' : 'closed'}`}>
+                <div className={`drawer-side mt-20 ${isDrawerOpen ? 'open' : 'closed'} `}>
 
-                    <label htmlFor="my-drawer" aria-label="close sidebar" className="drawer-overlay" onClick={toggleDrawer}></label>
-                    <div className="menu  w-72 max-h-screen bg-base-200 text-base-content overflow-y-auto border-2 flex flex-col">
+                    <label htmlFor="my-drawer" aria-label="close sidebar" className="drawer-overlay " onClick={toggleDrawer}></label>
+                    <div className="menu  w-72  bg-base-200 text-base-content flex gap-4 h-full items-center ">
+                        <div className=' overflow-y-auto h-4/5 p-1 overflow-x-hidden'>
                         {/* Sidebar content here */}
                         <div className=' '>
                             <li>
@@ -239,13 +240,13 @@ const EditorComponent = ({ socketRef, value, setValue }) => {
                             <li><input type="text" value={meetName ? `${meetName}` : 'No meeting ID set'} readOnly className="input input-bordered input-primary w-64 text-xl mt-4"></input></li>
                         </div>
 
-                        <hr className=' mt-6' />
+                        {/* <hr className=' mt-6' /> */}
 
-                        <div className='  flex flex-col h-auto p-3 gap-3 mt-6 bg-base-300 rounded-lg'>
+                        <div className='  flex flex-col h-auto p-3 gap-3 mt-6 bg-base-300 '>
                             {
                                 teamMembers?.map(member => (
 
-                                    <li className=' rounded-lg bg-base-100 border-2 flex flex-row items-center justify-center gap-1 '>
+                                    <li className=' rounded-lg bg-base-100 flex flex-row items-center justify-center gap-1 p-3 '>
                                         <span>
                                             {/* <Avatar name={member.username} className="dropdown" size="40" round={true} color={Avatar.getRandomColor(['red', 'green', 'blue'])} textSizeRatio={0.8}  /> */}
                                             <Avatar name={member.username} className="dropdown" size="50" round={true} color={Avatar.getRandomColor(['red', 'green', 'blue'])} textSizeRatio={0.8} src={member.photoUrl || ''} />
@@ -270,7 +271,7 @@ const EditorComponent = ({ socketRef, value, setValue }) => {
                                                     )
                                                 }
                                         {userId === hostId  &&  member.id != userId && (
-                                            <button className=' btn bg-red-600' onClick={()=>removeTeamMembers(member.id)}>Remove</button>
+                                            <button className=' btn bg-red-600' onClick={()=>removeTeamMembers(member.id)}>Remove<span className=' text-white text-lg'><FontAwesomeIcon icon={faCircleXmark} /></span></button>
                                         )}
 
                                     </li>
@@ -278,14 +279,20 @@ const EditorComponent = ({ socketRef, value, setValue }) => {
                             }
 
                         </div>
+
+                       
+                        </div>
+
                         <div>
                             <li>
-                                <button className=' btn bg-red-600 w-full' onClick={handleLeave}>Leave Room </button>
+                                <button className=' btn bg-red-600 w-60' onClick={handleLeave}>Leave Room </button>
                             </li>
                         </div>
                     </div>
                 </div>
             </div>
+
+       
 
 
             <div className={`flex p-4 h-auto  ${isDrawerOpen ? 'w-4/5 ml-72' : 'w-full'}`}>
