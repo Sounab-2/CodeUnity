@@ -343,7 +343,7 @@ const EditorComponent = ({ socketRef, value, setValue }) => {
                         theme={theme}
                         onMount={onMount}
                         defaultLanguage={language}
-                        defaultValue='print("Hello World in Python")'
+                        defaultValue={value}
                         value={value}
                         onChange={handleCodeChange}
                     />

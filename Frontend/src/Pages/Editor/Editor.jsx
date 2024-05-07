@@ -28,7 +28,8 @@ const Editor = () => {
       const response = await axiosInstance.post('/api/v1/project/showTeam',{roomId:meetingId});
       const {team,_id,name} = response.data.workspace;
       isUserPresent = team.some(member => member.id === userId);
-      if(!isUserPresent) {
+      const teamType =response.data.workspace.type ;
+      if(!(teamType=='solo') && !isUserPresent) {
         console.log('user not present');
         navigate('/dashboard/newproject');
         return;
@@ -36,7 +37,8 @@ const Editor = () => {
       dispatch(setTeam(team));
       dispatch(setMeetingId(_id));
       dispatch(setMeetingName(name));
-      dispatch(setSelectedTeam(response.data.workspace.type));
+      dispatch(setSelectedTeam(teamType));
+      console.log(teamType);
     } catch (error) {
       console.log(error);
     }
@@ -87,10 +89,10 @@ const Editor = () => {
 }, [meetingId]);
 
   return (
-    isUserPresent && <section className=' max-h-screen overflow-hidden w-full'>
+    (isUserPresent || selectedTeam=='solo') && (<section className=' max-h-screen overflow-hidden w-full'>
       <EditorNav socketRef={socketRef}/>
       <EDtor socketRef={socketRef} value={value} setValue={setValue}/>
-    </section>
+    </section>)
   );
 }
 
