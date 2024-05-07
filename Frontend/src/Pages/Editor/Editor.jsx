@@ -9,7 +9,7 @@ import { axiosInstance } from '../../../utils';
 import { useDispatch } from 'react-redux';
 import { setTeam } from '../../../features/meetingSlice';
 import { useNavigate } from 'react-router-dom';
-
+import { auth } from '../../firebase';
 
 const Editor = () => {
   const socketRef = useRef(null);
@@ -17,6 +17,31 @@ const Editor = () => {
   const [value, setValue] = useState('');
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const user =  auth.currentUser;
+  const userId = user?.uid;
+  let isUserPresent = true;
+
+  const reloadWorkspace = async () =>{
+    try {
+      const response = await axiosInstance.post('/api/v1/project/showTeam',{roomId:meetingId});
+      const {team} = response.data.workspace;
+      isUserPresent = team.some(member => member.id === userId);
+      if(!isUserPresent) {
+        console.log('user not present');
+        navigate('/dashboard/newproject');
+        return;
+      }
+      dispatch(setTeam(team));
+      dispatch(setMeetingId(_id));
+      dispatch(setMeetingName(name));
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
+  useEffect(() => {
+    reloadWorkspace();
+  },[]);
 
   useEffect(() => {
     const initSocket = async () => {
@@ -59,7 +84,7 @@ const Editor = () => {
 }, [meetingId]);
 
   return (
-    <section className=' max-h-screen overflow-hidden w-full'>
+    isUserPresent && <section className=' max-h-screen overflow-hidden w-full'>
       <EditorNav socketRef={socketRef}/>
       <EDtor socketRef={socketRef} value={value} setValue={setValue}/>
     </section>

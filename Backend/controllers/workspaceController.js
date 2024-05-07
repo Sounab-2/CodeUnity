@@ -60,11 +60,13 @@ const createTeamWorkspace = async (req, res) => {
 const joinTeam = async (req,res) => {
     const { userId } = req.params;
     const {meetingId, username,photoUrl} = req.body;
-    // console.log(username);
     try{
         const workspace = await WorkspaceModel.findOne({_id:meetingId});
-        workspace.team.push({id:userId, username:username, photoUrl});
-        await workspace.save();
+        const isUserIdPresent = workspace.team.some(member => member.id === userId);
+        if(!isUserIdPresent){
+            workspace.team.push({id:userId, username:username, photoUrl});
+            await workspace.save();
+        }
         res.status(StatusCodes.OK).json({ workspace });
     }
     catch(error){
@@ -176,6 +178,23 @@ const leaveWorkspace = async (req, res) => {
         console.log(error);
     }
 };
+
+const removeTeamMembers = async (req,res)=>{
+    const {meetingId, userId} = req.body;
+    if(!meetingId || !userId){
+        throw new customError.BadRequestError('Please provide Meeting ID and User ID');
+    }
+
+    try {
+        const workspace = await WorkspaceModel.findOne({_id:meetingId});
+        const newTeam = workspace.team.filter(member => member.id != userId);
+        workspace.team = newTeam;
+        await workspace.save();
+        res.status(StatusCodes.OK).json({ workspace });
+    } catch (error) {
+        console.log(error);   
+    }
+}
 
 // const runCode = async (req,res) => {
 //     const code = req.body.code;
@@ -393,4 +412,4 @@ const runCode = async (req, res) => {
 module.exports = runCode;
 
 
-module.exports = { createSoloWorkspace,createTeamWorkspace,joinTeam,showTeam,savedWorkspace,languageSelector,saveCode,runCode,leaveWorkspace,saveChat,getChat };
+module.exports = { createSoloWorkspace,createTeamWorkspace,joinTeam,showTeam,removeTeamMembers,savedWorkspace,languageSelector,saveCode,runCode,leaveWorkspace,saveChat,getChat };

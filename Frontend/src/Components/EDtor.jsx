@@ -48,6 +48,16 @@ const EditorComponent = ({ socketRef, value, setValue }) => {
         showTeamMembers();
     },[teamMembers]);
 
+    const removeTeamMembers = async (memberId) => {
+        try {
+           const response = await axiosInstance.post('/api/v1/project/remove',{meetingId,userId:memberId});
+           console.log(response);
+
+        } catch (error) {
+            console.log("Error removing team members",error);
+        }
+    };
+
 
     const handleCodeChange = (newValue) => {
         setValue(newValue);
@@ -249,7 +259,7 @@ const EditorComponent = ({ socketRef, value, setValue }) => {
                                                     )
                                                 }
                                         {userId === hostId  &&  member.id != userId && (
-                                            <button className=' btn bg-red-600'>Remove</button>
+                                            <button className=' btn bg-red-600' onClick={()=>removeTeamMembers(member.id)}>Remove</button>
                                         )}
 
                                     </li>
