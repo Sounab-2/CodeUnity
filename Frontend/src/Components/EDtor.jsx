@@ -105,6 +105,11 @@ const EditorComponent = ({ socketRef, value, setValue }) => {
     const runCode = async () => {
         const sourcecode = editorRef.current.getValue();
         if (!sourcecode) return;
+        const r2 = await axiosInstance.post('/api/v1/project/save', {
+            meetingId,
+            code: sourcecode
+        })
+        
         setIsError(false);
         try {
             setIsLoading(true);
@@ -116,12 +121,13 @@ const EditorComponent = ({ socketRef, value, setValue }) => {
             const output = response.data;
             setOutput(output);
             console.log(output);
-            const r2 = await axiosInstance.post('/api/v1/project/save', {
-                meetingId,
-                code: sourcecode
-            })
+            // const r2 = await axiosInstance.post('/api/v1/project/save', {
+            //     meetingId,
+            //     code: sourcecode
+            // })
             
         } catch (error) {
+            console.log(error.response.data.data);
             if(language == 'python'){
                 setOutput('An error occurred\n' + error.response.data.data); 
             }

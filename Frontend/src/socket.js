@@ -1,6 +1,6 @@
 import io from 'socket.io-client';
 
-const SOCKET_URL = 'https://collaborative-editor-s89a.onrender.com'; 
+const SOCKET_URL = 'http://localhost:8000/'; 
 
 const options = {
     reconnection: true,               
