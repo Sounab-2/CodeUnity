@@ -27,5 +27,6 @@ export default defineConfig({
 // define process env
   define: {
     'process.env': process.env
-  }
+  },
+  
 });

@@ -34,7 +34,7 @@ const Hero = () => {
                     <span><FontAwesomeIcon icon={faUpRightFromSquare} /></span>
                   </Link>
                   <Link
-                    to=''
+                    to='/dashboard'
                     className="rounded-md bg-secondary hover:bg-base-100 hover:text-white py-4 px-8 text-base font-semibold text-black duration-300 ease-in-out flex gap-5"
                   >
                     Explore
