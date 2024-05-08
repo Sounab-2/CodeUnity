@@ -88,7 +88,7 @@ const port = process.env.PORT || 3000;
 // Middlewares
 app.use(helmet());
 app.use(cors({
-    origin: ['https://code-unity-20-sounabs-projects.vercel.app/'], 
+    origin: 'https://code-unity-20-sounabs-projects.vercel.app', 
     credentials: true
 }));
 app.use(express.json());
@@ -116,8 +116,8 @@ app.use(errorHandlerMiddleware);
 const server = http.createServer(app);
 const io = new Server(server, {
     cors: {
-        origin: "https://code-unity-20-sounabs-projects.vercel.app/",
-        methods: ["GET", "POST"],
+        origin: "https://code-unity-20-sounabs-projects.vercel.app",
+        methods: ["GET", "POST","PUT", "DELETE"],
         // allowedHeaders: ["my-custom-header"],
         credentials: true
     }
