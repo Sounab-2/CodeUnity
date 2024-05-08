@@ -5,7 +5,7 @@ import { CODE_SNIPPETS } from '../constants';
 import { executeCode } from '../api';
 import { initializeSocket } from '../socket';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faPlay, faFolderPlus, faComments,faCircleXmark } from '@fortawesome/free-solid-svg-icons';
+import { faPlay, faFolderPlus, faComments, faCircleXmark } from '@fortawesome/free-solid-svg-icons';
 import { axiosInstance } from '../../utils/index';
 import { useSelector } from 'react-redux';
 import { selectHostId, selectMeetingId, selectMeetingName } from '../../features/meetingSlice';
@@ -15,7 +15,7 @@ import { setTeam, setMeetingId, setMeetingName } from '../../features/meetingSli
 import { useFirebase } from '../Context/FirebaseContext';
 let isUserPresent = true;
 
-const EditorComponent = ({ socketRef, value, setValue,language,setLanguage }) => {
+const EditorComponent = ({ socketRef, value, setValue, language, setLanguage }) => {
     const [theme, setTheme] = useState('vs-dark');
     const editorRef = useRef(null);
     const selectedTeam = useSelector(state => state.meeting.selectedTeam);
@@ -33,14 +33,14 @@ const EditorComponent = ({ socketRef, value, setValue,language,setLanguage }) =>
     const { user } = useFirebase();
     const userId = user?.uid;
     const navigate = useNavigate();
-    const isHost = ((userId === hostId) || selectedTeam==='solo');
+    const isHost = ((userId === hostId) || selectedTeam === 'solo');
     const teamMembers = useSelector(state => state.meeting.team);
 
     const showTeamMembers = async () => {
-        const response = await axiosInstance.post('/api/v1/project/showTeam',{roomId: meetingId});
-        const {team,_id,name}= response.data.workspace;
+        const response = await axiosInstance.post('/api/v1/project/showTeam', { roomId: meetingId });
+        const { team, _id, name } = response.data.workspace;
         isUserPresent = team.some(member => member.id === userId);
-        if(!isUserPresent) {
+        if (!isUserPresent) {
             navigate('/dashboard/newproject');
             return;
         }
@@ -51,27 +51,27 @@ const EditorComponent = ({ socketRef, value, setValue,language,setLanguage }) =>
 
     useEffect(() => {
         showTeamMembers();
-    },[teamMembers]);
+    }, [teamMembers]);
 
-    const setCode = async() => {
-        const r2 = await axiosInstance.post('/api/v1/project/showTeam', {roomId:meetingId});
+    const setCode = async () => {
+        const r2 = await axiosInstance.post('/api/v1/project/showTeam', { roomId: meetingId });
         setValue(r2.data.workspace.code[language]);
     }
 
-    useEffect(()=>{
-            setCode();
-     },[]);
-
-     useEffect(()=>{
+    useEffect(() => {
         setCode();
-     },[language]);
+    }, []);
+
+    useEffect(() => {
+        setCode();
+    }, [language]);
 
     const removeTeamMembers = async (memberId) => {
         try {
-            socketRef?.current?.emit('remove-user', {memberId,meetingId});
-           const response = await axiosInstance.post('/api/v1/project/remove',{meetingId,userId:memberId});
+            socketRef?.current?.emit('remove-user', { memberId, meetingId });
+            const response = await axiosInstance.post('/api/v1/project/remove', { meetingId, userId: memberId });
         } catch (error) {
-            console.log("Error removing team members",error);
+            console.log("Error removing team members", error);
         }
     };
 
@@ -95,9 +95,9 @@ const EditorComponent = ({ socketRef, value, setValue,language,setLanguage }) =>
 
     const onSelectLanguage = async (newLanguage) => {
         setLanguage(newLanguage);
-        
-        if (socketRef.current){
-            socketRef.current.emit('language-change', { lang:newLanguage, meetingId });
+
+        if (socketRef.current) {
+            socketRef.current.emit('language-change', { lang: newLanguage, meetingId });
         }
 
         const response = await axiosInstance.post('/api/v1/project/language', {
@@ -112,7 +112,7 @@ const EditorComponent = ({ socketRef, value, setValue,language,setLanguage }) =>
             meetingId,
             code: value
         })
-       
+
     };
 
     const runCode = async () => {
@@ -122,7 +122,7 @@ const EditorComponent = ({ socketRef, value, setValue,language,setLanguage }) =>
             meetingId,
             code: sourcecode
         })
-        
+
         setIsError(false);
         try {
             setIsLoading(true);
@@ -134,18 +134,18 @@ const EditorComponent = ({ socketRef, value, setValue,language,setLanguage }) =>
             const output = response.data;
             setOutput(output);
             console.log(output);
-            
+
         } catch (error) {
-            if(language == 'python'){
-                setOutput('An error occurred\n' + error.response.data.data); 
+            if (language == 'python') {
+                setOutput('An error occurred\n' + error.response.data.data);
             }
-            else{
+            else {
                 setOutput('An error occurred\n' + error.response.data.data.cmd);
             }
         }
         finally {
             setIsLoading(false);
-            
+
         }
     };
 
@@ -165,13 +165,13 @@ const EditorComponent = ({ socketRef, value, setValue,language,setLanguage }) =>
 
 
     const handleLeave = async () => {
-    //     socketRef.current?.emit('user-left', { meetingId });
-    //     socketRef.current?.off('userJoined');
-    //     socketRef.current?.off('code-sync');
+        //     socketRef.current?.emit('user-left', { meetingId });
+        //     socketRef.current?.off('userJoined');
+        //     socketRef.current?.off('code-sync');
         try {
-            const response = await axiosInstance.post('/api/v1/project/leaveWorkspace', {meetingId,userId});
-            const {team} = response.data.workspace;
-            if(response){
+            const response = await axiosInstance.post('/api/v1/project/leaveWorkspace', { meetingId, userId });
+            const { team } = response.data.workspace;
+            if (response) {
                 dispatch(setTeam(team));
                 socketRef.current?.disconnect();
                 navigate('/');
@@ -180,7 +180,7 @@ const EditorComponent = ({ socketRef, value, setValue,language,setLanguage }) =>
             console.log(error);
         }
     };
-    
+
 
 
 
@@ -204,109 +204,148 @@ const EditorComponent = ({ socketRef, value, setValue,language,setLanguage }) =>
 
                     <label htmlFor="my-drawer" aria-label="close sidebar" className="drawer-overlay " onClick={toggleDrawer}></label>
                     <div className="menu  w-72  bg-base-200 text-base-content flex gap-4 h-full items-center ">
-                        <div className=' overflow-y-auto h-4/5 p-1 overflow-x-hidden'>
-                        {/* Sidebar content here */}
-                        <div className=' '>
-                            <li>
+                        <div className=' overflow-y-aut h-2/3 p-1 overflow-x-hidden'>
+                            {/* Sidebar content here */}
+                            <div className=' '>
+                                <li>
 
-                                <h1 className=' text-base-content font-bold text-base flex flex-col text-left w-64'>
+                                    <h1 className=' text-base-content font-bold text-base flex flex-col text-left w-64'>
 
-                                    Meeting Id :
-                                    <pre className=' text-base-content font-light text-xs'>(Share with your friends to invite them) </pre>
-                                </h1>
-
-
-                                <input type="text" value={meetId ? ` ${meetId}` : 'No meeting ID set'} readOnly className="input input-bordered input-primary w-64 text-sm" />
-                                <button
-                                    className="absolute left-52  top-16 mt-2 text-center bg-transparent "
-                                    onClick={copyToClipboard}
-                                >
-                                    {copied ? (
-                                        <div className="flex items-center justify-center h-full bg-transparent">
-                                            <svg
-                                                className="w-3.5 h-3.5 text-blue-700 dark:text-blue-500 mr-1 bg-transparent"
-                                                aria-hidden="true"
-                                                xmlns="http://www.w3.org/2000/svg"
-                                                fill="none"
-                                                viewBox="0 0 16 12"
-                                            >
-                                                <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M1 5.917 5.724 10.5 15 1.5" />
-                                            </svg>
-                                            <span className="text-sm font-medium">Copied!</span>
-                                        </div>
-                                    ) : (
-                                        <div className="flex items-center justify-center h-full">
-                                            <svg
-                                                className="w-3.5 h-3.5"
-                                                aria-hidden="true"
-                                                xmlns="http://www.w3.org/2000/svg"
-                                                fill="currentColor"
-                                                viewBox="0 0 18 20"
-                                            >
-                                                <path d="M16 1h-3.278A1.992 1.992 0 0 0 11 0H7a1.993 1.993 0 0 0-1.722 1H2a2 2 0 0 0-2 2v15a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V3a2 2 0 0 0-2-2Zm-3 14H5a1 1 0 0 1 0-2h8a1 1 0 0 1 0 2Zm0-4H5a1 1 0 0 1 0-2h8a1 1 0 1 1 0 2Zm0-5H5a1 1 0 0 1 0-2h2V2h4v2h2a1 1 0 1 1 0 2Z" />
-                                            </svg>
-
-                                        </div>
-                                    )}
-                                </button>
-                            </li>
-                            <h1 className=' text-base-content font-bold text-base flex flex-col items-center justify-center text-center mt-5 w-64'> Meeting Name :</h1>
-                            <li><input type="text" value={meetName ? `${meetName}` : 'No meeting ID set'} readOnly className="input input-bordered input-primary w-64 text-xl mt-4"></input></li>
-                        </div>
-
-                        {/* <hr className=' mt-6' /> */}
-
-                        <div className='  flex flex-col h-auto p-3 gap-3 mt-6 bg-base-300 '>
-                            {
-                                teamMembers?.map(member => (
-
-                                    <li className=' rounded-lg bg-base-100 flex flex-row items-center justify-center gap-1 p-3 '>
-                                        <span>
-                                            {/* <Avatar name={member.username} className="dropdown" size="40" round={true} color={Avatar.getRandomColor(['red', 'green', 'blue'])} textSizeRatio={0.8}  /> */}
-                                            <Avatar name={member.username} className="dropdown" size="50" round={true} color={Avatar.getRandomColor(['red', 'green', 'blue'])} textSizeRatio={0.8} src={member.photoUrl || ''} />
+                                        Meeting Id :
+                                        <pre className=' text-base-content font-light text-xs'>(Share with your friends to invite them) </pre>
+                                    </h1>
 
 
-                                        </span>
-                                        <h1>
-                                            {member.username}
-                                            <span>
-                                                {member.id === userId && (
-                                                    /* Content to render if member.id equals userId */
-                                                    <span>(You)</span>
-                                                )}
-                                            </span>
+                                    <input type="text" value={meetId ? ` ${meetId}` : 'No meeting ID set'} readOnly className="input input-bordered input-primary w-64 text-sm" />
+                                    <button
+                                        className="absolute left-52  top-16 mt-2 text-center bg-transparent "
+                                        onClick={copyToClipboard}
+                                    >
+                                        {copied ? (
+                                            <div className="flex items-center justify-center h-full bg-transparent">
+                                                <svg
+                                                    className="w-3.5 h-3.5 text-blue-700 dark:text-blue-500 mr-1 bg-transparent"
+                                                    aria-hidden="true"
+                                                    xmlns="http://www.w3.org/2000/svg"
+                                                    fill="none"
+                                                    viewBox="0 0 16 12"
+                                                >
+                                                    <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M1 5.917 5.724 10.5 15 1.5" />
+                                                </svg>
+                                                <span className="text-sm font-medium">Copied!</span>
+                                            </div>
+                                        ) : (
+                                            <div className="flex items-center justify-center h-full">
+                                                <svg
+                                                    className="w-3.5 h-3.5"
+                                                    aria-hidden="true"
+                                                    xmlns="http://www.w3.org/2000/svg"
+                                                    fill="currentColor"
+                                                    viewBox="0 0 18 20"
+                                                >
+                                                    <path d="M16 1h-3.278A1.992 1.992 0 0 0 11 0H7a1.993 1.993 0 0 0-1.722 1H2a2 2 0 0 0-2 2v15a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V3a2 2 0 0 0-2-2Zm-3 14H5a1 1 0 0 1 0-2h8a1 1 0 0 1 0 2Zm0-4H5a1 1 0 0 1 0-2h8a1 1 0 1 1 0 2Zm0-5H5a1 1 0 0 1 0-2h2V2h4v2h2a1 1 0 1 1 0 2Z" />
+                                                </svg>
 
-                                        </h1>
-                                        {
-                                                    member.id === hostId && (
-
-                                                        <span className=' font-bold tetx-lg text-green-600'>(Host)</span>
-
-                                                    )
-                                                }
-                                        {userId === hostId  &&  member.id != userId && (
-                                            <button className=' btn bg-red-600' onClick={()=>removeTeamMembers(member.id)}>Remove<span className=' text-white text-lg'><FontAwesomeIcon icon={faCircleXmark} /></span></button>
+                                            </div>
                                         )}
+                                    </button>
+                                </li>
+                                <h1 className=' text-base-content font-bold text-base flex flex-col items-center justify-center text-center mt-5 w-64'> Meeting Name :</h1>
+                                <li><input type="text" value={meetName ? `${meetName}` : 'No meeting ID set'} readOnly className="input input-bordered input-primary w-64 text-xl mt-4"></input></li>
+                            </div>
 
-                                    </li>
-                                ))
-                            }
+                            {/* <hr className=' mt-6' /> */}
+
+                            <div className='  flex flex-col h-auto p-3 gap-3 mt-6 bg-base-300 '>
+                                {
+                                    teamMembers?.map(member => (
+
+                                        <li className=' rounded-lg bg-base-100 flex flex-row items-center justify-center gap-1 p-3 '>
+                                            <span>
+                                                {/* <Avatar name={member.username} className="dropdown" size="40" round={true} color={Avatar.getRandomColor(['red', 'green', 'blue'])} textSizeRatio={0.8}  /> */}
+                                                <Avatar name={member.username} className="dropdown" size="50" round={true} color={Avatar.getRandomColor(['red', 'green', 'blue'])} textSizeRatio={0.8} src={member.photoUrl || ''} />
+
+
+                                            </span>
+                                            <h1>
+                                                {member.username}
+                                                <span>
+                                                    {member.id === userId && (
+                                                        /* Content to render if member.id equals userId */
+                                                        <span>(You)</span>
+                                                    )}
+                                                </span>
+
+                                            </h1>
+                                            {
+                                                member.id === hostId && (
+
+                                                    <span className=' font-bold tetx-lg text-green-600'>(Host)</span>
+
+                                                )
+                                            }
+                                            {userId === hostId && member.id != userId && (
+                                                <button className=' btn bg-red-600' onClick={() => removeTeamMembers(member.id)}>Remove<span className=' text-white text-lg'><FontAwesomeIcon icon={faCircleXmark} /></span></button>
+                                            )}
+
+                                        </li>
+                                    ))
+                                }
+
+                            </div>
+
 
                         </div>
 
-                       
+                        <div class="flex flex-col">
+                            <div class="flex-1">
+                                <li>
+                                    <button class='btn bg-red-600 w-60' onClick={handleLeave}>Leave Room</button>
+                                </li>
+                            </div>
+
+                            <div class="my-2 flex items-center">
+                                <span class="block w-full border-t border-gray-300 my-4"></span>
+
+                                <span class="mx-4">or</span>
+                                <span class="block w-full border-t border-gray-300 my-4"></span>
+
+                            </div>
+
+                            <div class="flex-1">
+                                <li>
+                                    {/* Open the modal using document.getElementById('ID').showModal() method */}
+                                    <button className="btn bg-red-600 w-60" onClick={() => document.getElementById('my_modal_1').showModal()}>Leave WorkSpace</button>
+                                    <dialog id="my_modal_1" className="modal">
+                                        <div className="modal-box absolute top-44 w-1/3 h-64  flex flex-col gap-0 overflow-hidden">
+                                            <div className=" mt-4 flex justify-center items-center"><img src="/images/warning.png" className=' w-12 h-12'alt="" /></div>
+                                            <div className='  flex flex-col justify-center items-center '>
+                                                <h1 className=' font-extrabold text-2xl text-red-700 text-center '>Warning</h1>
+                                                <p className=' text-center text-lg'>
+                                                Once you exit this workspace, your code will be erased, and you won't be able to retrieve or access it again.
+                                                </p>
+
+                                            </div>
+                                            <div className="modal-action  flex justify-center gap-6">
+                                                <form method="dialog">
+                                                    {/* if there is a button in form, it will close the modal */}
+                                                    <button className="btn w-32 bg-primary text-white">Close</button>
+                                                </form>
+
+                                                <button class='btn bg-red-600 w-32' onClick={handleLeave}>Leave</button> 
+                                            </div>
+                                        </div>
+                                    </dialog>
+                                    {/* <button class='btn bg-red-600 w-60' onClick={handleLeave}>Leave WorkSpace</button> */}
+                                </li>
+                            </div>
                         </div>
 
-                        <div>
-                            <li>
-                                <button className=' btn bg-red-600 w-60' onClick={handleLeave}>Leave Room </button>
-                            </li>
-                        </div>
                     </div>
                 </div>
             </div>
 
-       
+
 
 
             <div className={`flex p-4 h-auto  ${isDrawerOpen ? 'w-4/5 ml-72' : 'w-full'}`}>
