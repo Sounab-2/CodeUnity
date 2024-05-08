@@ -148,6 +148,10 @@ io.on('connection', (socket) => {
         socket.to(meetingId).emit('received-message',{text,sender,senderPhoto});
     })
 
+    socket.on('remove-user',({memberId,meetingId}) => {
+        socket.to(meetingId).emit('user-removed',{memberId,meetingId});
+    })
+
     socket.on('call', (meetingId)=>{
         socket.to(meetingId).emit('incoming-call');
     })

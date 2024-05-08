@@ -29,7 +29,7 @@ const Editor = () => {
       const {team,_id,name} = response.data.workspace;
       isUserPresent = team.some(member => member.id === userId);
       const teamType =response.data.workspace.type ;
-      if(!(teamType=='solo') && !isUserPresent) {
+      if(!(teamType==='solo') && !isUserPresent) {
         console.log('user not present');
         navigate('/dashboard/newproject');
         return;
@@ -69,6 +69,10 @@ const Editor = () => {
                 setValue(code);
             });
 
+            socketRef.current.on('user-removed', () => {
+              reloadWorkspace();
+            })
+            
             socketRef.current.on('disconnect',()=>{
               console.log('socket disconnected');
               // navigate('/dashboard/newproject');

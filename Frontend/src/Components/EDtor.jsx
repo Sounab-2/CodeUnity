@@ -13,7 +13,7 @@ import Avatar from 'react-avatar';
 import { useDispatch } from 'react-redux';
 import { setTeam, setMeetingId, setMeetingName } from '../../features/meetingSlice';
 import { useFirebase } from '../Context/FirebaseContext';
-
+let isUserPresent = true;
 
 const EditorComponent = ({ socketRef, value, setValue }) => {
     const [theme, setTheme] = useState('vs-dark');
@@ -39,6 +39,11 @@ const EditorComponent = ({ socketRef, value, setValue }) => {
     const showTeamMembers = async () => {
         const response = await axiosInstance.post('/api/v1/project/showTeam',{roomId: meetingId});
         const {team,_id,name}= response.data.workspace;
+        isUserPresent = team.some(member => member.id === userId);
+        if(!isUserPresent) {
+            navigate('/dashboard/newproject');
+            return;
+        }
         dispatch(setTeam(team));
         dispatch(setMeetingId(_id));
         dispatch(setMeetingName(name));
@@ -60,9 +65,8 @@ const EditorComponent = ({ socketRef, value, setValue }) => {
 
     const removeTeamMembers = async (memberId) => {
         try {
+            socketRef?.current?.emit('remove-user', {memberId,meetingId});
            const response = await axiosInstance.post('/api/v1/project/remove',{meetingId,userId:memberId});
-           console.log(response);
-
         } catch (error) {
             console.log("Error removing team members",error);
         }
