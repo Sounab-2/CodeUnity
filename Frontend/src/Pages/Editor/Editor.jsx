@@ -22,6 +22,7 @@ const Editor = () => {
   const user =  auth.currentUser;
   const userId = user?.uid;
   let isUserPresent = true;
+  const [language, setLanguage] = useState('python');
 
   const reloadWorkspace = async () =>{
     try {
@@ -69,6 +70,12 @@ const Editor = () => {
                 setValue(code);
             });
 
+            socketRef.current.on('tab-change',(lang)=>{
+              setLanguage(lang);
+              // console.log(lang);
+            })
+
+
             socketRef.current.on('user-removed', () => {
               reloadWorkspace();
             })
@@ -87,15 +94,16 @@ const Editor = () => {
         if (socketRef.current) {
             socketRef.current.off('userJoined');
             socketRef.current.off('code-sync');
+            socketRef.current.off('tab-change');
             socketRef.current.disconnect();
         }
     };
 }, [meetingId]);
 
   return (
-    (isUserPresent || selectedTeam=='solo') && (<section className=' max-h-screen overflow-hidden w-full'>
+    (isUserPresent || selectedTeam==='solo') && (<section className=' max-h-screen overflow-hidden w-full'>
       <EditorNav socketRef={socketRef}/>
-      <EDtor socketRef={socketRef} value={value} setValue={setValue}/>
+      <EDtor socketRef={socketRef} value={value} setValue={setValue} language={language} setLanguage={setLanguage}/>
     </section>)
   );
 }

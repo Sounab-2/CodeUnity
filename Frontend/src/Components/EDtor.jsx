@@ -15,10 +15,10 @@ import { setTeam, setMeetingId, setMeetingName } from '../../features/meetingSli
 import { useFirebase } from '../Context/FirebaseContext';
 let isUserPresent = true;
 
-const EditorComponent = ({ socketRef, value, setValue }) => {
+const EditorComponent = ({ socketRef, value, setValue,language,setLanguage }) => {
     const [theme, setTheme] = useState('vs-dark');
     const editorRef = useRef(null);
-    const [language, setLanguage] = useState('python');
+    const selectedTeam = useSelector(state => state.meeting.selectedTeam);
     const [output, setOutput] = useState('');
     const [isLoading, setIsLoading] = useState(false);
     const [isError, setIsError] = useState(false);
@@ -33,7 +33,7 @@ const EditorComponent = ({ socketRef, value, setValue }) => {
     const { user } = useFirebase();
     const userId = user?.uid;
     const navigate = useNavigate();
-
+    const isHost = ((userId === hostId) || selectedTeam==='solo');
     const teamMembers = useSelector(state => state.meeting.team);
 
     const showTeamMembers = async () => {
@@ -62,6 +62,9 @@ const EditorComponent = ({ socketRef, value, setValue }) => {
             setCode();
      },[]);
 
+     useEffect(()=>{
+        setCode();
+     },[language]);
 
     const removeTeamMembers = async (memberId) => {
         try {
@@ -80,6 +83,7 @@ const EditorComponent = ({ socketRef, value, setValue }) => {
         }
     };
 
+
     const onMount = (editor) => {
         editorRef.current = editor;
         editor.focus();
@@ -91,6 +95,11 @@ const EditorComponent = ({ socketRef, value, setValue }) => {
 
     const onSelectLanguage = async (newLanguage) => {
         setLanguage(newLanguage);
+        
+        if (socketRef.current){
+            socketRef.current.emit('language-change', { lang:newLanguage, meetingId });
+        }
+
         const response = await axiosInstance.post('/api/v1/project/language', {
             meetingId,
             language: newLanguage
@@ -318,22 +327,26 @@ const EditorComponent = ({ socketRef, value, setValue }) => {
                             <ul className="menu menu-vertical lg:menu-horizontal bg-base-200 rounded-box">
                                 <li><button
                                     className={language === 'javascript' ? 'font-bold text-blue-500' : ''}
-                                    onClick={() => onSelectLanguage('javascript')}>
+                                    onClick={() => onSelectLanguage('javascript')}
+                                    disabled={!isHost}>
                                     Javascript
                                 </button></li>
                                 <li><button
                                     className={language === 'python' ? 'font-bold text-blue-500' : ''}
-                                    onClick={() => onSelectLanguage('python')}>
+                                    onClick={() => onSelectLanguage('python')}
+                                    disabled={!isHost}>
                                     Python
                                 </button></li>
                                 <li><button
                                     className={language === 'java' ? 'font-bold text-blue-500' : ''}
-                                    onClick={() => onSelectLanguage('java')}>
+                                    onClick={() => onSelectLanguage('java')}
+                                    disabled={!isHost}>
                                     Java
                                 </button></li>
                                 <li><button
                                     className={language === 'cPlusPlus' ? 'font-bold text-blue-500' : ''}
-                                    onClick={() => onSelectLanguage('cPlusPlus')}>
+                                    onClick={() => onSelectLanguage('cPlusPlus')}
+                                    disabled={!isHost}>
                                     C++
                                 </button></li>
                             </ul>

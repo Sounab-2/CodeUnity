@@ -141,6 +141,11 @@ io.on('connection', (socket) => {
         socket.to(meetingId).emit('code-sync',value);
     })
 
+    socket.on('language-change',({lang,meetingId})=>{
+        // console.log(lang);
+        socket.to(meetingId).emit('tab-change',lang);
+    })
+
     socket.on('message',({text,meetingId,sender,senderPhoto})=>{
         console.log(text);
         // console.log(sender);
