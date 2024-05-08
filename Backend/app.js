@@ -88,7 +88,7 @@ const port = process.env.PORT || 3000;
 // Middlewares
 app.use(helmet());
 app.use(cors({
-    origin: ['http://localhost:5173'], 
+    origin: ['https://code-unity-20-sounabs-projects.vercel.app/'], 
     credentials: true
 }));
 app.use(express.json());
