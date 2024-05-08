@@ -121,13 +121,8 @@ const EditorComponent = ({ socketRef, value, setValue }) => {
             const output = response.data;
             setOutput(output);
             console.log(output);
-            // const r2 = await axiosInstance.post('/api/v1/project/save', {
-            //     meetingId,
-            //     code: sourcecode
-            // })
             
         } catch (error) {
-            console.log(error.response.data.data);
             if(language == 'python'){
                 setOutput('An error occurred\n' + error.response.data.data); 
             }
@@ -333,7 +328,7 @@ const EditorComponent = ({ socketRef, value, setValue }) => {
                                     Java
                                 </button></li>
                                 <li><button
-                                    className={language === 'cpp' ? 'font-bold text-blue-500' : ''}
+                                    className={language === 'cPlusPlus' ? 'font-bold text-blue-500' : ''}
                                     onClick={() => onSelectLanguage('cPlusPlus')}>
                                     C++
                                 </button></li>
