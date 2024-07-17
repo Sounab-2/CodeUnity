@@ -35,7 +35,7 @@ const Savedfile = () => {
 
 
   return (
-    <div className="p-16 pt-20 min-h-screen lg:ml-64  flex flex-wrap gap-10  ">
+    <div className="p-16 pt-20 min-h-screen lg:ml-64  flex flex-wrap gap-20  ">
 
       {workspaces.map((workspace) => (
         <Link to={`/editor/${workspace._id}`} class="relative flex w-80 flex-col rounded-xl bg-base-300 shadow-lg shadow-primary bg-clip-border   broder-2 h-96 mt-11 ">

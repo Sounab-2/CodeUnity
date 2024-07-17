@@ -187,7 +187,7 @@ const EditorComponent = ({ socketRef, value, setValue, language, setLanguage }) 
 
     return (
         <>
-            <div className="drawer min-h-screen absolute top-4 left-10 w-1/2 overflow-y-auto">
+            <div className="drawer min-h-screen absolute top-4 left-10 lg:w-1/2 w-full overflow-y-auto ">
                 <input id="my-drawer" type="checkbox" className="drawer-toggle" checked={isDrawerOpen} onChange={toggleDrawer} />
                 <div className="drawer-content w-1/2 ">
 
@@ -204,7 +204,7 @@ const EditorComponent = ({ socketRef, value, setValue, language, setLanguage }) 
 
                     <label htmlFor="my-drawer" aria-label="close sidebar" className="drawer-overlay " onClick={toggleDrawer}></label>
                     <div className="menu  w-72  bg-base-200 text-base-content flex gap-4 h-full items-center ">
-                        <div className=' overflow-y-aut h-2/3 p-1 overflow-x-hidden'>
+                        <div className=' overflow-y-auto h-2/3 p-1 overflow-x-hidden'>
                             {/* Sidebar content here */}
                             <div className=' '>
                                 <li>
@@ -348,10 +348,10 @@ const EditorComponent = ({ socketRef, value, setValue, language, setLanguage }) 
 
 
 
-            <div className={`flex p-4 h-auto  ${isDrawerOpen ? 'w-4/5 ml-72' : 'w-full'}`}>
+            <div className={`flex p-4 h-auto min-h-fit  md:flex-row flex-col md:overflow-y-hidden overflow-y-auto  gap-4 ${isDrawerOpen ? 'w-4/5 ml-72' : 'w-full'}`}>
 
                 {/* Input section */}
-                <div className=" pr-3 relative z-30 w-1/2 ">
+                <div className=" pr-3 relative z-30 md:w-1/2 w-full  ">
 
                     <div className="navbar bg-base-300 rounded-box flex justify-between ">
 
@@ -362,8 +362,8 @@ const EditorComponent = ({ socketRef, value, setValue, language, setLanguage }) 
                         {/* </button> */}
                         {/* </div>  */}
 
-                        <div className="flex px-2 lg:flex-none">
-                            <ul className="menu menu-vertical lg:menu-horizontal bg-base-200 rounded-box">
+                        <div className="flex px-2 ">
+                            <ul className="menu menu-horizontal bg-base-200 rounded-box">
                                 <li><button
                                     className={language === 'javascript' ? 'font-bold text-blue-500' : ''}
                                     onClick={() => onSelectLanguage('javascript')}
@@ -414,7 +414,7 @@ const EditorComponent = ({ socketRef, value, setValue, language, setLanguage }) 
                 </div>
 
                 {/* output section */}
-                <div className='w-1/2 pl-3 relative z-30 bg-base-200 rounded-lg'>
+                <div className='lg:w-1/2 pl-3 relative z-30 bg-base-200 rounded-lg w-full h-96 lg:h-screen'>
                     <div className='bg-black-200 rounded-md p-4 h-full flex flex-col justify-between'>
                         <div className=' flex items-center bg-base-300 rounded-md h-20 justify-between p-9'>
                             <h2 className="text-2xl font-extrabold mb-4 ">Output</h2>

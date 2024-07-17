@@ -54,7 +54,7 @@ export default function Header() {
             <div className="flex items-center lg:order-2 gap-5">
 
               <AvatarCom />
-              <Themetoggler/>
+              {/* <Themetoggler/> */}
             </div>
 
 

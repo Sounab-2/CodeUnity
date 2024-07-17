@@ -101,7 +101,7 @@ const Editor = () => {
 }, [meetingId]);
 
   return (
-    (isUserPresent || selectedTeam==='solo') && (<section className=' max-h-screen overflow-hidden w-full'>
+    (isUserPresent || selectedTeam==='solo') && (<section className=' max-h-screen md:overflow-hidden overflow-y-auto overflow-x-hidden w-full'>
       <EditorNav socketRef={socketRef}/>
       <EDtor socketRef={socketRef} value={value} setValue={setValue} language={language} setLanguage={setLanguage}/>
     </section>)
