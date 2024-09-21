@@ -40,13 +40,15 @@ const EditorComponent = ({ socketRef, value, setValue, language, setLanguage }) 
         const response = await axiosInstance.post('/api/v1/project/showTeam', { roomId: meetingId });
         const { team, _id, name } = response.data.workspace;
         isUserPresent = team.some(member => member.id === userId);
-        if (!isUserPresent) {
+        const type=response.data.workspace.type;
+        if (!isUserPresent && type!=='solo') {
             navigate('/dashboard/newproject');
             return;
         }
         dispatch(setTeam(team));
         dispatch(setMeetingId(_id));
         dispatch(setMeetingName(name));
+        
     }
 
     useEffect(() => {

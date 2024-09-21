@@ -30,11 +30,11 @@ const Editor = () => {
       const {team,_id,name} = response.data.workspace;
       isUserPresent = team.some(member => member.id === userId);
       const teamType =response.data.workspace.type ;
-      if(!(teamType==='solo') && !isUserPresent) {
+      if (teamType !== 'solo' && !isUserPresent) {
         console.log('user not present');
         navigate('/dashboard/newproject');
         return;
-      }
+    }
       dispatch(setTeam(team));
       dispatch(setMeetingId(_id));
       dispatch(setMeetingName(name));
