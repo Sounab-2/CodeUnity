@@ -107,7 +107,7 @@ const EditorComponent = ({ socketRef, value, setValue, language, setLanguage }) 
         setValue(response.data.workspace.code[newLanguage]);
     };
 
-    const codeSave = async () => {
+    const codeSave = async () => {   
         const response = await axiosInstance.post('/api/v1/project/save', {
             meetingId,
             code: value
@@ -164,7 +164,19 @@ const EditorComponent = ({ socketRef, value, setValue, language, setLanguage }) 
     };
 
 
-    const handleLeave = async () => {
+    const handleLeaveRoom = async () => {
+        //     socketRef.current?.emit('user-left', { meetingId });
+        //     socketRef.current?.off('userJoined');
+        //     socketRef.current?.off('code-sync');
+        try {
+            socketRef.current?.disconnect();
+            navigate('/dashboard');
+        } catch (error) {
+            console.log(error);
+        }
+    };
+                                     
+    const handleLeaveWorkspace = async () => {
         //     socketRef.current?.emit('user-left', { meetingId });
         //     socketRef.current?.off('userJoined');
         //     socketRef.current?.off('code-sync');
@@ -174,14 +186,12 @@ const EditorComponent = ({ socketRef, value, setValue, language, setLanguage }) 
             if (response) {
                 dispatch(setTeam(team));
                 socketRef.current?.disconnect();
-                navigate('/');
+                navigate('/dashboard');
             }
         } catch (error) {
             console.log(error);
         }
     };
-
-
 
 
 
@@ -300,7 +310,7 @@ const EditorComponent = ({ socketRef, value, setValue, language, setLanguage }) 
                         <div class="flex flex-col">
                             <div class="flex-1">
                                 <li>
-                                    <button class='btn bg-red-600 w-60' onClick={handleLeave}>Leave Room</button>
+                                    <button class='btn bg-red-600 w-60' onClick={handleLeaveRoom}>Leave Room</button>
                                 </li>
                             </div>
 
@@ -332,7 +342,7 @@ const EditorComponent = ({ socketRef, value, setValue, language, setLanguage }) 
                                                     <button className="btn w-32 bg-primary text-white">Close</button>
                                                 </form>
 
-                                                <button class='btn bg-red-600 w-32' onClick={handleLeave}>Leave</button> 
+                                                <button class='btn bg-red-600 w-32' onClick={handleLeaveWorkspace}>Leave</button> 
                                             </div>
                                         </div>
                                     </dialog>
