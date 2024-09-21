@@ -57,9 +57,9 @@ const About = () => {
                     </div>
                 </div>
             </section>
-            <section className=' bg-primary-content p-20 flex items-center justify-center'>
-                <div className="join join-vertical w-4/5 border-2">
-                    <div className="collapse collapse-arrow join-item border border-base-300">
+            <section className=' bg-primary-content p-20 flex items-center justify-center w-full '>
+                <div className="join join-vertical md:w-11/12 w-full border-2">
+                    <div className="collapse collapse-arrow join-item border border-base-300 w-full">
                         <input type="radio" name="my-accordion-4" defaultChecked />
                         <div className="collapse-title text-xl font-medium text-primary">
                             What is CodeUnity all about ?
@@ -89,75 +89,7 @@ const About = () => {
                 </div>
             </section>
 
-            <section className=' min-h-96 bg-primary-content p-12 flex gap-8'>
-                <img src="/about-image-dark.svg" alt="" />
-                <div className=' border-3'>
-                    <ul className="timeline timeline-snap-icon max-md:timeline-compact timeline-vertical">
-                        <li>
-                            <div className="timeline-middle">
-                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" className="h-5 w-5"><path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.857-9.809a.75.75 0 00-1.214-.882l-3.483 4.79-1.88-1.88a.75.75 0 10-1.06 1.061l2.5 2.5a.75.75 0 001.137-.089l4-5.5z" clipRule="evenodd" /></svg>
-                            </div>
-                            <div className="timeline-start md:text-end mb-10">
-                               <span>1.</span>
-                                <div className="text-lg font-black">Sign up or Log in</div>
-                                Sign up or log in using your email or social authentication.
-                            </div>
-                            <hr />
-                        </li>
-                        <li>
-                            <hr />
-                            <div className="timeline-middle">
-                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" className="h-5 w-5"><path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.857-9.809a.75.75 0 00-1.214-.882l-3.483 4.79-1.88-1.88a.75.75 0 10-1.06 1.061l2.5 2.5a.75.75 0 001.137-.089l4-5.5z" clipRule="evenodd" /></svg>
-                            </div>
-                            <div className="timeline-end mb-10">
-                            <span>2.</span>
-                                <div className="text-lg font-black">Get Started</div>
-                                Create a new coding session or join an existing one.
-                            </div>
-                            <hr />
-                        </li>
-                        <li>
-                            <hr />
-                            <div className="timeline-middle">
-                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" className="h-5 w-5"><path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.857-9.809a.75.75 0 00-1.214-.882l-3.483 4.79-1.88-1.88a.75.75 0 10-1.06 1.061l2.5 2.5a.75.75 0 001.137-.089l4-5.5z" clipRule="evenodd" /></svg>
-                            </div>
-                            <div className="timeline-start md:text-end mb-10">
-                                {/* <time className="font-mono italic">2001</time> */}
-                                <span>3.</span>
-                                <div className="text-lg font-black">Start Coding</div>
-                                Collaborate in real-time by editing code, chatting with team members, and utilizing optional AI assistance.
-                            </div>
-                            <hr />
-                        </li>
-                        <li>
-                            <hr />
-                            <div className="timeline-middle">
-                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" className="h-5 w-5"><path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.857-9.809a.75.75 0 00-1.214-.882l-3.483 4.79-1.88-1.88a.75.75 0 10-1.06 1.061l2.5 2.5a.75.75 0 001.137-.089l4-5.5z" clipRule="evenodd" /></svg>
-                            </div>
-                            <div className="timeline-end mb-10">
-                                {/* <time className="font-mono italic">2007</time> */}
-                                <span>4.</span>
-                                <div className="text-lg font-black">Save work</div>
-                                Save your workspace to continue later or share the session link for others to join.
-                            </div>
-                            <hr />
-                        </li>
-                        <li>
-                            <hr />
-                            <div className="timeline-middle">
-                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" className="h-5 w-5"><path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.857-9.809a.75.75 0 00-1.214-.882l-3.483 4.79-1.88-1.88a.75.75 0 10-1.06 1.061l2.5 2.5a.75.75 0 001.137-.089l4-5.5z" clipRule="evenodd" /></svg>
-                            </div>
-                            <div className="timeline-start md:text-end mb-10">
-                                {/* <time className="font-mono italic">2015</time> */}
-                                <span>5.</span>
-                                <div className="text-lg font-black">End</div>
-                                Log out securely when done.
-                            </div>
-                        </li>
-                    </ul>
-
-                </div>
-            </section>
+         
         </>
     );
 }

@@ -13,19 +13,19 @@ const Hero = () => {
           <div className="-mx-4 flex flex-col ">
             <div className="w-full px-4">
               <div
-                className="wow fadeInUp mx-auto max-w-[800px] text-center  flex flex-col gap-5  -mt-10"
+                className="wow fadeInUp mx-auto max-w-[800px] text-center  flex flex-col gap-2 md:gap-4  -mt-10"
                 data-wow-delay=".2s"
               >
-                <div className="mb-5 text-3xl font-bold leading-tight  sm:text-4xl sm:leading-tight md:text-5xl md:leading-tight flex  justify-center items-center gap-5">
-                  <img src="./images/logo.png" className=' h-20 w-28' alt="" />
-                  <span>CodeUnity</span>
+                <div className="mb-5 text-3xl font-bold leading-tight  sm:text-4xl sm:leading-tight md:text-5xl md:leading-tight flex  justify-center items-center gap-4">
+                  <img src="./images/logo.png" className=' md:h-20 md:w-28 h-14 w-16 ' alt="" />
+                  <span className='text-4xl md:text-6xl tracking-tight font-bold text-transparent bg-clip-text bg-gradient-to-bl from-zinc-800 via-slate-200 to-zinc-900 h-20 md:mt-6 mt-10'>CodeUnity</span>
                   
                 </div>
-                <span className=' text-white text-xl font-bold'>Empowering Collaboration, Unifying Code.</span>
-                <p className="mb-12 text-base font-medium !leading-relaxed text-body-color dark:opacity-90 sm:text-lg md:text-xl">
+                <span className=' text-white md:text-xl font-bold text-lg'>Empowering Collaboration, Unifying Code.</span>
+                <p className="mb-12 text-base font-medium !leading-relaxed text-body-color dark:opacity-90 sm:text-lg md:text-xl p-4 text-left md:text-center md:p-0">
                 Experience coding like never before with our platform's real-time collaboration features. Easily join sessions, synchronize edits, chat, make calls, and boost productivity with seamless teamwork. Effortlessly communicate, share ideas, and code together in a dynamic environment designed to elevate your projects to new heights of success.
                 </p>
-                <div className="flex flex-col items-center justify-center gap-4  sm:flex-row sm:space-x-4 sm:space-y-0 -mt-7">
+                <div className="flex  items-center justify-center gap-4  sm:flex-row sm:space-x-4 sm:space-y-0 -mt-7">
                   <Link
                     to='/about'
                     className="rounded-md bg-primary py-4 px-8  text-base font-semibold text-white duration-300 ease-in-out hover:bg-primary/80 flex gap-4"

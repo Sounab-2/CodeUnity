@@ -30,7 +30,7 @@ const EditorNav = ({socketRef}) => {
           
         </div>
       )}
-      <Themetoggler/>
+      {/* <Themetoggler/> */}
     </div>
   );
 }
