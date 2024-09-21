@@ -51,7 +51,7 @@ const EditorComponent = ({ socketRef, value, setValue,language,setLanguage }) =>
 
     useEffect(() => {
         showTeamMembers();
-    },[teamMembers]);
+    },[meetingId]);
 
     const setCode = async() => {
         const r2 = await axiosInstance.post('/api/v1/project/showTeam', {roomId:meetingId});
