@@ -24,6 +24,7 @@ const EditorComponent = ({ socketRef, value, setValue, language, setLanguage }) 
     const [isError, setIsError] = useState(false);
     const [inputValue, setInputValue] = useState('');
     const [isDrawerOpen, setIsDrawerOpen] = useState(true);
+    const [teamType, setTeamType] = useState('');
     const { meetingId } = useParams();
     const meetId = useSelector(selectMeetingId);
     const meetName = useSelector(selectMeetingName);
@@ -35,12 +36,14 @@ const EditorComponent = ({ socketRef, value, setValue, language, setLanguage }) 
     const navigate = useNavigate();
     const isHost = ((userId === hostId) || selectedTeam === 'solo');
     const teamMembers = useSelector(state => state.meeting.team);
+   
 
     const showTeamMembers = async () => {
         const response = await axiosInstance.post('/api/v1/project/showTeam', { roomId: meetingId });
         const { team, _id, name } = response.data.workspace;
         isUserPresent = team.some(member => member.id === userId);
         const type=response.data.workspace.type;
+        setTeamType(type);
         if (!isUserPresent && type!=='solo') {
             navigate('/dashboard/newproject');
             return;
@@ -151,9 +154,10 @@ const EditorComponent = ({ socketRef, value, setValue, language, setLanguage }) 
         }
     };
 
-    const handleInputChange = (e) => {
-        setInputValue(e.target.value);
-    };
+    // const handleInputChange = (e) => {
+    //     setInputValue(e.target.value);
+    // };
+
     const toggleDrawer = () => {
         setIsDrawerOpen(!isDrawerOpen);
     };
@@ -219,7 +223,7 @@ const EditorComponent = ({ socketRef, value, setValue, language, setLanguage }) 
                         <div className=' overflow-y-auto h-2/3 p-1 overflow-x-hidden'>
                             {/* Sidebar content here */}
                             <div className=' '>
-                                <li>
+                                {teamType==='team' && (<li>
 
                                     <h1 className=' text-base-content font-bold text-base flex flex-col text-left w-64'>
 
@@ -261,7 +265,7 @@ const EditorComponent = ({ socketRef, value, setValue, language, setLanguage }) 
                                             </div>
                                         )}
                                     </button>
-                                </li>
+                                </li>)}
                                 <h1 className=' text-base-content font-bold text-base flex flex-col items-center justify-center text-center mt-5 w-64'> Meeting Name :</h1>
                                 <li><input type="text" value={meetName ? `${meetName}` : 'No meeting ID set'} readOnly className="input input-bordered input-primary w-64 text-xl mt-4"></input></li>
                             </div>
@@ -316,15 +320,15 @@ const EditorComponent = ({ socketRef, value, setValue, language, setLanguage }) 
                                 </li>
                             </div>
 
-                            <div class="my-2 flex items-center">
+                            {teamType==='team' && (<div class="my-2 flex items-center">
                                 <span class="block w-full border-t border-gray-300 my-4"></span>
 
                                 <span class="mx-4">or</span>
                                 <span class="block w-full border-t border-gray-300 my-4"></span>
 
-                            </div>
+                            </div>)}
 
-                            <div class="flex-1">
+                            {teamType==='team' && (<div class="flex-1">
                                 <li>
                                     {/* Open the modal using document.getElementById('ID').showModal() method */}
                                     <button className="btn bg-red-600 w-60" onClick={() => document.getElementById('my_modal_1').showModal()}>Leave WorkSpace</button>
@@ -350,7 +354,7 @@ const EditorComponent = ({ socketRef, value, setValue, language, setLanguage }) 
                                     </dialog>
                                     {/* <button class='btn bg-red-600 w-60' onClick={handleLeave}>Leave WorkSpace</button> */}
                                 </li>
-                            </div>
+                            </div>)}
                         </div>
 
                     </div>
@@ -376,24 +380,24 @@ const EditorComponent = ({ socketRef, value, setValue, language, setLanguage }) 
 
                         <div className="flex px-2 ">
                             <ul className="menu menu-horizontal bg-base-200 rounded-box">
-                                <li><button
+                                {/* <li><button
                                     className={language === 'javascript' ? 'font-bold text-blue-500' : ''}
                                     onClick={() => onSelectLanguage('javascript')}
                                     disabled={!isHost}>
                                     Javascript
-                                </button></li>
+                                </button></li> */}
                                 <li><button
                                     className={language === 'python' ? 'font-bold text-blue-500' : ''}
                                     onClick={() => onSelectLanguage('python')}
                                     disabled={!isHost}>
                                     Python
                                 </button></li>
-                                <li><button
+                                {/* <li><button
                                     className={language === 'java' ? 'font-bold text-blue-500' : ''}
                                     onClick={() => onSelectLanguage('java')}
                                     disabled={!isHost}>
                                     Java
-                                </button></li>
+                                </button></li> */}
                                 <li><button
                                     className={language === 'cPlusPlus' ? 'font-bold text-blue-500' : ''}
                                     onClick={() => onSelectLanguage('cPlusPlus')}
