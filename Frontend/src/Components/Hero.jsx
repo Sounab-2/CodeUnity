@@ -17,13 +17,18 @@ const Hero = () => {
                 data-wow-delay=".2s"
               >
                 <div className="mb-5 text-3xl font-bold leading-tight  sm:text-4xl sm:leading-tight md:text-5xl md:leading-tight flex  justify-center items-center gap-4">
-                  <img src="./images/logo.png" className=' md:h-20 md:w-28 h-14 w-16 ' alt="" />
-                  <span className='text-4xl md:text-6xl tracking-tight font-bold text-transparent bg-clip-text bg-gradient-to-bl from-zinc-800 via-slate-200 to-zinc-900 h-20 md:mt-6 mt-10'>CodeUnity</span>
-                  
+                  <img
+                    src="./images/logo.png"
+                    className="md:h-20 md:w-28 h-14 w-16"
+                    alt="Logo"
+                  />
+
+                  <span className='text-4xl md:text-6xl tracking-tight font-bold text-transparent bg-clip-text bg-gradient-to-bl from-zinc-800 via-slate-200 to-zinc-900 h-20 md:mt-6 mt-10 font-heading'>CodeUnity</span>
+
                 </div>
-                <span className=' text-white md:text-xl font-bold text-lg'>Empowering Collaboration, Unifying Code.</span>
+                <span className=' text-white md:text-xl font-bold text-lg font-heading'>Empowering Collaboration, Unifying Code.</span>
                 <p className="mb-12 text-base font-medium !leading-relaxed text-body-color dark:opacity-90 sm:text-lg md:text-xl p-4 text-left md:text-center md:p-0">
-                Experience coding like never before with our platform's real-time collaboration features. Easily join sessions, synchronize edits, chat, make calls, and boost productivity with seamless teamwork. Effortlessly communicate, share ideas, and code together in a dynamic environment designed to elevate your projects to new heights of success.
+                  Experience coding like never before with our platform's real-time collaboration features. Easily join sessions, synchronize edits, chat, make calls, and boost productivity with seamless teamwork. Effortlessly communicate, share ideas, and code together in a dynamic environment designed to elevate your projects to new heights of success.
                 </p>
                 <div className="flex  items-center justify-center gap-4  sm:flex-row sm:space-x-4 sm:space-y-0 -mt-7">
                   <Link

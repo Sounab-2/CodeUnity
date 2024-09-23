@@ -43,7 +43,7 @@ export default function Header() {
         <div className="flex flex-wrap justify-between items-center mx-auto max-w-screen-xl">
           <Link to="/" className="flex items-center">
             <img src="./images/logo.png" className=' h-10 w-16' alt="" />
-            <span className=' font-extrabold text-2xl text-white'>CodeUnity</span>
+            <span className=' font-extrabold text-2xl text-white font-heading'>CodeUnity</span>
           </Link>
           <span onClick={toggleMobileNav}
             className=' absolute left-5'>
@@ -62,7 +62,7 @@ export default function Header() {
             <div className="flex items-center lg:order-2">
               <Link
                 to="/signin"
-                className="text-gray-800 bg-gray-50 hover:bg-gray-200 focus:ring-4 focus:ring-gray-300 font-medium rounded-lg text-sm px-4 lg:px-5 py-2 lg:py-2.5 mr-2 focus:outline-none"
+                className="text-gray-800 bg-gray-50 hover:bg-gray-200 focus:ring-4 focus:ring-gray-300 font-medium rounded-lg text-sm px-4 lg:px-5 py-2 lg:py-2.5 mr-2 focus:outline-none font-sans"
               >
                 <div className='w-16 justify-between flex'>
                   <span><FontAwesomeIcon icon={faUserPlus} /></span>

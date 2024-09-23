@@ -1,9 +1,10 @@
+
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&display=swap');
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
-
-
-
 
 
 /* Team css */
@@ -100,17 +101,70 @@
     transform: scale(1.05);
     cursor: pointer;
 }
-.sub-history h3 {
-    font-weight: 600;
-    margin: 0 0 5px;
-    font-size: 1.6em;
-    font-family: "Gilda Display";
-    font-weight: 700;
 
-}
 
 .sub-history span {
     color: yellow;
     font-weight: bold;
 }
 
+@keyframes slide-in {
+    0% {
+      transform: translateX(-100%);
+      opacity: 0;
+    }
+    100% {
+      transform: translateX(0);
+      opacity: 1;
+    }
+  }
+  
+  @keyframes wave {
+    0% { transform: rotate(0deg); }
+    10% { transform: rotate(14deg); }
+    20% { transform: rotate(-8deg); }
+    30% { transform: rotate(14deg); }
+    40% { transform: rotate(-4deg); }
+    50% { transform: rotate(10deg); }
+    60% { transform: rotate(0deg); }
+    100% { transform: rotate(0deg); }
+  }
+  
+  .animate-slide-in {
+    animation: slide-in 1s ease-out forwards;
+  }
+  
+  .animate-wave {
+    display: inline-block;
+    animation: wave 2s infinite;
+  }
+  /* src/index.css or src/global.css */
+@keyframes zoomIn {
+    0% {
+      transform: scale(0.5);
+    }
+    100% {
+      transform: scale(1);
+    }
+  }
+  
+  @layer utilities {
+    .zoom-in {
+      animation: zoomIn 0.5s ease-in-out 2s;
+    }
+  }
+  @keyframes fadeOut {
+    0% {
+      opacity: 0;
+    }
+    100% {
+      opacity: 1;
+    }
+  }
+  
+  @layer utilities {
+    .fade-out {
+      animation: fadeOut 2s ease-in-out forwards; /* Adjust timing as needed */
+    }
+  }
+  

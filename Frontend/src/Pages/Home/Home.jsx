@@ -23,7 +23,7 @@ const Home = () => {
       )}
     </div> */}
     <Feauters/>
-    <hr />
+    {/* <hr /> */}
     <Team/>
     <Footer/>
     </section>
