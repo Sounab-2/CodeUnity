@@ -3,11 +3,11 @@ import React from 'react';
 const About = () => {
     return (
         <>
-            <section class="bg-primary-content">
+            <section class=" bg-slate-900">
                 <div class="py-8 px-4 mx-auto max-w-screen-xl sm:py-16 lg:px-6">
                     <div class="max-w-screen-md mb-8 lg:mb-16">
-                        <h2 class="mb-4 text-3xl tracking-tight font-extrabold text-white">Unlock the Ultimate Collaboration Experience</h2>
-                        <p class=" sm:text-xl text-gray-400">
+                        <h2 class="mb-4 text-3xl tracking-tight font-extrabold text-white font-heading">Unlock the Ultimate Collaboration Experience</h2>
+                        <p class=" sm:text-xl text-gray-200 font-sans">
                         Embark on a Collaborative Journey with Our Platform. Create Rooms, Join with a Code, and Code Together in Real-Time. Enjoy Seamless Chat and Call Features for Enhanced Collaboration. Here Are the Key Highlights:</p>
                     </div>
                     <div class="space-y-8 md:grid md:grid-cols-2 lg:grid-cols-3 md:gap-12 md:space-y-0">
@@ -57,7 +57,7 @@ const About = () => {
                     </div>
                 </div>
             </section>
-            <section className=' bg-primary-content p-20 flex items-center justify-center w-full '>
+            {/* <section className=' bg-primary-content p-20 flex items-center justify-center w-full '>
                 <div className="join join-vertical md:w-11/12 w-full border-2">
                     <div className="collapse collapse-arrow join-item border border-base-300 w-full">
                         <input type="radio" name="my-accordion-4" defaultChecked />
@@ -87,7 +87,7 @@ const About = () => {
                         </div>
                     </div>
                 </div>
-            </section>
+            </section> */}
 
          
         </>
