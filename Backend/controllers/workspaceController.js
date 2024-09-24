@@ -101,6 +101,24 @@ const savedWorkspace = async (req, res) => {
     }
 };
 
+const deleteWorkspace = async (req, res) => {
+    const { workspaceId } = req.params;
+  
+    try {
+      
+      const deletedWorkspace = await WorkspaceModel.findByIdAndDelete(workspaceId);
+  
+      if (!deletedWorkspace) {
+        return res.status(404).json({ message: 'Workspace not found' });
+      }
+  
+      return res.status(200).json({ message: 'Workspace deleted successfully',  });
+    } catch (error) {
+      console.error('Error deleting workspace:', error);
+      return res.status(500).json({ message: 'Internal server error' });
+    }
+  };
+
 const saveChat = async (req,res) => {
     const { meetingId, message,username,userId,photoUrl } = req.body;
     if(!meetingId){
@@ -412,4 +430,4 @@ const runCode = async (req, res) => {
 module.exports = runCode;
 
 
-module.exports = { createSoloWorkspace,createTeamWorkspace,joinTeam,showTeam,removeTeamMembers,savedWorkspace,languageSelector,saveCode,runCode,leaveWorkspace,saveChat,getChat };
+module.exports = { createSoloWorkspace,createTeamWorkspace,joinTeam,showTeam,removeTeamMembers,savedWorkspace,deleteWorkspace,languageSelector,saveCode,runCode,leaveWorkspace,saveChat,getChat };

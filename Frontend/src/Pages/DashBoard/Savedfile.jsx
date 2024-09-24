@@ -3,6 +3,8 @@ import { axiosInstance } from '../../../utils/index';
 import { useFirebase } from '../../Context/FirebaseContext';
 import { Link } from 'react-router-dom';
 import Avatar from 'react-avatar';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faTrash } from '@fortawesome/free-solid-svg-icons';
 
 const Savedfile = () => {
   const { user } = useFirebase();
@@ -28,52 +30,65 @@ const Savedfile = () => {
     fetchWorkspaces();
   }, [user]);
 
+  const deleteWorkspace = async (workspaceId) => {
+    try {
+      await axiosInstance.delete(`/api/v1/project/deleteWorkspace/${workspaceId}`);
+      const userId = user.uid;
+      const response = await axiosInstance.post('/api/v1/project/savedWorkspace', { userId });
+      const workspacesData = response.data.workspaces;
+      setWorkspaces(workspacesData);
+    } catch (error) {
+      console.error('Error deleting workspace:', error);
+    }
+  };
+
   return (
     <div className="p-16 pt-20 min-h-screen lg:ml-64 flex flex-wrap gap-20">
       {workspaces.reverse().map((workspace) => (
-        <Link
-          to={`/editor/${workspace._id}`}
-          key={workspace._id}
-          className="relative flex w-80 flex-col rounded-xl bg-base-300 shadow-lg shadow-primary bg-clip-border border-2 h-96 mt-11"
-        >
-          <div className="relative mx-4 -mt-6 h-56 rounded-xl bg-blue-gray-500 bg-clip-border text-white shadow-lg shadow-blue-gray-500/40 bg-gradient-to-r from-blue-500 to-blue-600 flex items-center justify-center flex-col gap-4">
-            <div className="avatar-group -space-x-6 rtl:space-x-reverse flex h-full justify-center gap-0">
-              <h1 className="left-28 relative top-8 font-extrabold text-xl">Host</h1>
-              {workspace.team.map((member, index) => (
-                <div key={index} className="flex justify-center items-center flex-col -mt-4">
-                  {member.id === workspace.host && (
-                    <div className="flex items-center justify-center gap-1">
-                      <Avatar
-                        name={user.displayName}
-                        className="dropdown"
-                        size="50"
-                        round={true}
-                        color={Avatar.getRandomColor('sitebase', ['red', 'green'])}
-                        textSizeRatio={0.8}
-                        src={member.photoUrl || ''}
-                      />
-                      <h1>{member.username}</h1>
-                    </div>
-                  )}
+        <div key={workspace._id} className="relative flex w-80 flex-col rounded-xl bg-base-300 shadow-lg shadow-primary bg-clip-border border-2 h-96 mt-11">
+          <Link
+            to={`/editor/${workspace._id}`}
+            className="relative flex w-80 flex-col"
+          >
+            <div className="relative mx-4 -mt-6 h-56 rounded-xl bg-blue-gray-500 bg-clip-border text-white shadow-lg shadow-blue-gray-500/40 bg-gradient-to-r from-blue-500 to-blue-600 flex items-center justify-center flex-col gap-4">
+              <div className="avatar-group -space-x-6 rtl:space-x-reverse flex h-full justify-center gap-0">
+                <h1 className="left-28 relative top-8 font-extrabold text-xl">Host</h1>
+                {workspace.team.map((member, index) => (
+                  <div key={index} className="flex justify-center items-center flex-col -mt-4">
+                    {member.id === workspace.host && (
+                      <div className="flex items-center justify-center gap-1">
+                        <Avatar
+                          name={user.displayName}
+                          className="dropdown"
+                          size="50"
+                          round={true}
+                          color={Avatar.getRandomColor('sitebase', ['red', 'green'])}
+                          textSizeRatio={0.8}
+                          src={member.photoUrl || ''}
+                        />
+                        <h1>{member.username}</h1>
+                      </div>
+                    )}
 
-                  {index === 0 && <p className="mt-4 font-extrabold text-xl">Other team member:</p>}
-                  {member.id !== workspace.host && (
-                    <div className="flex relative top-20 right-24">
-                      <Avatar
-                        name={member.username}
-                        className="dropdown"
-                        size="50"
-                        round={true}
-                        color={Avatar.getRandomColor('sitebase', ['red', 'green'])}
-                        textSizeRatio={0.8}
-                        src={member.photoUrl || ''}
-                      />
-                    </div>
-                  )}
-                </div>
-              ))}
+                    {index === 0 && <p className="mt-4 font-extrabold text-xl">Other team member:</p>}
+                    {member.id !== workspace.host && (
+                      <div className="flex relative top-20 right-24">
+                        <Avatar
+                          name={member.username}
+                          className="dropdown"
+                          size="50"
+                          round={true}
+                          color={Avatar.getRandomColor('sitebase', ['red', 'green'])}
+                          textSizeRatio={0.8}
+                          src={member.photoUrl || ''}
+                        />
+                      </div>
+                    )}
+                  </div>
+                ))}
+              </div>
             </div>
-          </div>
+          </Link>
           <div className="p-6 flex flex-col gap-5">
             <h5 className="mb-2 block font-sans leading-snug tracking-normal text-blue-gray-900 antialiased font-extrabold text-2xl">
               {workspace.name}
@@ -83,7 +98,13 @@ const Savedfile = () => {
               <span className="bg-primary rounded-md p-1 text-primary-content">{workspace.language}</span>
             </p>
           </div>
-        </Link>
+          <button
+            onClick={() => deleteWorkspace(workspace._id)}
+            className="absolute bottom-4 right-4 text-red-500 hover:text-red-700"
+          >
+            <FontAwesomeIcon icon={faTrash} size="lg" />
+          </button>
+        </div>
       ))}
     </div>
   );
