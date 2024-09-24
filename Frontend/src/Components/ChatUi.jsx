@@ -1,17 +1,18 @@
-
 import React, { useState, useEffect } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faPaperPlane, faComments } from '@fortawesome/free-solid-svg-icons';
+import { faPaperPlane, faComments, faSmile } from '@fortawesome/free-solid-svg-icons';
 import { useParams } from 'react-router-dom';
 import { useFirebase } from '../Context/FirebaseContext';
 import AvatarCom from './AvatarCom';
 import { axiosInstance } from '../../utils';
+import EmojiPicker from 'emoji-picker-react';
 
 const ChatUi = ({ socketRef }) => {
     const [message, setMessage] = useState('');
     const [messages, setMessages] = useState([]);
-    const [unreadCount, setUnreadCount] = useState(0); 
+    const [unreadCount, setUnreadCount] = useState(0);
     const [isDrawerOpen, setIsDrawerOpen] = useState(false);
+    const [showEmojiPicker, setShowEmojiPicker] = useState(false); // State for controlling emoji picker visibility
     const { meetingId } = useParams();
     const { user } = useFirebase();
 
@@ -23,23 +24,20 @@ const ChatUi = ({ socketRef }) => {
         if (message.trim() !== '') {
             socketRef.current.emit('message', { text: message, meetingId, sender: senderName, senderPhoto: senderAvatar });
             setMessages(prevMessages => [...prevMessages, { text: message, sentByUser: true, sender: senderName, senderPhoto: senderAvatar }]);
-                
-            try{
-                const response =await axiosInstance.post('/api/v1/project/savechat',{
+
+            try {
+                const response = await axiosInstance.post('/api/v1/project/savechat', {
                     meetingId,
                     message,
-                    username:senderName,
-                    userId:user?.uid,
-                    photoUrl:senderAvatar
-                })
+                    username: senderName,
+                    userId: user?.uid,
+                    photoUrl: senderAvatar
+                });
                 console.log(response.data.workSpace.chat);
                 setMessage('');
-                
+            } catch (e) {
+                console.log('Error sending message', e);
             }
-            catch(e){
-                console.log('Error sending message',e);
-            }
-            
         }
     };
 
@@ -50,7 +48,6 @@ const ChatUi = ({ socketRef }) => {
                 const response = await axiosInstance.post(`/api/v1/project/getchat/${meetingId}`);
                 const fetchedMessages = response.data.workSpace.chat;
                 console.log(fetchedMessages);
-              
             } catch (error) {
                 console.error('Error fetching messages:', error);
             }
@@ -58,17 +55,14 @@ const ChatUi = ({ socketRef }) => {
 
         if (socketRef.current) {
             socketRef.current.off('received-message');
-            
+
             socketRef.current.on('received-message', ({ text, sender, senderPhoto }) => {
                 fetchMessages();
-                
+
                 if (!isDrawerOpen) {
                     setUnreadCount(prevCount => prevCount + 1);
                 }
                 setMessages(prevMessages => [...prevMessages, { text, sender, senderPhoto }]);
-                // console.log(text);
-                // console.log(sender);
-                // console.log(senderPhoto);
             });
         }
     }, [socketRef.current]);
@@ -97,6 +91,11 @@ const ChatUi = ({ socketRef }) => {
 
     const currentTime = getCurrentTime();
 
+    // Function to handle emoji click
+    const handleEmojiClick = (emojiData, event) => {
+        const { emoji } = emojiData;
+        setMessage(prevMessage => prevMessage + emoji);
+    };
 
     return (
         <div className="drawer drawer-end relative z-50 w-full">
@@ -113,7 +112,8 @@ const ChatUi = ({ socketRef }) => {
                 <div className='min-h-screen w-1/3 p-5 bg-base-300 relative z-50'>
 
                     {/* Chat messages */}
-                    <div className='h-[600px] overflow-y-auto chat-container'>
+                    <div className=''></div>
+                    <div className='h-[600px] overflow-y-auto chat-container p-5'>
                         {messages.map((msg, index) => (
                             <div key={index} className={`chat ${msg.sentByUser ? 'chat-end' : 'chat-start'}`}>
                                 <div className="chat-image avatar">
@@ -123,14 +123,10 @@ const ChatUi = ({ socketRef }) => {
                                 </div>
                                 <div className="chat-header">
                                     {msg.sentByUser ? 'you' : msg.sender}
-                                    {/* <time className="text-xs opacity-50">{currentTime}</time> */}
                                 </div>
-                                <div className={`chat-bubble  ${msg.sentByUser ? 'chat-bubble-primary' : 'chat-bubble-info'}`}>{msg.text}</div>
+                                <div className={`chat-bubble ${msg.sentByUser ? 'chat-bubble-primary' : 'chat-bubble-info'}`}>{msg.text}</div>
                             </div>
                         ))}
-
-
-
                     </div>
 
                     {/* Message input */}
@@ -142,16 +138,20 @@ const ChatUi = ({ socketRef }) => {
                             value={message}
                             onChange={(e) => setMessage(e.target.value)}
                         />
-                        <button className='btn' onClick={(e) => sendMessage(e)}>Send <FontAwesomeIcon icon={faPaperPlane} /></button>
+                        <button onClick={() => setShowEmojiPicker(!showEmojiPicker)} className="btn">
+                            <FontAwesomeIcon icon={faSmile} className='text-2xl' />
+                        </button>
+                        {showEmojiPicker && (
+                            <div className="absolute bottom-16 right-4 z-50">
+                                <EmojiPicker onEmojiClick={handleEmojiClick} theme='dark' />
+                            </div>
+                        )}
+                        <button className='btn' onClick={sendMessage}>Send <FontAwesomeIcon icon={faPaperPlane} /></button>
                     </div>
                 </div>
-
             </div>
         </div>
     );
-}
+};
 
 export default ChatUi;
-
-
-

@@ -73,17 +73,33 @@ const Savedfile = () => {
                     {index === 0 && <p className="mt-4 font-extrabold text-xl">Other team member:</p>}
                     {member.id !== workspace.host && (
                       <div className="flex relative top-20 right-24">
-                        <Avatar
-                          name={member.username}
-                          className="dropdown"
-                          size="50"
-                          round={true}
-                          color={Avatar.getRandomColor('sitebase', ['red', 'green'])}
-                          textSizeRatio={0.8}
-                          src={member.photoUrl || ''}
-                        />
+                        <div className="relative group">
+                          {/* Avatar */}
+                          <Avatar
+                            // name={member.username}
+                            className="dropdown"
+                            size="50"
+                            round={true}
+                            color={Avatar.getRandomColor('sitebase', ['red', 'green'])}
+                            textSizeRatio={0.8}
+                            src={member.photoUrl || ''}
+                          />
+
+                          {/* Tooltip below the avatar */}
+                          <div
+                            id="tooltip-dark"
+                            role="tooltip"
+                            className="absolute z-10 invisible group-hover:visible group-hover:opacity-100 bottom-[-40px] left-1/2 transform -translate-x-1/2 px-3 py-2 text-sm font-medium text-white bg-gray-900 rounded-lg shadow-sm opacity-0 transition-opacity duration-300 dark:bg-gray-700"
+                          >
+                            {member.username} {/* Display the username here */}
+
+                            {/* Arrow pointing to the avatar */}
+                            <div className="tooltip-arrow absolute top-[-6px] left-1/2 transform -translate-x-1/2 w-3 h-3 bg-gray-900 rotate-45 dark:bg-gray-700"></div>
+                          </div>
+                        </div>
                       </div>
                     )}
+
                   </div>
                 ))}
               </div>
