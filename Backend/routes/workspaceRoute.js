@@ -12,7 +12,8 @@ const {
       runCode,
       leaveWorkspace,
       saveChat,
-      getChat
+      getChat,
+      deleteWorkspace
 } = require('../controllers/workspaceController');
 
 router.post('/create/solo/:userId',createSoloWorkspace);
@@ -24,6 +25,7 @@ router.post('/run',runCode);
 router.post('/showTeam',showTeam);
 router.post('/remove',removeTeamMembers);
 router.post('/savedWorkspace',savedWorkspace);
+router.delete('/deleteWorkspace/:workspaceId', deleteWorkspace);
 router.post('/leaveWorkspace',leaveWorkspace);
 router.post('/savechat',saveChat);
 router.post('/getchat/:meetingId',getChat);
