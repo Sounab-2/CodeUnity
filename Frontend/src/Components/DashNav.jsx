@@ -16,13 +16,13 @@ const DashNav = () => {
               </svg>
             </button>
             <Link to="/" className="flex items-center">
-              <img src="./images/logo.png" className=' h-10 w-16' alt="" />
+              <img src="/images/logo.png" className=' h-10 w-16' alt="" />
               <span className=' font-extrabold text-2xl text-white'>CodeUnity</span>
             </Link>
           </div>
           <div className=' flex gap-3'>
             <AvatarCom />
-            <Themetoggler />
+            {/* <Themetoggler /> */}
           </div>
 
         </div>

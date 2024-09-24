@@ -283,8 +283,8 @@ const EditorComponent = ({ socketRef, value, setValue, language, setLanguage }) 
 
 
                                             </span>
-                                            <h1>
-                                                {member.username}
+                                            <h1 className='flex gap-1 flex-wrap justify-center items-center'>
+                                                <span>{member.username}</span>
                                                 <span>
                                                     {member.id === userId && (
                                                         /* Content to render if member.id equals userId */
