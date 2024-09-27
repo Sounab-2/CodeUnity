@@ -1,6 +1,6 @@
 import React from 'react';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
-import { Home, About, ContactUs, SignIn, SignUp, Error,Editor, Dashboard } from './Pages';
+import { Home, About, ContactUs, SignIn, SignUp, Error,Editor, Dashboard, Chatbot } from './Pages';
 
 
 const App = () => {
@@ -14,6 +14,7 @@ const App = () => {
         <Route path="/signup" element={<SignUp />} />
         <Route path="/editor/:meetingId" element={<Editor />} />
         <Route path="/dashboard/*" element={<Dashboard />} />
+        <Route path="/chatbot/" element={<Chatbot/>} />
         <Route path="*" element={<Error />} />
       </Routes>
 
