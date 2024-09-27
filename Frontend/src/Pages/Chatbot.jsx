@@ -27,7 +27,7 @@ const Chatbot = ({socket}) => {
     return () => {
       socket?.current?.off('botResponse');
     };
-  }, []);
+  }, [socket.current]);
 
   const handleSendMessage = () => {
     if (!input.trim()) return;
