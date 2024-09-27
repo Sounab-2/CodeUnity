@@ -6,3 +6,4 @@ export {default as SignUp} from './Signup/Signup';
 export {default as Error} from './Error/Error';
 export {default as Editor} from './Editor/Editor';
 export{default as Dashboard} from './DashBoard/Dashboard'
+export {default as Chatbot} from './Chatbot';

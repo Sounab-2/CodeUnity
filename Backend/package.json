@@ -1,5 +1,6 @@
 {
   "dependencies": {
+    "@langchain/google-genai": "^0.1.0",
     "child_process": "^1.0.2",
     "compilex": "^0.7.4",
     "dotenv": "^16.4.5",
@@ -8,6 +9,7 @@
     "http-status-codes": "^2.3.0",
     "mongoose": "^8.3.1",
     "socket.io": "^4.7.5",
+    "uuid": "^10.0.0",
     "validator": "^13.11.0"
   },
   "devDependencies": {
