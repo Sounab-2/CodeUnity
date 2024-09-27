@@ -1,12 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import io from 'socket.io-client';
 
-const socket = io(import.meta.env.REACT_APP_BACKEND_URL, {
-  transports: ['websocket', 'polling'],
-  withCredentials: true,
-});
+// const socket = io(import.meta.env.REACT_APP_BACKEND_URL, {
+//   transports: ['websocket', 'polling'],
+//   withCredentials: true,
+// });
 
-const Chatbot = () => {
+const Chatbot = ({socket}) => {
   const [messages, setMessages] = useState([]);
   const [input, setInput] = useState('');
   const [avatar, setAvatar] = useState('');
@@ -18,14 +18,14 @@ const Chatbot = () => {
     // setAvatar(user.imageUrl);
 
     // Listen for bot responses from the server
-    socket.on('botResponse', (response) => {
+    socket?.current?.on('botResponse', (response) => {
       setMessages((prev) => [...prev, { sender: 'bot', text: response }]);
       setLoading(false);
     });
 
     // Clean up when the component is unmounted
     return () => {
-      socket.off('botResponse');
+      socket?.current?.off('botResponse');
     };
   }, []);
 
@@ -34,7 +34,7 @@ const Chatbot = () => {
 
     const userMessage = { text: input, sender: 'user' };
     setMessages([...messages, userMessage]);
-    socket.emit('userMessage', userMessage);
+    socket?.current?.emit('userMessage', userMessage);
 
     setInput('');
     setLoading(true);
@@ -79,9 +79,8 @@ const Chatbot = () => {
   };
 
   return (
-    <div className="h-screen ml-64 flex flex-col items-center justify-center bg-gray-100">
-      <div className="w-full max-w-4xl border border-gray-300 rounded-lg shadow-lg bg-white mb-12" style={{ height: '650px' }}>
-        <div className="p-4 overflow-y-auto" style={{ height: '570px' }}>
+        <>
+        <div className="p-4 overflow-y-auto" style={{ height: '570px' , width: '970px'}}>
           {messages.length === 0 && (
             <div className="flex flex-col items-center justify-center h-full">
               <img
@@ -126,8 +125,7 @@ const Chatbot = () => {
             Send
           </button>
         </div>
-      </div>
-    </div>
+        </>
   );
 };
 

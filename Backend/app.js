@@ -1,10 +1,11 @@
+// import { handleChat,createNewSession } from './chatbot/chatbot';
 const express = require('express');
 const http = require('http');
 const { Server } = require("socket.io");
 const cors = require('cors');
 const helmet = require('helmet');
 require('dotenv').config();
-const {handleChat} = require('./chatbot/chatbot');
+const {handleChat,createNewSession} = require('./chatbot/chatbot');
 const app = express();
 const port = process.env.PORT || 3000;
 
