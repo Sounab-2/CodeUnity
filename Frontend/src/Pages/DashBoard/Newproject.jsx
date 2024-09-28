@@ -66,20 +66,28 @@ const Newproject = () => {
     const name = workspaceName;
     const fileName = 'topic';
     const language = 'python';
+    const username = user?.displayName; 
+    const photoUrl = user?.photoURL || ''; 
 
     try {
       console.log(userId);
-      const response = await axiosInstance.post(`/api/v1/project/create/solo/${userId}`, { name, fileName, language });
+      const response = await axiosInstance.post(`/api/v1/project/create/solo/${userId}`, {
+        name,
+        fileName,
+        language,
+        username,
+        photoUrl,
+      });
       console.log(response);
       const meetingId = response.data.workspace._id;
       dispatch(setMeetingId(meetingId));
-      console.log(meetingId);
+      
       navigate(`/editor/${meetingId}`);
     } catch (error) {
       console.error('Error creating workspace:', error.message);
-
     }
-  };
+};
+
 
   const handleNextStep = async () => {
     setStep(step + 1);

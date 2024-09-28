@@ -13,50 +13,53 @@ const { exec } = require('child_process');
 
 
 const createSoloWorkspace = async (req, res) => {
-    const { name,fileName, language } = req.body; // Correctly extract and rename filename to fileName
+    const { name, fileName, language, username, photoUrl } = req.body; // Added username and photoUrl
     const { userId } = req.params;
 
-    if (!name || !fileName || !language || !userId) { // Check for userId as well
-        throw new customError.BadRequestError('Please provide all project details');
+    if (!name || !fileName || !language || !userId || !username || !photoUrl) { // Validate all inputs
+        return res.status(StatusCodes.BAD_REQUEST).json({ message: 'Please provide all project details' });
     }
 
     try {
-        const workspace = await WorkspaceModel.create({ name, fileName, language, type: 'solo', host: userId });
+        const workspace = await WorkspaceModel.create({
+            name,
+            fileName,
+            language,
+            type: 'solo',
+            host: { id: userId, username, photoUrl },
+        });
         res.status(StatusCodes.CREATED).json({ workspace });
     } catch (error) {
-        // Handle possible errors such as MongoDB errors or validation errors
         res.status(StatusCodes.BAD_REQUEST).json({ message: error.message });
     }
 };
 
 const createTeamWorkspace = async (req, res) => {
-    const { name, fileName, language, username, photoUrl} = req.body;
+    const { name, fileName, language, username, photoUrl } = req.body;
     const { userId } = req.params;
-    console.log(username);
 
-    if (!name || !fileName || !language || !userId || !username || !photoUrl) {
-        throw new customError.BadRequestError('Please provide all project details');
+    if (!name || !fileName || !language || !userId || !username || !photoUrl) { 
+        return res.status(StatusCodes.BAD_REQUEST).json({ message: 'Please provide all project details' });
     }
 
     try {
-        // Create the workspace with initial host and then add the host to the team
+        // Create the workspace with the host as a team member
         const workspace = new WorkspaceModel({
             name,
             fileName,
             language,
             type: 'team',
-            host: userId,
-            team: [{ id: userId, username, photoUrl}]
+            host: { id: userId, username, photoUrl },
+            team: [{ id: userId, username, photoUrl }] 
         });
 
-        await workspace.save(); // Save the workspace with the user added to the team
+        await workspace.save(); 
 
         res.status(StatusCodes.CREATED).json({ workspace });
     } catch (error) {
         res.status(StatusCodes.BAD_REQUEST).json({ message: error.message });
     }
 };
-
 const joinTeam = async (req,res) => {
     const { userId } = req.params;
     const {meetingId, username,photoUrl} = req.body;
@@ -90,16 +93,24 @@ const showTeam = async (req,res) => {
 
 const savedWorkspace = async (req, res) => {
     const { userId } = req.body;
-    if(!userId){
-        throw new customError.BadRequestError('Please provide User ID');
+    if (!userId) {
+      throw new customError.BadRequestError('Please provide User ID');
     }
+  
     try {
-        const workspaces = await WorkspaceModel.find({ team: { $elemMatch: { id: userId } } });
-        res.status(StatusCodes.OK).json({ workspaces });
+      const workspaces = await WorkspaceModel.find({
+        $or: [
+          { team: { $elemMatch: { id: userId } } }, 
+          { 'host.id': userId }                           
+        ]
+      });
+  
+      res.status(StatusCodes.OK).json({ workspaces });
     } catch (error) {
-        res.status(StatusCodes.BAD_REQUEST).json({ message: error.message });
+      res.status(StatusCodes.BAD_REQUEST).json({ message: error.message });
     }
-};
+  };
+  
 
 const deleteWorkspace = async (req, res) => {
     const { workspaceId } = req.params;

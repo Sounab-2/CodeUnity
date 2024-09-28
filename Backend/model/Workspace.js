@@ -43,9 +43,18 @@ const WorkspaceSchema = new mongoose.Schema({
         }
     }],
     host: {
-        type: String,
-        // ref: 'User',
-        required: true,
+        id: {
+            type: String,
+            required: true
+        },
+        username: {
+            type: String,
+            required: true
+        },
+        photoUrl: {
+            type: String,
+            required: true
+        }
     },
     chat: [{
         _id: false,
