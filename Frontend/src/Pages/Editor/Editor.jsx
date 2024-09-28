@@ -51,7 +51,7 @@ const Editor = () => {
 
   useEffect(() => {
     const initSocket = async () => {
-        if (!socketRef.current && selectedTeam==='team') {
+        if (!socketRef.current) {
             socketRef.current = await initializeSocket();
             socketRef.current.emit('joinRoom', meetingId);
             socketRef.current.on('userJoined', async ({ userId ,roomId}) => {
@@ -98,7 +98,7 @@ const Editor = () => {
             socketRef.current.disconnect();
         }
     };
-}, [meetingId,selectedTeam]);
+}, [meetingId]);
 
   return (
     (isUserPresent || selectedTeam==='solo') && (<section className=' max-h-screen md:overflow-hidden overflow-y-auto overflow-x-hidden w-full'>
