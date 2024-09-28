@@ -36,6 +36,7 @@ const EditorComponent = ({ socketRef, value, setValue, language, setLanguage }) 
     const navigate = useNavigate();
     const isHost = ((userId === hostId) || selectedTeam === 'solo');
     const teamMembers = useSelector(state => state.meeting.team);
+    const [host,setHost]=useState('');
    
 
     const showTeamMembers = async () => {
@@ -43,6 +44,7 @@ const EditorComponent = ({ socketRef, value, setValue, language, setLanguage }) 
         const { team, _id, name } = response.data.workspace;
         isUserPresent = team.some(member => member.id === userId);
         const type=response.data.workspace.type;
+        setHost(response.data.workspace.host.id);
         setTeamType(type);
         if (!isUserPresent && type!=='solo') {
             navigate('/dashboard/newproject');
@@ -296,13 +298,13 @@ const EditorComponent = ({ socketRef, value, setValue, language, setLanguage }) 
 
                                             </h1>
                                             {
-                                                member.id === hostId && (
+                                                member.id === host && (
 
                                                     <span className=' font-bold tetx-lg text-green-600'>(Host)</span>
 
                                                 )
                                             }
-                                            {userId === hostId && member.id != userId && (
+                                            {userId === host && member.id != userId && (
                                                 <button className=' btn bg-red-600' onClick={() => removeTeamMembers(member.id)}>Remove<span className=' text-white text-lg'><FontAwesomeIcon icon={faCircleXmark} /></span></button>
                                             )}
 
