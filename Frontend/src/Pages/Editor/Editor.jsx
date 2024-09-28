@@ -17,6 +17,8 @@ const Editor = () => {
   const { meetingId } = useParams();
   const [value, setValue] = useState('');
   const selectedTeam = useSelector(state => state.meeting.selectedTeam);
+  const username = useSelector(state => state.user.username);
+
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const user =  auth.currentUser;
@@ -79,14 +81,15 @@ const Editor = () => {
             socketRef.current.on('user-removed', () => {
               reloadWorkspace();
             })
+
+            socketRef.current.on('user-left', ({ userId, username, meetingId,updatedWorkspace }) => {
+                console.log(`User ${username} has left the room.`);
+                console.log("after disconnect",updatedWorkspace.team);
+                dispatch(setTeam(updatedWorkspace.team));
+          });
             
-            socketRef.current.on('disconnect', async () => {
-              console.log('socket disconnected');
-              const response = await axiosInstance.post('/api/v1/project/showTeam', { roomId: meetingId });
-               console.log("after disconnect",response.data.workspace.team);
-              dispatch(setTeam(response.data.workspace.team));
-              // navigate('/dashboard/newproject');
-            })
+            // socketRef.current.on('disconnect', async () => {
+            // })
         }
     };
 
