@@ -112,7 +112,7 @@ const Newproject = () => {
   const joinTeam = async () => {
     try {
       if (code) {
-        const response = await axiosInstance.post(`/api/v1/project/join/team/${userId}`, { meetingId: code, username: user?.displayName, photoUrl: user?.photoURL });
+        const response = await axiosInstance.post(`/api/v1/project/join/team/${userId}`, { meetingId: code, username: user?.displayName, photoUrl: user?.photoURL ,status:'online'});
         const { team } = response.data.workspace;
         console.log(team);
         dispatch(setTeam(team));

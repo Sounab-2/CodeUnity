@@ -175,6 +175,7 @@ const EditorComponent = ({ socketRef, value, setValue, language, setLanguage }) 
         //     socketRef.current?.off('userJoined');
         //     socketRef.current?.off('code-sync');
         try {
+            socketRef.current.emit('userDisconnect', { userId, meetingId })
             socketRef.current?.disconnect();
             navigate('/dashboard');
         } catch (error) {
@@ -191,6 +192,7 @@ const EditorComponent = ({ socketRef, value, setValue, language, setLanguage }) 
             const { team } = response.data.workspace;
             if (response) {
                 dispatch(setTeam(team));
+                socketRef.current.emit('userDisconnect', { userId, meetingId })
                 socketRef.current?.disconnect();
                 navigate('/dashboard');
             }

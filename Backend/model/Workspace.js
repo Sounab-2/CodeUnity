@@ -40,6 +40,12 @@ const WorkspaceSchema = new mongoose.Schema({
         photoUrl: {
             type: String,
             required: true
+        },
+        status:{
+            type: String,
+            required: true,
+            default: 'offline',
+            enum: ['offline', 'online']
         }
     }],
     host: {

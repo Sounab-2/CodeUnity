@@ -19,6 +19,7 @@ app.use(express.json());
 
 // Database
 const connectDB = require('./db/connect');
+const WorkspaceModel = require('./model/Workspace');
 
 // Routers
 const authRouter = require('./routes/authRoute');
@@ -54,6 +55,20 @@ io.on('connection', (socket) => {
         console.log('User disconnected:', socket.id);
     });
 
+    socket.on('userDisconnect', async ({ userId, meetingId }) => {
+        try {
+            console.log(`User ${userId} disconnected from meeting ${meetingId}`);
+            
+            // Update the user's status to offline in the database based on meetingId
+            const updatedWorkspace = await WorkspaceModel.findOneAndUpdate(
+                { _id: meetingId, 'team.id': userId }, // Match the workspace by its ID (meetingId) and userId
+                { $set: { 'team.$.status': 'offline' } }, // Set status to offline
+            );
+        } catch (error) {
+            console.error('Error updating user status:', error);
+        }
+    });
+    
     socket.on('joinRoom', (roomId) => {
         socket.join(roomId);
         console.log(`User ${socket.id} joined room: ${roomId}`);
