@@ -55,15 +55,19 @@ io.on('connection', (socket) => {
         console.log('User disconnected:', socket.id);
     });
 
-    socket.on('userDisconnect', async ({ userId, meetingId }) => {
+    socket.on('userDisconnect', async ({ userId, username, meetingId }) => {
         try {
-            console.log(`User ${userId} disconnected from meeting ${meetingId}`);
+            // console.log(`User ${username} disconnected from meeting ${meetingId}`);
             
             // Update the user's status to offline in the database based on meetingId
             const updatedWorkspace = await WorkspaceModel.findOneAndUpdate(
-                { _id: meetingId, 'team.id': userId }, // Match the workspace by its ID (meetingId) and userId
-                { $set: { 'team.$.status': 'offline' } }, // Set status to offline
+                { _id: meetingId, 'team.id': userId }, 
+                { $set: { 'team.$.status': 'offline' } },
+                { new: true }  
             );
+            // console.log(updatedWorkspace.team);
+            socket.to(meetingId).emit('user-left', { userId, username, meetingId, updatedWorkspace});
+
         } catch (error) {
             console.error('Error updating user status:', error);
         }

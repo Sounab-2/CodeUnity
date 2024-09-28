@@ -10,7 +10,7 @@ const MainDashBoard = () => {
             {/* Greeting Section */}
             <div className="bg-gradient-to-r from-textmain to-yellow-300 text-white font-bold text-3xl w-full rounded-md bg-teal-600 h-36 flex justify-left p-8 items-center flex-col gap-3 font-heading ">
                 <h1 className="">Hello  <span className='animate-wave'>👋</span> ,
-                    <span className=" text-white text-4xl font-extrabold animate-slide-in">{" "}{user.displayName}</span>.
+                    <span className=" text-white text-4xl font-extrabold animate-slide-in">{" "}{user?.displayName}</span>.
                 </h1>
                 <p className="text-base font-royal4">
                     Welcome to your Dashboard! Check what you can do today.

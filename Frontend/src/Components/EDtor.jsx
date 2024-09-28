@@ -33,6 +33,7 @@ const EditorComponent = ({ socketRef, value, setValue, language, setLanguage }) 
     const dispatch = useDispatch();
     const { user } = useFirebase();
     const userId = user?.uid;
+    const username = user?.displayName;
     const navigate = useNavigate();
     const isHost = ((userId === hostId) || selectedTeam === 'solo');
     const teamMembers = useSelector(state => state.meeting.team);
@@ -177,7 +178,7 @@ const EditorComponent = ({ socketRef, value, setValue, language, setLanguage }) 
         //     socketRef.current?.off('userJoined');
         //     socketRef.current?.off('code-sync');
         try {
-            socketRef.current.emit('userDisconnect', { userId, meetingId });
+            socketRef.current.emit('userDisconnect', { userId, username, meetingId });
             socketRef.current?.disconnect();
             navigate('/dashboard');
         } catch (error) {
