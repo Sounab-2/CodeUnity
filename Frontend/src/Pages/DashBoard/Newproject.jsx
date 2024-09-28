@@ -107,7 +107,7 @@ const Newproject = () => {
       console.log(meetingId);
       // console.log(team);
       dispatch(setMeetingId(meetingId));
-      dispatch(setHostId(response.data.workspace.host));
+      dispatch(setHostId(response.data.workspace.host.id));
       console.log(response.data.workspace.host);
       navigate(`/editor/${meetingId}`);
     } catch (error) {

@@ -92,6 +92,7 @@ const Editor = () => {
     // Proper cleanup to remove listeners
     return () => {
         if (socketRef.current) {
+          socketRef.current.emit('userDisconnect', { userId, meetingId });
             socketRef.current.off('userJoined');
             socketRef.current.off('code-sync');
             socketRef.current.off('tab-change');
