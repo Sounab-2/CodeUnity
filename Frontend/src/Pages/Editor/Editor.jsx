@@ -80,8 +80,11 @@ const Editor = () => {
               reloadWorkspace();
             })
             
-            socketRef.current.on('disconnect',()=>{
+            socketRef.current.on('disconnect', async () => {
               console.log('socket disconnected');
+              const response = await axiosInstance.post('/api/v1/project/showTeam', { roomId: meetingId });
+               console.log("after disconnect",response.data.workspace.team);
+              dispatch(setTeam(response.data.workspace.team));
               // navigate('/dashboard/newproject');
             })
         }
