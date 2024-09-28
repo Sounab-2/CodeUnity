@@ -1,5 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import io from 'socket.io-client';
+import ReactMarkdown from 'react-markdown';
+import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter';
+import { coldarkDark, twilight } from 'react-syntax-highlighter/dist/esm/styles/prism';
+import { CopyToClipboard } from 'react-copy-to-clipboard';
+import { useFirebase } from '../Context/FirebaseContext';
+
 
 // const socket = io(import.meta.env.REACT_APP_BACKEND_URL, {
 //   transports: ['websocket', 'polling'],
@@ -11,11 +17,12 @@ const Chatbot = ({socket}) => {
   const [input, setInput] = useState('');
   const [avatar, setAvatar] = useState('');
   const [loading, setLoading] = useState(false);
-
+  const [copied, setCopied] = useState(false);
+  const {user}=useFirebase();
 
 
   useEffect(() => {
-    // setAvatar(user.imageUrl);
+    setAvatar(user?.photoURL);
 
     // Listen for bot responses from the server
     socket?.current?.on('botResponse', (response) => {
@@ -63,7 +70,7 @@ const Chatbot = ({socket}) => {
                 className="w-10 h-10 rounded-full mr-2"
               />
               <div className="chat chat-start">
-                <div className="chat-bubble bg-[#dde8e7] text-black"> {message.text}</div>
+                <div className="chat-bubble bg-[#dde8e7] text-black"> {renderMarkdown(message.text)}</div>
               </div>
             </>
           )
@@ -77,6 +84,66 @@ const Chatbot = ({socket}) => {
       handleSendMessage();
     }
   };
+
+ const renderMarkdown = (text) => {
+  return (
+    <ReactMarkdown
+      components={{
+        code({ node, inline, className, children, ...props }) {
+          const language = className?.replace(/language-/, '') || '';
+          return (
+            <div className="relative mb-4">
+              <div className="flex justify-between items-start">
+                
+                <CopyToClipboard text={String(children)} onCopy={() => {
+                    navigator.clipboard.writeText(String(children));
+                    setCopied(true);
+                    setTimeout(() => setCopied(false), 2000);
+                  }}>
+                  <div className="cursor-pointer mr-2 relative">
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      className="h-5 w-5 text-blue-500 hover:text-blue-700"
+                      fill="currentColor"
+                      viewBox="0 0 24 24"
+                      stroke="currentColor"
+                      strokeWidth="2"
+                    >
+                      <path strokeLinecap="round" strokeLinejoin="round" d="M8 7V3a1 1 0 011-1h10a1 1 0 011 1v10a1 1 0 01-1 1h-4m-2 0v4a1 1 0 01-1 1H5a1 1 0 01-1-1V9a1 1 0 011-1h4a1 1 0 011 1v4z" />
+                    </svg>
+                    {copied && (
+                      <span className="absolute left-0 top-8 text-sm text-green-500 bg-gray-300 rounded-md px-2 py-1 z-10">
+                        Copied!
+                      </span>
+                    )}
+                  </div>
+                </CopyToClipboard>
+                
+               
+                <SyntaxHighlighter
+                  style={twilight}
+                  language={language}
+                  {...props}
+                  className="code-snippet"
+                  customStyle={{
+                    maxHeight: '1000px',
+                    width: '100%',
+                    overflow: 'auto',
+                    borderRadius: '8px',
+                  }}
+                >
+                  {String(children).replace(/\n$/, '')}
+                </SyntaxHighlighter>
+              </div>
+            </div>
+          );
+        },
+      }}
+    >
+      {text}
+    </ReactMarkdown>
+  );
+};
 
   return (
         <>

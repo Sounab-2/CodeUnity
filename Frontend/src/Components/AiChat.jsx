@@ -11,7 +11,7 @@ const AiChat = ({ socketRef }) => {
 
         <div>
 
-            <button className="btn" onClick={() => document.getElementById('my_modal_3').showModal()}>open modal</button>
+            <button className="btn" onClick={() => document.getElementById('my_modal_3').showModal()}>Open AI chatbot</button>
             <dialog id="my_modal_3" className="modal">
                 <div className="modal-box  min-h-fit min-w-fit" >
                     <form method="dialog">
