@@ -49,8 +49,9 @@ const createTeamWorkspace = async (req, res) => {
             fileName,
             language,
             type: 'team',
+
             host: { id: userId, username, photoUrl },
-            team: [{ id: userId, username, photoUrl }] 
+            team: [{ id: userId, username, photoUrl, status: 'online' }]
         });
 
         await workspace.save(); 
@@ -60,22 +61,49 @@ const createTeamWorkspace = async (req, res) => {
         res.status(StatusCodes.BAD_REQUEST).json({ message: error.message });
     }
 };
-const joinTeam = async (req,res) => {
-    const { userId } = req.params;
-    const {meetingId, username,photoUrl} = req.body;
-    try{
-        const workspace = await WorkspaceModel.findOne({_id:meetingId});
-        const isUserIdPresent = workspace.team.some(member => member.id === userId);
-        if(!isUserIdPresent){
-            workspace.team.push({id:userId, username:username, photoUrl});
-            await workspace.save();
+
+
+const joinTeam = async (req, res) => {
+    const { userId } = req.params; // user ID from route params
+    const { meetingId, username, photoUrl } = req.body; // data from request body
+    const status = 'online'; 
+
+    try {
+        // Find the workspace
+        const workspace = await WorkspaceModel.findOne({ _id: meetingId });
+
+        if (!workspace) {
+            return res.status(StatusCodes.NOT_FOUND).json({ message: "Workspace not found" });
         }
-        res.status(StatusCodes.OK).json({ workspace });
-    }
-    catch(error){
+
+        const userIndex = workspace.team.findIndex(member => member.id === userId);
+
+        if (userIndex === -1) {
+            // User not present, add them to the team
+            workspace.team.push({ id: userId, username, photoUrl, status });
+        } else {
+            console.log('User already present in the team');
+            // User is present, update status to online
+            workspace.team[userIndex].status = status;
+        }
+
+        // Save the workspace with updated team
+        const updatedWorkspace = await workspace.save(); 
+
+        // Log the updated workspace
+        // console.log('Updated Workspace:', updatedWorkspace);
+
+        res.status(StatusCodes.OK).json({ workspace: updatedWorkspace });
+    } catch (error) {
+        console.error("Error joining team:", error);
         res.status(StatusCodes.BAD_REQUEST).json({ message: error.message });
     }
 };
+
+
+
+
+
 
 const showTeam = async (req,res) => {
     const {roomId} = req.body;
