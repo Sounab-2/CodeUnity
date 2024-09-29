@@ -68,47 +68,50 @@ const Savedfile = () => {
                   <h2>{user.displayName}</h2>
                 </div>
               ) : (
-                <div className="avatar-group -space-x-6 rtl:space-x-reverse flex h-full justify-center gap-0">
-                  <h1 className="left-28 relative top-8 font-extrabold text-xl">Host</h1>
+                <div className="flex flex-col items-center">
+                <div className="flex flex-col items-center mb-4">
+                  <h1 className="font-extrabold text-xl mb-2">Host</h1>
                   {workspace.team.map((member, index) => (
-                    <div key={index} className="flex justify-center items-center flex-col -mt-4">
-                      {member.id === workspace.host && (
-                        <div className="flex items-center justify-center gap-1">
+                    member.id === workspace.host.id && (
+                      <div key={index} className="flex flex-col items-center justify-center">
+                        <Avatar
+                          name={member.username}
+                          size="50"
+                          round={true}
+                          color={Avatar.getRandomColor('sitebase', ['red', 'green'])}
+                          textSizeRatio={0.8}
+                          src={member.photoUrl || ''}
+                        />
+                        <h1 className="mt-2 font-bold text-lg">{member.username}</h1>
+                      </div>
+                    )
+                  ))}
+                </div>
+              
+                <div className="flex flex-col items-center">
+                  <p className="font-extrabold text-xl mb-2">Other Team Members:</p>
+                  <div className="flex space-x-4">
+                    {workspace.team.map((member, index) => (
+                      member.id !== workspace.host && (
+                        <div key={index} className="relative group">
                           <Avatar
-                            name={member.username}
                             size="50"
                             round={true}
                             color={Avatar.getRandomColor('sitebase', ['red', 'green'])}
                             textSizeRatio={0.8}
                             src={member.photoUrl || ''}
                           />
-                          <h1>{member.username}</h1>
-                        </div>
-                      )}
-
-                      {index === 0 && <p className="mt-4 font-extrabold text-xl">Other team member:</p>}
-                      {member.id !== workspace.host && (
-                        <div className="flex relative top-20 right-24">
-                          <div className="relative group">
-                            <Avatar
-                              size="50"
-                              round={true}
-                              color={Avatar.getRandomColor('sitebase', ['red', 'green'])}
-                              textSizeRatio={0.8}
-                              src={member.photoUrl || ''}
-                            />
-                            <div
-                              className="absolute z-10 invisible group-hover:visible group-hover:opacity-100 bottom-[-40px] left-1/2 transform -translate-x-1/2 px-3 py-2 text-sm font-medium text-white bg-gray-900 rounded-lg shadow-sm opacity-0 transition-opacity duration-300 dark:bg-gray-700"
-                            >
-                              {member.username}
-                              <div className="tooltip-arrow absolute top-[-6px] left-1/2 transform -translate-x-1/2 w-3 h-3 bg-gray-900 rotate-45 dark:bg-gray-700"></div>
-                            </div>
+                  
+                          <div className="absolute z-10 invisible group-hover:visible opacity-0 group-hover:opacity-100 bottom-[-40px] left-1/2 transform -translate-x-1/2 px-3 py-2 text-sm font-medium text-white bg-gray-900 rounded-lg shadow-sm transition-opacity duration-300 dark:bg-gray-700">
+                            {member.username}
+                            <div className="tooltip-arrow absolute top-[-6px] left-1/2 transform -translate-x-1/2 w-3 h-3 bg-gray-900 rotate-45 dark:bg-gray-700"></div>
                           </div>
                         </div>
-                      )}
-                    </div>
-                  ))}
+                      )
+                    ))}
+                  </div>
                 </div>
+              </div>
               )}
             </div>
           </Link>
