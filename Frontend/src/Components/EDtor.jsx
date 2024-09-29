@@ -37,32 +37,32 @@ const EditorComponent = ({ socketRef, value, setValue, language, setLanguage }) 
     const navigate = useNavigate();
     const isHost = ((userId === hostId) || selectedTeam === 'solo');
     const teamMembers = useSelector(state => state.meeting.team);
-    const [host,setHost]=useState('');
-   
+    const [host, setHost] = useState('');
+
 
     const showTeamMembers = async () => {
         const response = await axiosInstance.post('/api/v1/project/showTeam', { roomId: meetingId });
         const { team, _id, name } = response.data.workspace;
         isUserPresent = team.some(member => member.id === userId);
-        const type=response.data.workspace.type;
+        const type = response.data.workspace.type;
         setHost(response.data.workspace.host.id);
         setTeamType(type);
-        if (!isUserPresent && type!=='solo') {
+        if (!isUserPresent && type !== 'solo') {
             navigate('/dashboard/newproject');
             return;
         }
         dispatch(setTeam(team));
         dispatch(setMeetingId(_id));
         dispatch(setMeetingName(name));
-        
+
     }
 
     useEffect(() => {
         showTeamMembers();
-    },[teamMembers]);
+    }, [teamMembers]);
 
-    const setCode = async() => {
-        const r2 = await axiosInstance.post('/api/v1/project/showTeam', {roomId:meetingId});
+    const setCode = async () => {
+        const r2 = await axiosInstance.post('/api/v1/project/showTeam', { roomId: meetingId });
         setValue(r2.data.workspace.code[language]);
     }
 
@@ -116,7 +116,7 @@ const EditorComponent = ({ socketRef, value, setValue, language, setLanguage }) 
         setValue(response.data.workspace.code[newLanguage]);
     };
 
-    const codeSave = async () => {   
+    const codeSave = async () => {
         const response = await axiosInstance.post('/api/v1/project/save', {
             meetingId,
             code: value
@@ -186,7 +186,7 @@ const EditorComponent = ({ socketRef, value, setValue, language, setLanguage }) 
             console.log(error);
         }
     };
-                                     
+
     const handleLeaveWorkspace = async () => {
         //     socketRef.current?.emit('user-left', { meetingId });
         //     socketRef.current?.off('userJoined');
@@ -229,7 +229,7 @@ const EditorComponent = ({ socketRef, value, setValue, language, setLanguage }) 
                         <div className=' overflow-y-auto h-2/3 p-1 overflow-x-hidden'>
                             {/* Sidebar content here */}
                             <div className=' '>
-                                {teamType==='team' && (<li>
+                                {teamType === 'team' && (<li>
 
                                     <h1 className=' text-base-content font-bold text-base flex flex-col text-left w-64'>
 
@@ -282,7 +282,7 @@ const EditorComponent = ({ socketRef, value, setValue, language, setLanguage }) 
                                 {
                                     teamMembers?.map(member => (
 
-                                        <li className=' rounded-lg bg-base-100 flex flex-row items-center justify-center gap-1 p-3 '>
+                                        <li className={`rounded-lg bg-base-100 flex flex-row items-center justify-center gap-1 p-3 ${member.status === 'online' ? 'border-green-500 border-4' : 'border-gray-500 border-4 '}`}>
                                             <span>
                                                 {/* <Avatar name={member.username} className="dropdown" size="40" round={true} color={Avatar.getRandomColor(['red', 'green', 'blue'])} textSizeRatio={0.8}  /> */}
                                                 <Avatar name={member.username} className="dropdown" size="50" round={true} color={Avatar.getRandomColor(['red', 'green', 'blue'])} textSizeRatio={0.8} src={member.photoUrl || ''} />
@@ -326,7 +326,7 @@ const EditorComponent = ({ socketRef, value, setValue, language, setLanguage }) 
                                 </li>
                             </div>
 
-                            {teamType==='team' && (<div class="my-2 flex items-center">
+                            {teamType === 'team' && (<div class="my-2 flex items-center">
                                 <span class="block w-full border-t border-gray-300 my-4"></span>
 
                                 <span class="mx-4">or</span>
@@ -334,17 +334,17 @@ const EditorComponent = ({ socketRef, value, setValue, language, setLanguage }) 
 
                             </div>)}
 
-                            {teamType==='team' && (<div class="flex-1">
+                            {teamType === 'team' && (<div class="flex-1">
                                 <li>
                                     {/* Open the modal using document.getElementById('ID').showModal() method */}
                                     <button className="btn bg-red-600 w-60" onClick={() => document.getElementById('my_modal_1').showModal()}>Leave WorkSpace</button>
                                     <dialog id="my_modal_1" className="modal">
                                         <div className="modal-box absolute top-44 w-1/3 h-64  flex flex-col gap-0 overflow-hidden">
-                                            <div className=" mt-4 flex justify-center items-center"><img src="/images/warning.png" className=' w-12 h-12'alt="" /></div>
+                                            <div className=" mt-4 flex justify-center items-center"><img src="/images/warning.png" className=' w-12 h-12' alt="" /></div>
                                             <div className='  flex flex-col justify-center items-center '>
                                                 <h1 className=' font-extrabold text-2xl text-red-700 text-center '>Warning</h1>
                                                 <p className=' text-center text-lg'>
-                                                Once you exit this workspace, your code will be erased, and you won't be able to retrieve or access it again.
+                                                    Once you exit this workspace, your code will be erased, and you won't be able to retrieve or access it again.
                                                 </p>
 
                                             </div>
@@ -354,7 +354,7 @@ const EditorComponent = ({ socketRef, value, setValue, language, setLanguage }) 
                                                     <button className="btn w-32 bg-primary text-white">Close</button>
                                                 </form>
 
-                                                <button class='btn bg-red-600 w-32' onClick={handleLeaveWorkspace}>Leave</button> 
+                                                <button class='btn bg-red-600 w-32' onClick={handleLeaveWorkspace}>Leave</button>
                                             </div>
                                         </div>
                                     </dialog>

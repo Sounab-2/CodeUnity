@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faComments } from '@fortawesome/free-solid-svg-icons';
+import { faRobot } from '@fortawesome/free-solid-svg-icons';
 import Chatbot from '../Pages/Chatbot';
 
 
@@ -11,7 +11,7 @@ const AiChat = ({ socketRef }) => {
 
         <div>
 
-            <button className="btn" onClick={() => document.getElementById('my_modal_3').showModal()}>Open AI chatbot</button>
+            <button className="btn bg-secondary-dark text-white" onClick={() => document.getElementById('my_modal_3').showModal()}>AI Chat<FontAwesomeIcon icon={faRobot} /></button>
             <dialog id="my_modal_3" className="modal">
                 <div className="modal-box  min-h-fit min-w-fit" >
                     <form method="dialog">
