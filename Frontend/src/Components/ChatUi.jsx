@@ -97,6 +97,12 @@ const ChatUi = ({ socketRef }) => {
         setMessage(prevMessage => prevMessage + emoji);
     };
 
+    const handleKeyDown = (e) => {
+        if (e.key === 'Enter') {
+          sendMessage(e);
+        }
+      };
+
     return (
         <div className="drawer drawer-end relative z-50 w-full">
             <input id="my-drawer-4" type="checkbox" className="drawer-toggle" />
@@ -137,6 +143,7 @@ const ChatUi = ({ socketRef }) => {
                             className="input input-bordered input-error w-full max-w-xs"
                             value={message}
                             onChange={(e) => setMessage(e.target.value)}
+                            onKeyDown={handleKeyDown}
                         />
                         <button onClick={() => setShowEmojiPicker(!showEmojiPicker)} className="btn">
                             <FontAwesomeIcon icon={faSmile} className='text-2xl' />
