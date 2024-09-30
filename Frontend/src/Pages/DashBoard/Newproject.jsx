@@ -163,6 +163,24 @@ const Newproject = () => {
     }, 2000);
   };
 
+  const handleKeyDown = (e) => {
+    if (e.key === 'Enter') {
+      joinTeam();
+    }
+  };
+
+  const handleKeydownSolo = (e) => {
+    if (e.key === 'Enter') {
+      handleSolo();
+    }
+  };
+
+  const handleKeydownTeam = (e) => {
+    if (e.key === 'Enter') {
+      handleNextStep();
+    }
+  };
+
 
 
 
@@ -216,7 +234,7 @@ const Newproject = () => {
                   <h3 className="font-bold text-lg">Create a Workspace</h3>
 
                   <div className=' flex gap-3'>
-                    <input type="text" value={workspaceName} onChange={handleWorkspaceNameChange} className="input input-bordered input-primary w-full max-w-xs" placeholder="workspace name" />
+                    <input type="text" value={workspaceName} onChange={handleWorkspaceNameChange} onKeyDown={handleKeydownSolo} className="input input-bordered input-primary w-full max-w-xs" placeholder="workspace name" />
 
                   </div>
                 </div>
@@ -234,7 +252,7 @@ const Newproject = () => {
               <>
                 <div className="flex flex-col gap-6">
                   <h3 className="font-bold text-lg">Workspace Details</h3>
-                  <input type="text" value={workspaceName} onChange={handleWorkspaceNameChange} placeholder="Workspace Name ( Atleast 6 characters)" className="input input-bordered input-primary w-full max-w-xs" />
+                  <input type="text" value={workspaceName} onChange={handleWorkspaceNameChange} onKeyDown={handleKeydownTeam} placeholder="Workspace Name ( Atleast 6 characters)" className="input input-bordered input-primary w-full max-w-xs" />
                   <button className="btn bg-primary text-primary-content hover:text-white" onClick={handleNextStep} disabled={isDisabled}>Next</button>
                 </div>
               </>
@@ -243,7 +261,7 @@ const Newproject = () => {
               <div className=' flex flex-col gap-6'>
                 <h3 className="font-bold text-lg">Paste the code or Ask friend a code</h3>
                 <div className=' flex gap-4'>
-                  <input type="text" onChange={handleCodeChange} className="input input-bordered input-primary w-full max-w-xs" />
+                  <input type="text" onChange={handleCodeChange} onKeyDown={handleKeyDown} className="input input-bordered input-primary w-full max-w-xs" />
                   <button className="btn bg-primary text-primary-content" onClick={() => joinTeam()}>Next</button>
                 </div>
               </div>
