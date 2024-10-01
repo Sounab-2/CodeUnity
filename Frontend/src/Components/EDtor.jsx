@@ -394,8 +394,15 @@ const EditorComponent = ({ socketRef, value, setValue, language, setLanguage }) 
                                 </button></li> */}
                                 <li><button
                                     className={language === 'python' ? 'font-bold text-blue-500' : ''}
-                                    onClick={() => onSelectLanguage('python')}
-                                    disabled={!isHost}>
+                                    onClick={() => {
+                                        if (!isHost) {
+                                          console.log('You are not the host. Only the host can change the language.');
+                                        } else {
+                                          onSelectLanguage('python');
+                                        }
+                                      }}
+                                      
+                                    >
                                     Python
                                 </button></li>
                                 {/* <li><button
@@ -406,8 +413,14 @@ const EditorComponent = ({ socketRef, value, setValue, language, setLanguage }) 
                                 </button></li> */}
                                 <li><button
                                     className={language === 'cPlusPlus' ? 'font-bold text-blue-500' : ''}
-                                    onClick={() => onSelectLanguage('cPlusPlus')}
-                                    disabled={!isHost}>
+                                    onClick={() => {
+                                        if (!isHost) {
+                                          console.log('You are not the host. Only the host can change the language.');
+                                        } else {
+                                          onSelectLanguage('cPlusPlus');
+                                        }
+                                      }}
+                                    >
                                     C++
                                 </button></li>
                             </ul>
