@@ -72,10 +72,10 @@ io.on('connection', (socket) => {
         }
     });
     
-    socket.on('joinRoom', (roomId) => {
+    socket.on('joinRoom', ({roomId,username}) => {
         socket.join(roomId);
-        console.log(`User ${socket.id} joined room: ${roomId}`);
-        socket.to(roomId).emit('userJoined', { roomId, userId: socket.id });
+        // console.log(`User ${socket.id} joined room: ${roomId}`);
+        socket.to(roomId).emit('userJoined', { username, roomId });
     });
 
     socket.on('code-change', ({ value, meetingId }) => {

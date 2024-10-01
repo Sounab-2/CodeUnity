@@ -33,7 +33,7 @@ const EditorComponent = ({ socketRef, value, setValue, language, setLanguage }) 
     const dispatch = useDispatch();
     const { user } = useFirebase();
     const userId = user?.uid;
-    const username = user?.displayName;
+    const username = useSelector(state => state.user.username) || user?.displayName;
     const navigate = useNavigate();
     const isHost = ((userId === hostId) || selectedTeam === 'solo');
     const teamMembers = useSelector(state => state.meeting.team);
@@ -428,7 +428,7 @@ const EditorComponent = ({ socketRef, value, setValue, language, setLanguage }) 
                         <div className="flex justify-end flex-1 px-2">
                             <div className="flex items-stretch gap-3">
                                 <button onClick={codeSave} className=' btn bg-primary text-secondary-content hover:bg-base-100 hover:text-base-content'>
-                                    save
+                                    Save
                                 </button>
                                 <label className="flex cursor-pointer gap-2 my-3">
                                     <input type="checkbox" className="toggle theme-controller" onClick={toggleTheme} />

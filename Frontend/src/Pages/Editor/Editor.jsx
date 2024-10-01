@@ -11,17 +11,18 @@ import { setTeam } from '../../../features/meetingSlice';
 import { useNavigate } from 'react-router-dom';
 import { auth } from '../../firebase';
 import { setSelectedTeam,setMeetingId,setMeetingName } from '../../../features/meetingSlice';
+import { toast } from 'react-toastify';
 
 const Editor = () => {
   const socketRef = useRef(null);
+  const user =  auth.currentUser;
   const { meetingId } = useParams();
   const [value, setValue] = useState('');
   const selectedTeam = useSelector(state => state.meeting.selectedTeam);
-  const username = useSelector(state => state.user.username);
+  const username = useSelector(state => state.user.username) || user?.displayName;
 
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const user =  auth.currentUser;
   const userId = user?.uid;
   let isUserPresent = true;
   const [language, setLanguage] = useState('python');
@@ -55,9 +56,10 @@ const Editor = () => {
     const initSocket = async () => {
         if (!socketRef.current) {
             socketRef.current = await initializeSocket();
-            socketRef.current.emit('joinRoom', meetingId);
-            socketRef.current.on('userJoined', async ({ userId ,roomId}) => {
-                console.log('A new user joined: ', userId);
+            socketRef.current.emit('joinRoom',{roomId:meetingId,username});
+            socketRef.current.on('userJoined', async ({username, roomId}) => {
+                console.log(`${username} joined`);
+                toast.success(`${username} joined the meeting`);
                 console.log('Room joined: ', roomId);
                 try {
                   const response = await axiosInstance.post('/api/v1/project/showTeam',{roomId});
@@ -83,7 +85,8 @@ const Editor = () => {
             })
 
             socketRef.current.on('user-left', ({ userId, username, meetingId,updatedWorkspace }) => {
-                console.log(`User ${username} has left the room.`);
+                // console.log(`${username} has left the room.`); 
+                toast.info(`${username} left the meeting`);
                 console.log("after disconnect",updatedWorkspace.team);
                 dispatch(setTeam(updatedWorkspace.team));
           });
@@ -98,7 +101,7 @@ const Editor = () => {
     // Proper cleanup to remove listeners
     return () => {
         if (socketRef.current) {
-          socketRef.current.emit('userDisconnect', { userId, meetingId });
+          socketRef.current.emit('userDisconnect', { userId, username, meetingId });
             socketRef.current.off('userJoined');
             socketRef.current.off('code-sync');
             socketRef.current.off('tab-change');
